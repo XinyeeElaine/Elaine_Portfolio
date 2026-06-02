@@ -12,9 +12,7 @@ function HomePage({ go }) {
             for the web.
           </h1>
           <p className="lede">
-            Product designer & front-end tinkerer based in Lisbon. I build interfaces that feel
-            warm, playful, and quietly competent — for early-stage teams who care about the small
-            stuff.
+            Bachelor in Data Science student at TARUMT. I enjoy building warm, playful interfaces for the web.
           </p>
           <div className="cta-row">
             <button className="btn primary" onClick={() => go('contact')}>
@@ -28,19 +26,19 @@ function HomePage({ go }) {
 
         <div className="collage">
           <div className="card-tile t-avatar">
-            <span className="glyph">J</span>
+            <img src="Elaine_profile.jpg" alt="Elaine" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div className="card-tile t-card1">
             <div className="tile-label">currently</div>
-            <div className="tile-body">designing a calm reading app 📚</div>
+            <div className="tile-body">undergoing internship 💻</div>
           </div>
           <div className="card-tile t-card2">
             <div className="tile-label">listening to</div>
             <div className="tile-body">lo-fi & rain sounds 🌧️</div>
           </div>
           <div className="card-tile t-card3">
-            <div className="tile-label">drinking</div>
-            <div className="tile-body">third coffee ☕</div>
+            <div className="tile-label">playing</div>
+            <div className="tile-body">Perler Beads ✨</div>
           </div>
         </div>
       </div>
@@ -48,20 +46,20 @@ function HomePage({ go }) {
       <div className="marquee">
         <div className="marquee-track">
           <span>
-            design systems <span className="star">✦</span>
-            playful interfaces <span className="star">✦</span>
+            data science <span className="star">✦</span>
+            UI/UX design <span className="star">✦</span>
             front-end <span className="star">✦</span>
-            illustration <span className="star">✦</span>
-            cozy UX <span className="star">✦</span>
+            Python <span className="star">✦</span>
             prototyping <span className="star">✦</span>
+            illustration <span className="star">✦</span>
           </span>
           <span>
-            design systems <span className="star">✦</span>
-            playful interfaces <span className="star">✦</span>
+            data science <span className="star">✦</span>
+            UI/UX design <span className="star">✦</span>
             front-end <span className="star">✦</span>
-            illustration <span className="star">✦</span>
-            cozy UX <span className="star">✦</span>
+            Python <span className="star">✦</span>
             prototyping <span className="star">✦</span>
+            illustration <span className="star">✦</span>
           </span>
         </div>
       </div>

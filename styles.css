@@ -334,7 +334,7 @@ a { color: inherit; }
   top: 30px; left: 60px;
   background: linear-gradient(160deg, var(--lavender) 0%, var(--sky) 100%);
   transform: rotate(-4deg);
-  display: grid; place-items: center;
+  position: relative;
   overflow: hidden;
 }
 .collage .t-avatar .glyph {
