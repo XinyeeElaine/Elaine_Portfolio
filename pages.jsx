@@ -7,9 +7,8 @@ function HomePage({ go }) {
         <div>
           <div className="eyebrow"><span className="pulse" /> open to new projects · 2026</div>
           <h1>
-            Hi, I'm Elaine <span className="wave">👋</span><br />
-            I make <em>cozy</em> things<br />
-            for the web.
+            Hi, I'm Elaine <span className="wave">🐱</span><br />
+            I turn data into <em>cozy</em> things -⩊-
           </h1>
           <p className="lede">
             Bachelor in Data Science student at TARUMT. I enjoy building warm, playful interfaces for the web.
@@ -69,38 +68,45 @@ function HomePage({ go }) {
 
 /* ---------- ABOUT ---------- */
 const TIMELINE = [
-  { year: '2024 — now', title: 'Senior Product Designer', org: 'Foxglove (remote)', kind: 'work',
-    body: 'Leading design for a small-team productivity app. Owning the design system, shipping weekly, occasionally writing the front-end.' },
-  { year: '2022 — 2024', title: 'Product Designer', org: 'Mellowtail Studio', kind: 'work',
-    body: 'Shipped 6 client apps across fintech and wellness. Built the studio\'s component library used on every project.' },
-  { year: '2020 — 2022', title: 'UI Designer & Illustrator', org: 'Freelance', kind: 'work',
-    body: 'Brand systems and product illustrations for early-stage startups. Learned to draw with my left hand on a rainy Tuesday.' },
-  { year: '2018 — 2020', title: 'MA in Interaction Design', org: 'Royal College of Art', kind: 'edu',
-    body: 'Thesis on slow software & ambient interfaces. Built a desk lamp that visualizes your inbox.' },
-  { year: '2014 — 2018', title: 'BSc in Computer Science', org: 'University of Porto', kind: 'edu',
-    body: 'Coding by day, drawing by night. Co-founded the campus illustration zine.' },
+  { year: 'June 2022 — June 2024', title: 'Diploma in Computer Science', org: 'Tunku Abdul Rahman University of Management and Technology (TARUMT)', kind: 'edu',
+    body: 'Built a solid foundation in programming fundamentals, algorithms, and software design.',
+    cgpa: '3.62' },
+  { year: 'November 2023 — January 2024', title: 'Data Analyst Intern', org: 'ADEV Ventures Sdn Bhd', kind: 'work',
+    body: 'Developed AI chatbot and automation solutions (miu.ai, WATI) while managing database data quality and cleansing.' },
+  { year: 'July 2024 — July 2026', title: 'Degree in Data Science', org: 'Tunku Abdul Rahman University of Management and Technology (TARUMT)', kind: 'edu',
+    body: 'Exploring data analytics, machine learning, and statistical modelling to turn raw numbers into meaningful stories.',
+    cgpa: '3.77' },
+  { year: 'January 2026 — July 2026', title: 'Software Support Executive Intern', org: 'Ideo Soft Sdn Bhd', kind: 'work',
+    body: 'Delivered full-cycle technical support and client training for the AutoCount enterprise ecosystem.' },
 ];
 
 const HOBBIES = [
-  { icon: '☕', name: 'Specialty coffee', note: 'V60 weekdays, espresso weekends' },
-  { icon: '🎮', name: 'Cozy games', note: 'Stardew, Animal Crossing, Spiritfarer' },
-  { icon: '🎨', name: 'Watercolor', note: 'Mostly mushrooms & tiny houses' },
-  { icon: '📖', name: 'Bookshop crawls', note: 'Currently rereading Le Guin' },
+  { icon: '🍵', name: 'Matcha & cocoa', note: 'Iced matcha, cold cocoa — I like my drinks chilly, not steamy' },
+  { icon: '🎮', name: 'Games', note: 'Screaming in REPO, drifting in Mario, and chaos in Roblox' },
+  { icon: '🎨', name: 'Art & DIY', note: 'One crochet project at a time — also hoarding perler beads I definitely need' },
+  { icon: '🌟', name: 'Exploring', note: 'Chasing new experiences, saying yes to random adventures' },
 ];
 
 function AboutPage() {
+	  const [order, setOrder] = React.useState('asc');
+	  const sorted = order === 'asc' ? TIMELINE : [...TIMELINE].reverse();
   return (
     <div className="page" data-screen-label="02 About">
       <div className="section-head">
         <div className="kicker">about & experience</div>
         <h2>A little walk through<br />where I've been.</h2>
-        <p>Six years bouncing between product design, illustration, and the occasional pull request. I like teams that ship often and care about small details.</p>
+        <p>Four years bouncing between data science, coding, and the occasional dive into AI. I like teams that ship often and care about small details.</p>
       </div>
 
       <div className="about-grid">
         <div>
-          <div className="timeline">
-            {TIMELINE.map((t, i) => (
+          <div className="timeline-sort">
+                <button className="btn ghost" onClick={() => setOrder(o => o === 'asc' ? 'desc' : 'asc')}>
+                  {order === 'asc' ? '↑ Earliest first' : '↓ Latest first'}
+                </button>
+              </div>
+              <div className="timeline">
+            {sorted.map((t, i) => (
               <div key={i} className={`t-item ${t.kind === 'edu' ? 'education' : ''}`}>
                 <span className="dot-marker" />
                 <span className="badge">{t.kind === 'edu' ? 'education' : 'work'}</span>
@@ -108,6 +114,7 @@ function AboutPage() {
                 <h3>{t.title}</h3>
                 <div className="org">{t.org}</div>
                 <p>{t.body}</p>
+                {t.cgpa && <span className="cgpa">CGPA: {t.cgpa}</span>}
               </div>
             ))}
           </div>
@@ -126,9 +133,9 @@ function AboutPage() {
             ))}
           </div>
           <div className="stats">
-            <div><strong>6</strong><span>years designing</span></div>
-            <div><strong>40+</strong><span>projects shipped</span></div>
-            <div><strong>3</strong><span>cities lived in</span></div>
+            <div><strong>4</strong><span>years in tech</span></div>
+            <div><strong>20+</strong><span>projects shipped</span></div>
+            <div><strong>3</strong><span>languages spoken</span></div>
           </div>
         </div>
       </div>
@@ -245,42 +252,42 @@ function ProjectsPage({ go }) {
 
 /* ---------- SKILLS ---------- */
 const SKILLS = {
-  Design: [
-    { label: 'Product design', v: 'v-lav' },
-    { label: 'Design systems', v: 'v-lav' },
-    { label: 'Prototyping', v: 'v-sky' },
-    { label: 'User research', v: 'v-sky' },
-    { label: 'Information architecture', v: 'v-lav' },
-    { label: 'Illustration', v: 'v-blush' },
-    { label: 'Brand identity', v: 'v-blush' },
-    { label: 'Motion & micro-interactions', v: 'v-mint' },
-  ],
   Code: [
+    { label: 'Python', v: 'v-sky' },
+    { label: 'SQL', v: 'v-sky' },
+    { label: 'C#', v: 'v-lav' },
     { label: 'HTML & CSS', v: 'v-sky' },
-    { label: 'React', v: 'v-sky' },
-    { label: 'TypeScript', v: 'v-lav' },
-    { label: 'Tailwind', v: 'v-mint' },
-    { label: 'Framer Motion', v: 'v-blush' },
-    { label: 'A little Three.js', v: 'v-butter' },
+    { label: 'JavaScript', v: 'v-lav' },
+    { label: 'php', v: 'v-sky' },
+    { label: 'Data Analytics', v: 'v-mint' },
+    { label: 'Machine Learning', v: 'v-lav' },
+    { label: 'Java', v: 'v-blush' },
+    { label: 'Pandas & NumPy', v: 'v-mint' },
+    { label: 'REST APIs', v: 'v-butter' },
+  ],
+  Languages: [
+    { label: 'English', v: 'v-lav' },
+    { label: 'Chinese', v: 'v-blush' },
+    { label: 'Malay', v: 'v-mint' },
   ],
   'Soft & squishy': [
-    { label: 'Workshop facilitation', v: 'v-blush' },
-    { label: 'Writing & docs', v: 'v-mint' },
-    { label: 'Cross-team collaboration', v: 'v-lav' },
-    { label: 'Mentoring', v: 'v-butter' },
+    { label: 'Adaptable & curious', v: 'v-blush' },
+    { label: 'Clear communicator', v: 'v-mint' },
+    { label: 'Team player', v: 'v-lav' },
+    { label: 'Detail-oriented', v: 'v-butter' },
   ],
 };
 
 const TOOLS = [
-  { glyph: 'F', name: 'Figma' },
-  { glyph: 'N', name: 'Notion' },
-  { glyph: 'L', name: 'Linear' },
-  { glyph: 'V', name: 'VS Code' },
-  { glyph: 'P', name: 'Procreate' },
-  { glyph: 'G', name: 'GitHub' },
+  { glyph: '💻', name: 'VS Code' },
+  { glyph: '🐙', name: 'GitHub' },
+  { glyph: '📓', name: 'Jupyter' },
+  { glyph: '☁️', name: 'Google Colab' },
+  { glyph: '📊', name: 'Power BI / Tableau' },
+  { glyph: '🗄️', name: 'MySQL / SSMS' },
 ];
 
-const SWATCHES = { Design: 'var(--lavender-deep)', Code: 'var(--sky-deep)', 'Soft & squishy': 'oklch(0.72 0.12 20)' };
+const SWATCHES = { Code: 'var(--sky-deep)', Languages: 'var(--lavender-deep)', 'Soft & squishy': 'oklch(0.72 0.12 20)' };
 
 function DraggableSticker({ baseRotate, className, children }) {
   const [pos, setPos] = React.useState({ x: 0, y: 0 });
@@ -409,7 +416,7 @@ function ContactPage() {
       <div className="section-head">
         <div className="kicker">say hello</div>
         <h2>Let's make<br />something together.</h2>
-        <p>I'm open to product design work, illustration commissions, and the occasional consulting chat. I reply within a day or two — usually with coffee in hand.</p>
+        <p>I'm open to design work, AI projects, and the occasional collaboration. I reply within a day or two — usually with matcha in hand.</p>
       </div>
 
       <div className="contact-grid">
@@ -417,32 +424,32 @@ function ContactPage() {
           <h3>Find me here</h3>
           <p>Or drop a line directly — both work. I promise I'm a friendly inbox.</p>
           <div className="social">
-            <a href="#" onClick={(e) => e.preventDefault()}>
+            <a href="https://www.linkedin.com/in/elaine-pang-xin-yee-313b4b211/" target="_blank" rel="noopener noreferrer">
               <span className="icon">in</span>
               <div>
                 <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>LinkedIn</div>
-                <div>/in/elaine</div>
+                <div>/in/elaine-pang-xin-yee</div>
               </div>
             </a>
-            <a href="#" onClick={(e) => e.preventDefault()}>
+            <a href="https://github.com/XinyeeElaine" target="_blank" rel="noopener noreferrer">
               <span className="icon">gh</span>
               <div>
                 <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>GitHub</div>
-                <div>@elainemakes</div>
+                <div>@XinyeeElaine</div>
               </div>
             </a>
-            <a href="#" onClick={(e) => e.preventDefault()}>
-              <span className="icon">@</span>
+            <a href="https://www.instagram.com/xinyee_elaine/" target="_blank" rel="noopener noreferrer">
+              <span className="icon">ig</span>
               <div>
-                <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>Email</div>
-                <div>xinyeeelaine@gmail.com</div>
+                <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>Instagram</div>
+                <div>@xinyee_elaine</div>
               </div>
             </a>
-            <a href="#" onClick={(e) => e.preventDefault()}>
-              <span className="icon">✦</span>
+            <a href="https://wa.me/60162864168" target="_blank" rel="noopener noreferrer">
+              <span className="icon">wa</span>
               <div>
-                <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>Read.cv</div>
-                <div>read.cv/elaine</div>
+                <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>WhatsApp</div>
+                <div>016-286 4168</div>
               </div>
             </a>
           </div>

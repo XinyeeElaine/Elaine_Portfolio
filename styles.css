@@ -396,6 +396,8 @@ a { color: inherit; }
 .section-head p { color: var(--ink-soft); max-width: 60ch; margin-top: 16px; font-size: 17px; }
 
 /* ============ ABOUT — timeline ============ */
+.timeline-sort { margin-bottom: 8px; }
+.timeline-sort .btn { font-size: 13px; padding: 4px 12px; }
 .timeline {
   position: relative;
   padding: 20px 0 20px 40px;
@@ -429,6 +431,7 @@ a { color: inherit; }
 .t-item .year { font-size: 13px; font-weight: 700; color: var(--ink-faint); }
 .t-item h3 { font-size: 22px; margin: 4px 0 4px; }
 .t-item .org { font-weight: 600; color: var(--lavender-deep); font-size: 15px; }
+.t-item .cgpa { position: absolute; bottom: 16px; right: 20px; font-weight: 500; font-size: 13px; color: var(--ink-faint); }
 .t-item.education .org { color: var(--sky-deep); }
 .t-item p { color: var(--ink-soft); margin: 10px 0 0; font-size: 15px; }
 .t-item .badge {
@@ -593,11 +596,8 @@ a { color: inherit; }
 }
 .tool-card:hover { transform: translateY(-4px) rotate(-2deg); }
 .tool-card .glyph {
-  font-family: "Caprasimo", serif; font-size: 28px;
+  font-size: 28px;
   display: block; margin-bottom: 6px;
-  background: linear-gradient(135deg, var(--lavender-deep), var(--sky-deep));
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 /* ============ CONTACT ============ */

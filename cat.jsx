@@ -420,7 +420,7 @@ function CatRoot() {
         <div className="catbar-inner">
           <div className="info">
             <div className="name-row">
-              <span className="name">Miso</span>
+              <span className="name">Cookie</span>
               <span className="mood">· {moodLabel}</span>
             </div>
             <div className="bars">
