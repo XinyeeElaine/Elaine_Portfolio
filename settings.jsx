@@ -285,7 +285,7 @@ function SettingsGear() {
           <div className="toggle-row">
             <div className="meta">
               <b>{music ? 'Bops playing' : 'Music muted'}</b>
-              <small>{music ? 'upbeat lofi · cozy beats' : 'tap to vibe'}</small>
+              <small>{music ? 'silly little tunes · wiggle approved' : 'tap to vibe'}</small>
             </div>
             <button
               className={`switch ${music ? 'on' : ''}`}

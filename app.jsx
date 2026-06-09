@@ -57,7 +57,7 @@ function App() {
       <nav className="nav" data-screen-label="nav">
         <div className="brand">
           <span className="dot" />
-          elaine.studio
+          elaine.portfolio
         </div>
         <div className={`links ${mobileOpen ? 'mobile-open' : ''}`}>
           {PAGES.map(p => (

@@ -69,15 +69,13 @@ function HomePage({ go }) {
 /* ---------- ABOUT ---------- */
 const TIMELINE = [
   { year: 'June 2022 — June 2024', title: 'Diploma in Computer Science', org: 'Tunku Abdul Rahman University of Management and Technology (TARUMT)', kind: 'edu',
-    body: 'Built a solid foundation in programming fundamentals, algorithms, and software design.',
-    cgpa: '3.62' },
+    body: 'Built a solid foundation in programming fundamentals, algorithms, and software design.' },
   { year: 'November 2023 — January 2024', title: 'Data Analyst Intern', org: 'ADEV Ventures Sdn Bhd', kind: 'work',
-    body: 'Developed AI chatbot and automation solutions (miu.ai, WATI) while managing database data quality and cleansing.' },
+    body: 'Led the design, testing, and deployment of conversational AI chatbot workflows (miu.ai, WATI), while also programming custom JavaScript tracking scripts and managing HubSpot and Airtable CRM databases.' },
   { year: 'July 2024 — July 2026', title: 'Degree in Data Science', org: 'Tunku Abdul Rahman University of Management and Technology (TARUMT)', kind: 'edu',
-    body: 'Exploring data analytics, machine learning, and statistical modelling to turn raw numbers into meaningful stories.',
-    cgpa: '3.77' },
+    body: 'Exploring data analytics, machine learning, and statistical modelling to turn raw numbers into meaningful stories.' },
   { year: 'January 2026 — July 2026', title: 'Software Support Executive Intern', org: 'Ideo Soft Sdn Bhd', kind: 'work',
-    body: 'Delivered full-cycle technical support and client training for the AutoCount enterprise ecosystem.' },
+    body: 'Delivered full-cycle infrastructure management and data solutions for the AutoCount enterprise ecosystem, leveraging Python, SQL, and C# for database customization and data cleansing while leading technical consultations and onboarding training for corporate clients.' },
 ];
 
 const HOBBIES = [
@@ -114,7 +112,6 @@ function AboutPage() {
                 <h3>{t.title}</h3>
                 <div className="org">{t.org}</div>
                 <p>{t.body}</p>
-                {t.cgpa && <span className="cgpa">CGPA: {t.cgpa}</span>}
               </div>
             ))}
           </div>
