@@ -143,75 +143,48 @@ function AboutPage() {
 /* ---------- PROJECTS ---------- */
 const PROJECTS = [
   {
-    title: 'Lantern',
-    slug: 'lantern',
-    summary: 'A calm reading app that tracks moods, not pages. Designed and prototyped end-to-end.',
-    description: "Lantern started from a frustration with reading apps that gamify progress — streaks, page counts, daily goals. It strips all of that away and replaces it with a simple mood log: how did this chapter make you feel?\n\nDesigned end-to-end over three months: user research, wireframes, high-fidelity screens, and an interactive iOS prototype. I also illustrated the full set of mood icons used throughout the app.",
-    tags: ['Product design', 'iOS', 'Illustration'],
+    title: 'LoafLand Bakery',
+    slug: 'loafland-bakery',
+    summary: 'Full-featured Android bakery app — online ordering for customers, management dashboard for admins.',
+    description: "A complete Android mobile app built for a bakery shop, delivering \"fresh from the oven, straight to your phone.\" Developed as part of a mobile application development course.\n\nBuilt with Kotlin and Jetpack Compose using MVVM architecture. The app has two modules — a customer-facing side (menu browsing, cart with 6% service tax, in-app wallet, order tracking, custom combo sets, reviews) and an admin panel (CRUD for menu items, review management, order status updates).\n\nFeatures Room (SQLite) with 8 entity tables, multi-language support (English, Bahasa Melayu, Chinese), and Material 3 design throughout.",
+    tags: ['Android', 'Kotlin', 'Jetpack Compose', 'MVVM', 'Room DB'],
     glyph: 'L',
-    bg: 'linear-gradient(135deg, oklch(0.82 0.09 295) 0%, oklch(0.86 0.07 230) 100%)',
+    thumb: 'LoafLand-Bakery_logo.jpg',
+    bg: 'linear-gradient(135deg, oklch(0.78 0.10 55) 0%, oklch(0.84 0.08 85) 100%)',
     image: null,
-    github: null,
+    github: 'https://github.com/XinyeeElaine/LoafLand-Bakery',
     deploy: null,
+    images: [
+      'LoafLand-Bakery1.png',
+      'LoafLand-Bakery2.png',
+      'LoafLand-Bakery3.png',
+      'LoafLand-Bakery4.png',
+      'LoafLand-Bakery5.png',
+      'LoafLand-Bakery6.png',
+    ],
   },
   {
-    title: 'Bramble Bank',
-    slug: 'bramble-bank',
-    summary: 'Reimagined onboarding for a community bank. 38% lift in first-week activation.',
-    description: "A community bank asked us to redesign their new account onboarding after data showed most users dropped off before completing it. We ran six user interviews, mapped the pain points, and rebuilt the flow from scratch — cutting it from 11 steps to 5.\n\nThe redesign shipped in Q3 2023 and drove a 38% lift in first-week activation. I owned the end-to-end design and worked closely with the engineering team through implementation.",
-    tags: ['Fintech', 'Research', 'Design system'],
-    glyph: 'B',
-    bg: 'linear-gradient(135deg, oklch(0.86 0.07 230) 0%, oklch(0.90 0.05 160) 100%)',
-    image: null,
-    github: null,
-    deploy: null,
-  },
-  {
-    title: 'Sprout Notes',
-    slug: 'sprout-notes',
-    summary: 'A note-taking tool for gardeners. Voice-first, weatherproof, lovingly low-tech.',
-    description: "A weekend project that got out of hand. Sprout Notes is a voice-first note-taking app designed for gardeners who need to record observations while their hands are in the dirt.\n\nBuilt with React and the Web Speech API. The UI is deliberately lo-fi — large touch targets, high contrast, no unnecessary chrome. Works offline and syncs when back online.",
-    tags: ['Web app', 'Branding', 'Frontend'],
-    glyph: 'S',
-    bg: 'linear-gradient(135deg, oklch(0.89 0.05 20) 0%, oklch(0.92 0.06 95) 100%)',
-    image: null,
-    github: null,
-    deploy: null,
-  },
-  {
-    title: 'Mellow Studio Site',
-    slug: 'mellow-studio',
-    summary: 'A handmade portfolio for a small design studio. Featured in CSS Design Awards.',
-    description: "A fully bespoke portfolio site for Mellowtail Studio, a four-person design consultancy. The brief was \"handmade, warm, a little unexpected.\" I designed and built it from scratch — no templates, no frameworks, just vanilla CSS and a lot of scroll animations.\n\nFeatured in CSS Design Awards in the month of launch. The studio still uses it today.",
-    tags: ['Branding', 'Web', 'Illustration'],
+    title: 'Meow-ney Maker',
+    slug: 'meow-ney-maker',
+    summary: 'Real-time salary tracker with a bouncing DJ cat. Watch your earnings grow second-by-second.',
+    description: "Work is boring, but getting paid isn't. A playful real-time working timer that calculates your earnings down to the second based on your monthly salary and working hours — complete with a bouncing hard-working cat companion and a DJ Cat for clock-out celebrations.\n\nBuilt with pure HTML, CSS, and vanilla JavaScript — no frameworks, just feline motivation. Session history is saved via local storage so you can track shifts, hours, and earnings over time. The UI uses clean glass-morphism cards with a custom floating glitter background.",
+    tags: ['Web app', 'Vanilla JS', 'Productivity', 'Fun'],
     glyph: 'M',
-    bg: 'linear-gradient(135deg, oklch(0.90 0.05 160) 0%, oklch(0.86 0.07 230) 100%)',
+    bg: 'linear-gradient(135deg, oklch(0.84 0.08 85) 0%, oklch(0.78 0.10 55) 100%)',
     image: null,
-    github: null,
-    deploy: null,
+    github: 'https://github.com/XinyeeElaine/Meow-ney-Maker',
+    deploy: 'https://meow-ney.sillycookie.me/',
   },
   {
-    title: 'Tiny Towns',
-    slug: 'tiny-towns',
-    summary: 'A weekend project: cozy procedurally-generated villages drawn in pure CSS.',
-    description: "Can you make a whole village using only CSS? Turns out: yes, mostly. Tiny Towns generates small isometric villages procedurally — every refresh gives you a new layout with different buildings, paths, and tiny trees.\n\nNo images, no canvas, no JavaScript drawing — just divs, transforms, and a lot of patience. A fun exercise in pushing CSS to places it probably shouldn't go.",
-    tags: ['Side project', 'CSS art'],
-    glyph: 'T',
-    bg: 'linear-gradient(135deg, oklch(0.92 0.06 95) 0%, oklch(0.89 0.05 20) 100%)',
+    title: 'FYP Predictive API',
+    slug: 'fyp-predictive-api',
+    summary: 'EV charger predictive diagnostics API — ML-powered fault detection for charging infrastructure.',
+    description: "My final year project: a predictive diagnostics API for electric vehicle charging stations. Built to detect potential faults before they happen, using a trained machine learning model on synthetic charger data.\n\nThe system ingests charger telemetry, runs it through a diagnostic engine, and returns predictive maintenance alerts via API. Includes a serialized ML model (ev_charger_model.pkl), a diagnostic engine, and full test coverage.",
+    tags: ['Python', 'Machine Learning', 'API', 'EV'],
+    glyph: 'E',
+    bg: 'linear-gradient(135deg, oklch(0.80 0.10 160) 0%, oklch(0.76 0.12 200) 100%)',
     image: null,
-    github: null,
-    deploy: null,
-  },
-  {
-    title: 'Tide & Time',
-    slug: 'tide-time',
-    summary: 'A pocket tide chart for fishermen and tide-pool nerds. Designed with my grandfather.',
-    description: "My grandfather has fished the same stretch of coast for fifty years and still uses a paper tide table he prints every January. Tide & Time is an attempt to build something he'd actually use on his phone.\n\nDesigned through dozens of sessions with him — testing paper prototypes at the kitchen table, refining the data visualization until it clicked. The final design uses a simple wave graph with large, readable type and zero clutter.",
-    tags: ['iOS', 'Data viz', 'Research'],
-    glyph: 'T',
-    bg: 'linear-gradient(135deg, oklch(0.86 0.07 230) 0%, oklch(0.82 0.09 295) 100%)',
-    image: null,
-    github: null,
+    github: 'https://github.com/XinyeeElaine/FYP_Predictive_api',
     deploy: null,
   },
 ];
@@ -222,15 +195,19 @@ function ProjectsPage({ go }) {
       <div className="section-head">
         <div className="kicker">selected work</div>
         <h2>Projects, side quests<br />& happy accidents.</h2>
-        <p>A small selection — mostly product design, with a sprinkle of illustration and CSS experiments. Click any card for a deeper look.</p>
+        <p>A small selection — apps, side quests, and whatever curiosity coughs up. Click any card for a deeper look.</p>
       </div>
 
       <div className="proj-grid">
         {PROJECTS.map((p, i) => (
           <article key={i} className="proj-card" onClick={() => go(`project-${p.slug}`)} role="link" tabIndex={0}>
             <div className="thumb">
-              <div className="thumb-shape" style={{ background: p.bg }}>
-                <span className="glyph">{p.glyph}</span>
+              <div className="thumb-shape" style={p.thumb ? { background: 'var(--paper)' } : { background: p.bg }}>
+                {p.thumb ? (
+                  <img src={p.thumb} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
+                ) : (
+                  <span className="glyph">{p.glyph}</span>
+                )}
               </div>
             </div>
             <div className="body">
@@ -478,6 +455,52 @@ function ContactPage() {
   );
 }
 
+function ImageCarousel({ images, title }) {
+  const [active, setActive] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
+  const timer = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!paused && images.length > 1) {
+      timer.current = setInterval(() => setActive(a => (a + 1) % images.length), 3500);
+    }
+    return () => { if (timer.current) clearInterval(timer.current); };
+  }, [paused, images.length]);
+
+  const goTo = (i) => { setActive(i); setPaused(true); };
+
+  return (
+    <div
+      className="carousel"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="carousel-viewport">
+        {images.map((src, i) => (
+          <img
+            key={i}
+            src={src}
+            alt={`${title} — screenshot ${i + 1}`}
+            className={`carousel-img ${i === active ? 'carousel-img-active' : ''}`}
+          />
+        ))}
+      </div>
+      {images.length > 1 && (
+        <div className="carousel-dots">
+          {images.map((_, i) => (
+            <button
+              key={i}
+              className={`carousel-dot ${i === active ? 'carousel-dot-active' : ''}`}
+              onClick={() => goTo(i)}
+              aria-label={`Image ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ProjectDetailPage({ slug, go }) {
   const project = PROJECTS.find(p => p.slug === slug);
 
@@ -498,15 +521,19 @@ function ProjectDetailPage({ slug, go }) {
       </button>
 
       <div className="proj-detail-preview">
-        <div
-          className="proj-detail-preview-img"
-          style={!project.image ? { background: project.bg } : {}}
-        >
-          {project.image
-            ? <img src={project.image} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            : <span className="glyph">{project.glyph}</span>
-          }
-        </div>
+        {project.images && project.images.length > 0 ? (
+          <ImageCarousel images={project.images} title={project.title} />
+        ) : (
+          <div
+            className="proj-detail-preview-img"
+            style={!project.image ? { background: project.bg } : {}}
+          >
+            {project.image
+              ? <img src={project.image} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              : <span className="glyph">{project.glyph}</span>
+            }
+          </div>
+        )}
         <div className="proj-detail-body">
           <div className="proj-detail-kicker">selected work</div>
           <h1>{project.title}</h1>
@@ -520,12 +547,9 @@ function ProjectDetailPage({ slug, go }) {
         <div className="proj-detail-card">
           <div className="proj-detail-kicker">About this project</div>
           <p>{project.description}</p>
-        </div>
-
-        {(project.github || project.deploy) && (
-          <div className="proj-detail-card">
-            <div className="proj-detail-kicker">Links</div>
-            <div className="proj-detail-links">
+          {(project.github || project.deploy) && (
+            <div className="proj-detail-links-row">
+              <div className="proj-detail-kicker">Links</div>
               {project.github && (
                 <a
                   href={project.github}
@@ -533,8 +557,7 @@ function ProjectDetailPage({ slug, go }) {
                   rel="noopener noreferrer"
                   className="proj-detail-link proj-detail-link-gh"
                 >
-                  <span>GitHub</span>
-                  <span>→</span>
+                  GitHub →
                 </a>
               )}
               {project.deploy && (
@@ -544,10 +567,20 @@ function ProjectDetailPage({ slug, go }) {
                   rel="noopener noreferrer"
                   className="proj-detail-link proj-detail-link-live"
                 >
-                  <span>Live site</span>
-                  <span>→</span>
+                  Live site →
                 </a>
               )}
+            </div>
+          )}
+        </div>
+
+        {project.techStack && (
+          <div className="proj-detail-card">
+            <div className="proj-detail-kicker">Tech stack</div>
+            <div className="tech-stack-grid">
+              {project.techStack.map(t => (
+                <span key={t} className="tech-chip">{t}</span>
+              ))}
             </div>
           </div>
         )}
