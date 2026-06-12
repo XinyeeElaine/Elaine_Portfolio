@@ -25,7 +25,7 @@ function HomePage({ go }) {
 
         <div className="collage">
           <div className="card-tile t-avatar">
-            <img src="Elaine_profile.jpg" alt="Elaine" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="Picture/Elaine_profile.jpg" alt="Elaine" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div className="card-tile t-card1">
             <div className="tile-label">currently</div>
@@ -149,18 +149,18 @@ const PROJECTS = [
     description: "A complete Android mobile app built for a bakery shop, delivering \"fresh from the oven, straight to your phone.\" Developed as part of a mobile application development course.\n\nBuilt with Kotlin and Jetpack Compose using MVVM architecture. The app has two modules — a customer-facing side (menu browsing, cart with 6% service tax, in-app wallet, order tracking, custom combo sets, reviews) and an admin panel (CRUD for menu items, review management, order status updates).\n\nFeatures Room (SQLite) with 8 entity tables, multi-language support (English, Bahasa Melayu, Chinese), and Material 3 design throughout.",
     tags: ['Android', 'Kotlin', 'Jetpack Compose', 'MVVM', 'Room DB'],
     glyph: 'L',
-    thumb: 'LoafLand-Bakery_logo.jpg',
+    thumb: 'Picture/LoafLand-Bakery_logo.jpg',
     bg: 'linear-gradient(135deg, oklch(0.78 0.10 55) 0%, oklch(0.84 0.08 85) 100%)',
     image: null,
     github: 'https://github.com/XinyeeElaine/LoafLand-Bakery',
     deploy: null,
     images: [
-      'LoafLand-Bakery1.png',
-      'LoafLand-Bakery2.png',
-      'LoafLand-Bakery3.png',
-      'LoafLand-Bakery4.png',
-      'LoafLand-Bakery5.png',
-      'LoafLand-Bakery6.png',
+      'Picture/LoafLand-Bakery1.png',
+      'Picture/LoafLand-Bakery2.png',
+      'Picture/LoafLand-Bakery3.png',
+      'Picture/LoafLand-Bakery4.png',
+      'Picture/LoafLand-Bakery5.png',
+      'Picture/LoafLand-Bakery6.png',
     ],
   },
   {
@@ -185,6 +185,30 @@ const PROJECTS = [
     bg: 'linear-gradient(135deg, oklch(0.80 0.10 160) 0%, oklch(0.76 0.12 200) 100%)',
     image: null,
     github: 'https://github.com/XinyeeElaine/FYP_Predictive_api',
+    deploy: null,
+  },
+  {
+    title: 'H&Maybe',
+    slug: 'h-and-maybe',
+    summary: 'Full-stack fashion e-commerce web app — browse, cart, Stripe checkout, and admin panel.',
+    description: "A full-stack fashion e-commerce web application built from the ground up with plain PHP — no frameworks, just clean architecture.\n\nUsers can browse clothing by category, manage a shopping cart, pay via Stripe, and track orders. An admin panel lets store operators manage products (with variations), orders, and members. The database spans 10 tables covering users, products, variations, cart, orders, addresses, and auth tokens.\n\nFeatures PDO-based MySQL/MariaDB queries, PHPMailer for SMTP emails, Stripe integration via stripe-php, jQuery for interactivity, and custom CSS styling with .avif product images served through a thumbnail library.",
+    tags: ['PHP', 'MySQL', 'E-commerce', 'Stripe', 'Full-stack'],
+    glyph: 'H',
+    bg: 'linear-gradient(135deg, oklch(0.75 0.10 10) 0%, oklch(0.68 0.12 30) 100%)',
+    image: null,
+    github: 'https://github.com/XinyeeElaine/HAndMaybe',
+    deploy: null,
+  },
+  {
+    title: 'FoodTrust',
+    slug: 'foodtrust',
+    summary: 'AI-powered browser extension that detects fake reviews on Google Maps using AWS Bedrock.',
+    description: "We built this during the Great AI Hackathon 2025 - Team Penguining, my first hackathon project🤩 FoodTrust is a browser extension that brings transparency back to online food reviews.\n\nIt analyzes Google Maps restaurant reviews in real time using AWS Bedrock's language models, flagging suspicious reviews with reasoning and probability scores. An overall trust score (e.g. 85%) is displayed directly on the page.\n\nThe architecture uses a serverless AWS backend — Lambda functions process review text through Bedrock, with API Gateway routing and S3 for storage. The extension frontend is vanilla JavaScript, HTML, and CSS, while the ML pipeline was prototyped in Jupyter Notebooks via SageMaker Studio.",
+    tags: ['AI/ML', 'Browser Extension', 'AWS Bedrock', 'JavaScript', 'Python'],
+    glyph: 'F',
+    bg: 'linear-gradient(135deg, oklch(0.72 0.08 260) 0%, oklch(0.62 0.12 290) 100%)',
+    image: null,
+    github: 'https://github.com/XinyeeElaine/fake-food-review-detector',
     deploy: null,
   },
 ];
@@ -437,7 +461,7 @@ function ContactPage() {
           )}
           <div className="field">
             <label>Your name</label>
-            <input type="text" value={form.name} onChange={onChange('name')} placeholder="Sam from the studio" />
+            <input type="text" value={form.name} onChange={onChange('name')} placeholder="Elaine from the studio" />
             {errors.name && <div className="err">{errors.name}</div>}
           </div>
           <div className="field">
