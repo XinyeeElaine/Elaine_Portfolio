@@ -116,9 +116,9 @@
   --bg: #1a1b2e;
   --bg-soft: #25273f;
   --paper: #2a2c47;
-  --ink: oklch(0.92 0.02 280);
-  --ink-soft: oklch(0.78 0.03 280);
-  --ink-faint: oklch(0.62 0.04 280);
+  --ink: #ffffff;
+  --ink-soft: #ffffff;
+  --ink-faint: #ffffff;
 
   --lavender: oklch(0.45 0.10 295);             /* surface tint */
   --lavender-deep: oklch(0.78 0.14 295);        /* neon pastel */
@@ -224,7 +224,7 @@ a { color: inherit; }
 }
 .nav a.link:hover { color: var(--ink); background: rgba(180,160,220,0.12); }
 .nav a.link.active {
-  color: var(--ink); background: white;
+  color: var(--ink); background: var(--paper);
   box-shadow: var(--shadow-sm);
 }
 
@@ -256,7 +256,7 @@ a { color: inherit; }
 }
 .btn.primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 14px 28px -8px rgba(140, 120, 220, 0.55); }
 .btn.ghost {
-  background: white; color: var(--ink);
+  background: var(--paper); color: var(--ink);
   border: 1px solid var(--line);
   box-shadow: var(--shadow-sm);
 }
@@ -267,7 +267,7 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 12px; border-radius: 100px;
   font-size: 13px; font-weight: 600;
-  background: white; border: 1px solid var(--line);
+  background: var(--paper); border: 1px solid var(--line);
   color: var(--ink-soft);
 }
 
@@ -281,7 +281,7 @@ a { color: inherit; }
   display: inline-flex; align-items: center; gap: 10px;
   font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--lavender-deep);
-  background: rgba(255,255,255,0.7);
+  background: var(--bg-soft);
   padding: 8px 14px; border-radius: 100px;
   border: 1px solid var(--line);
   margin-bottom: 24px;
@@ -323,7 +323,7 @@ a { color: inherit; }
 /* avatar collage on right side */
 .collage { position: relative; height: 460px; }
 .collage .card-tile {
-  position: absolute; background: white;
+  position: absolute; background: var(--paper);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 18px;
@@ -371,7 +371,7 @@ a { color: inherit; }
   overflow: hidden;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: rgba(255,255,255,0.4);
+  background: var(--bg-soft);
   padding: 18px 0;
 }
 .marquee-track {
@@ -410,7 +410,7 @@ a { color: inherit; }
 }
 .t-item {
   position: relative;
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 22px 26px;
@@ -423,7 +423,7 @@ a { color: inherit; }
 .t-item .dot-marker {
   position: absolute; left: -34px; top: 26px;
   width: 22px; height: 22px; border-radius: 50%;
-  background: white;
+  background: var(--paper);
   border: 3px solid var(--lavender-deep);
   box-shadow: 0 0 0 4px rgba(180,160,220,0.18);
 }
@@ -440,7 +440,7 @@ a { color: inherit; }
   padding: 4px 10px; border-radius: 100px; text-transform: uppercase;
   background: var(--bg-soft); color: var(--lavender-deep);
 }
-.t-item.education .badge { background: oklch(0.95 0.04 230); color: var(--sky-deep); }
+.t-item.education .badge { background: var(--sky); color: var(--sky-deep); }
 
 /* beyond work */
 .beyond-grid {
@@ -448,7 +448,7 @@ a { color: inherit; }
   margin-top: 28px;
 }
 .hobby {
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 22px 18px 20px;
@@ -472,7 +472,7 @@ a { color: inherit; }
   align-items: start;
 }
 .about-bio {
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 28px 30px;
@@ -489,7 +489,7 @@ a { color: inherit; }
 /* ============ PROJECTS ============ */
 .proj-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
 .proj-card {
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -519,7 +519,7 @@ a { color: inherit; }
 /* ============ SKILLS — sticker cloud ============ */
 .skills-board {
   position: relative;
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
@@ -542,7 +542,7 @@ a { color: inherit; }
   padding: 12px 18px;
   border-radius: 100px;
   font-family: "Quicksand", sans-serif; font-weight: 700; font-size: 15px;
-  background: white;
+  background: var(--paper);
   border: 2px solid var(--line);
   box-shadow: 0 6px 14px -6px rgba(120,100,180,0.18);
   cursor: grab;
@@ -585,7 +585,7 @@ a { color: inherit; }
   margin-top: 24px;
 }
 .tool-card {
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 18px 12px;
@@ -633,13 +633,13 @@ a { color: inherit; }
 .contact-side .social a:hover { transform: translateX(6px); background: rgba(255,255,255,0.28); }
 .contact-side .social a .icon {
   width: 32px; height: 32px; border-radius: 8px;
-  background: white; color: var(--lavender-deep);
+  background: var(--paper); color: var(--lavender-deep);
   display: grid; place-items: center;
   font-family: "Caprasimo", serif; font-size: 14px;
 }
 
 .contact-form {
-  background: white;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 36px;
@@ -659,7 +659,7 @@ a { color: inherit; }
 .contact-form input:focus, .contact-form textarea:focus {
   outline: none;
   border-color: var(--lavender-deep);
-  background: white;
+  background: var(--paper);
   box-shadow: 0 0 0 4px rgba(180,160,220,0.18);
 }
 .contact-form textarea { resize: vertical; min-height: 120px; font-family: inherit; }
@@ -768,7 +768,7 @@ a { color: inherit; }
 .catbar .actions { display: flex; gap: 6px; flex-shrink: 0; }
 .catbar .actions button {
   border: 1.5px solid var(--line);
-  background: white;
+  background: var(--paper);
   padding: 5px 12px; border-radius: 100px;
   font-family: inherit; font-weight: 700; font-size: 12px;
   line-height: 1.4;
@@ -846,7 +846,7 @@ a { color: inherit; }
   .nav .links.mobile-open {
     display: flex; flex-direction: column;
     position: absolute; top: 60px; right: 12px;
-    background: white; border: 1px solid var(--line);
+    background: var(--paper); border: 1px solid var(--line);
     border-radius: 18px; padding: 8px; box-shadow: var(--shadow-md);
   }
   .nav .menu-toggle { display: inline-flex !important; }
@@ -1365,4 +1365,30 @@ a { color: inherit; }
 .carousel-dot-active:hover {
   transform: scale(1.3);
 }
+
+/* ============ Midnight Pastel — dark-mode overrides for hardcoded light elements ============ */
+
+/* skill stickers — dark backgrounds + light text */
+[data-theme="midnight"] .sticker.v-lav { background: oklch(0.28 0.05 295); color: oklch(0.88 0.06 295); }
+[data-theme="midnight"] .sticker.v-lav .dot { background: oklch(0.88 0.06 295); }
+[data-theme="midnight"] .sticker.v-sky { background: oklch(0.28 0.05 230); color: oklch(0.88 0.06 230); }
+[data-theme="midnight"] .sticker.v-sky .dot { background: oklch(0.88 0.06 230); }
+[data-theme="midnight"] .sticker.v-blush { background: oklch(0.28 0.05 20); color: oklch(0.88 0.06 20); }
+[data-theme="midnight"] .sticker.v-blush .dot { background: oklch(0.88 0.06 20); }
+[data-theme="midnight"] .sticker.v-mint { background: oklch(0.28 0.05 160); color: oklch(0.88 0.06 160); }
+[data-theme="midnight"] .sticker.v-mint .dot { background: oklch(0.88 0.06 160); }
+[data-theme="midnight"] .sticker.v-butter { background: oklch(0.30 0.05 95); color: oklch(0.90 0.06 95); }
+[data-theme="midnight"] .sticker.v-butter .dot { background: oklch(0.90 0.06 95); }
+
+/* cat bar action buttons */
+[data-theme="midnight"] .catbar .actions .feed { background: oklch(0.28 0.05 20); color: oklch(0.88 0.06 20); }
+[data-theme="midnight"] .catbar .actions .play { background: oklch(0.28 0.05 160); color: oklch(0.88 0.06 160); }
+[data-theme="midnight"] .catbar .actions .pet { background: oklch(0.28 0.05 295); color: oklch(0.88 0.06 295); }
+
+/* project detail links */
+[data-theme="midnight"] .proj-detail-link-gh { background: oklch(0.28 0.05 295); color: oklch(0.88 0.06 295); }
+[data-theme="midnight"] .proj-detail-link-live { background: oklch(0.28 0.05 230); color: oklch(0.88 0.06 230); }
+
+/* contact form success message */
+[data-theme="midnight"] .contact-form .success { background: oklch(0.28 0.05 145); color: oklch(0.88 0.06 145); }
 

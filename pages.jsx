@@ -25,7 +25,7 @@ function HomePage({ go }) {
 
         <div className="collage">
           <div className="card-tile t-avatar">
-            <img src="Picture/Elaine_profile.jpg" alt="Elaine" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="Picture/Elaine_profile.jpg?v=2" alt="Elaine" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div className="card-tile t-card1">
             <div className="tile-label">currently</div>
@@ -207,6 +207,7 @@ const PROJECTS = [
     tags: ['AI/ML', 'Browser Extension', 'AWS Bedrock', 'JavaScript', 'Python'],
     glyph: 'F',
     bg: 'linear-gradient(135deg, oklch(0.72 0.08 260) 0%, oklch(0.62 0.12 290) 100%)',
+    thumb: 'Picture/FoodTrust.png?v=1',
     image: null,
     github: 'https://github.com/XinyeeElaine/fake-food-review-detector',
     deploy: null,
