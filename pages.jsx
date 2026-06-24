@@ -182,10 +182,15 @@ const PROJECTS = [
     description: "My final year project: a predictive diagnostics API for electric vehicle charging stations. Built to detect potential faults before they happen, using a trained machine learning model on synthetic charger data.\n\nThe system ingests charger telemetry, runs it through a diagnostic engine, and returns predictive maintenance alerts via API. Includes a serialized ML model (ev_charger_model.pkl), a diagnostic engine, and full test coverage.",
     tags: ['Python', 'Machine Learning', 'API', 'EV'],
     glyph: 'E',
+    thumb: 'Picture/ev_logo.png',
     bg: 'linear-gradient(135deg, oklch(0.80 0.10 160) 0%, oklch(0.76 0.12 200) 100%)',
     image: null,
     github: 'https://github.com/XinyeeElaine/FYP_Predictive_api',
     deploy: null,
+    images: [
+      'Picture/ev_predictive_maintenance.png',
+      'Picture/ev_usage_analysis.png',
+    ],
   },
   {
     title: 'H&Maybe',
@@ -195,9 +200,15 @@ const PROJECTS = [
     tags: ['PHP', 'MySQL', 'E-commerce', 'Stripe', 'Full-stack'],
     glyph: 'H',
     bg: 'linear-gradient(135deg, oklch(0.75 0.10 10) 0%, oklch(0.68 0.12 30) 100%)',
+    thumb: 'Picture/HAndMaybe.png?v=2',
     image: null,
     github: 'https://github.com/XinyeeElaine/HAndMaybe',
     deploy: null,
+    images: [
+      'Picture/H&Maybe_product.png',
+      'Picture/H&Maybe_cart.png',
+      'Picture/H&Maybe_order.png',
+    ],
   },
   {
     title: 'FoodTrust',
@@ -211,6 +222,10 @@ const PROJECTS = [
     image: null,
     github: 'https://github.com/XinyeeElaine/fake-food-review-detector',
     deploy: null,
+    images: [
+      'Picture/FoodTrust_extension.png',
+      'Picture/FoodTrust_analysis.png',
+    ],
   },
 ];
 
@@ -484,15 +499,32 @@ function ImageCarousel({ images, title }) {
   const [active, setActive] = React.useState(0);
   const [paused, setPaused] = React.useState(false);
   const timer = React.useRef(null);
+  const resumeTimer = React.useRef(null);
 
-  React.useEffect(() => {
-    if (!paused && images.length > 1) {
+  const clearTimers = () => {
+    if (timer.current) { clearInterval(timer.current); timer.current = null; }
+    if (resumeTimer.current) { clearTimeout(resumeTimer.current); resumeTimer.current = null; }
+  };
+
+  const startAuto = () => {
+    clearTimers();
+    if (images.length > 1) {
       timer.current = setInterval(() => setActive(a => (a + 1) % images.length), 3500);
     }
-    return () => { if (timer.current) clearInterval(timer.current); };
+  };
+
+  React.useEffect(() => {
+    if (!paused) startAuto();
+    else clearTimers();
+    return clearTimers;
   }, [paused, images.length]);
 
-  const goTo = (i) => { setActive(i); setPaused(true); };
+  const goTo = (i) => {
+    clearTimers();
+    setActive(i);
+    setPaused(true);
+    resumeTimer.current = setTimeout(() => setPaused(false), 4000);
+  };
 
   return (
     <div
