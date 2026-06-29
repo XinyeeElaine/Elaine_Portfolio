@@ -171,6 +171,7 @@ const PROJECTS = [
     tags: ['Web app', 'Vanilla JS', 'Productivity', 'Fun'],
     glyph: 'M',
     bg: 'linear-gradient(135deg, oklch(0.84 0.08 85) 0%, oklch(0.78 0.10 55) 100%)',
+    thumb: 'Picture/meow-ney_logo.png',
     image: null,
     github: 'https://github.com/XinyeeElaine/Meow-ney-Maker',
     deploy: 'https://meow-ney.sillycookie.me/',
@@ -178,9 +179,9 @@ const PROJECTS = [
   {
     title: 'FYP Predictive API',
     slug: 'fyp-predictive-api',
-    summary: 'EV charger predictive diagnostics API — ML-powered fault detection for charging infrastructure.',
-    description: "My final year project: a predictive diagnostics API for electric vehicle charging stations. Built to detect potential faults before they happen, using a trained machine learning model on synthetic charger data.\n\nThe system ingests charger telemetry, runs it through a diagnostic engine, and returns predictive maintenance alerts via API. Includes a serialized ML model (ev_charger_model.pkl), a diagnostic engine, and full test coverage.",
-    tags: ['Python', 'Machine Learning', 'API', 'EV'],
+    summary: 'EV charger predictive diagnostics API: ML-powered fault detection for charging infrastructure.',
+            description: "EV Predictive Maintenance API — a Flask REST API that detects charger faults before they happen using a trained scikit-learn pipeline.\n\nThe POST /predict endpoint accepts charger telemetry and returns a failure probability, risk level, failure category (Overheating, Power Quality, Software Error), and a root cause explanation. Designed to handle messy real-world data with input key mapping (Laravel/PHP integration), rolling-feature backfilling, and sensible fallback defaults.\n\nServed via Waitress, deployed on Render, and tested against 20 edge-case scenarios.",
+    tags: ['Python', 'Flask', 'scikit-learn', 'ML', 'REST API', 'EV'],
     glyph: 'E',
     thumb: 'Picture/ev_logo.png',
     bg: 'linear-gradient(135deg, oklch(0.80 0.10 160) 0%, oklch(0.76 0.12 200) 100%)',
@@ -266,20 +267,30 @@ function ProjectsPage({ go }) {
 
 /* ---------- SKILLS ---------- */
 const SKILLS = {
-  Code: [
+  Languages: [
     { label: 'Python', v: 'v-sky' },
     { label: 'SQL', v: 'v-sky' },
     { label: 'C#', v: 'v-lav' },
     { label: 'HTML & CSS', v: 'v-sky' },
     { label: 'JavaScript', v: 'v-lav' },
-    { label: 'php', v: 'v-sky' },
-    { label: 'Data Analytics', v: 'v-mint' },
-    { label: 'Machine Learning', v: 'v-lav' },
+    { label: 'PHP', v: 'v-sky' },
     { label: 'Java', v: 'v-blush' },
-    { label: 'Pandas & NumPy', v: 'v-mint' },
-    { label: 'REST APIs', v: 'v-butter' },
+    { label: 'Kotlin', v: 'v-sky' },
   ],
-  Languages: [
+  Frameworks: [
+    { label: 'Flask API', v: 'v-lav' },
+    { label: 'Jetpack Compose', v: 'v-sky' },
+  ],
+  Libraries: [
+    { label: 'pandas', v: 'v-mint' },
+    { label: 'scikit-learn', v: 'v-lav' }
+  ],
+  Infrastructure: [
+    { label: 'MySQL', v: 'v-mint' },
+    { label: 'SQLite', v: 'v-mint' },
+    { label: 'AWS', v: 'v-lav' },
+  ],
+  Spoken: [
     { label: 'English', v: 'v-lav' },
     { label: 'Chinese', v: 'v-blush' },
     { label: 'Malay', v: 'v-mint' },
@@ -301,7 +312,7 @@ const TOOLS = [
   { glyph: '🗄️', name: 'MySQL / SSMS' },
 ];
 
-const SWATCHES = { Code: 'var(--sky-deep)', Languages: 'var(--lavender-deep)', 'Soft & squishy': 'oklch(0.72 0.12 20)' };
+const SWATCHES = { Languages: 'var(--sky-deep)', Frameworks: 'var(--mint)', Libraries: 'oklch(0.70 0.10 200)', Infrastructure: 'oklch(0.65 0.12 160)', Spoken: 'var(--lavender-deep)', 'Soft & squishy': 'oklch(0.72 0.12 20)' };
 
 function DraggableSticker({ baseRotate, className, children }) {
   const [pos, setPos] = React.useState({ x: 0, y: 0 });
