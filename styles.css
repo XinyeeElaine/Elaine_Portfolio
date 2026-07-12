@@ -517,23 +517,32 @@ a { color: inherit; }
 .proj-card .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
 
 /* ============ SKILLS — sticker cloud ============ */
-.skills-board {
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 28px;
+}
+.skill-section {
   position: relative;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  padding: 36px;
-  min-height: 480px;
+  padding: 28px 32px;
+  height: 250px;
   overflow: hidden;
 }
-.skills-board::before {
+.skill-section::before {
   content: '';
-  position: absolute; inset: 0;
+  position: absolute; inset: 22px;
+  border-radius: var(--radius-lg);
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(180,160,220,0.18) 1px, transparent 0);
-  background-size: 24px 24px;
-  opacity: 0.6;
+    /* pearl highlight */
+    radial-gradient(circle at 2.5px 2.5px, rgba(255,255,255,0.85) 1px, transparent 1px),
+    /* pearl body */
+    radial-gradient(circle at 3px 3px, oklch(0.75 0.06 290 / 0.5) 2.5px, transparent 2.5px);
+  background-size: 28px 28px;
+  opacity: 1;
   pointer-events: none;
 }
 .sticker {
@@ -555,6 +564,11 @@ a { color: inherit; }
 .sticker .dot {
   width: 12px; height: 12px; border-radius: 50%;
 }
+.sticker .sticker-icon {
+  width: 20px; height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
 .sticker.v-lav { background: oklch(0.95 0.04 295); border-color: var(--lavender); color: oklch(0.32 0.10 295); }
 .sticker.v-lav .dot { background: var(--lavender-deep); }
 .sticker.v-sky { background: oklch(0.96 0.04 230); border-color: var(--sky); color: oklch(0.32 0.10 230); }
@@ -571,13 +585,19 @@ a { color: inherit; }
   position: relative; z-index: 1;
 }
 .cluster-label {
-  font-family: "Caprasimo", serif; font-size: 18px;
+  font-family: "Caprasimo", serif; font-size: 22px;
   display: flex; align-items: center; gap: 10px;
   margin: 24px 0 14px;
   position: relative; z-index: 1;
 }
 .cluster-label:first-child { margin-top: 0; }
-.cluster-label .swatch { width: 14px; height: 14px; border-radius: 50%; }
+.cluster-label .swatch { min-width: 14px; width: 14px; min-height: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+.swatch-languages { background: var(--sky-deep); }
+.swatch-frameworks { background: oklch(0.68 0.12 160); }
+.swatch-libraries { background: oklch(0.70 0.10 200); }
+.swatch-infrastructure { background: oklch(0.65 0.12 160); }
+.swatch-tools { background: var(--lavender-deep); }
+.swatch-softskills { background: oklch(0.72 0.12 20); }
 
 /* tools row (small) */
 .tools-row {
@@ -598,6 +618,10 @@ a { color: inherit; }
 .tool-card .glyph {
   font-size: 28px;
   display: block; margin-bottom: 6px;
+}
+.tool-card .tool-icon {
+  width: 28px; height: 28px;
+  display: block; margin: 0 auto 6px;
 }
 
 /* ============ CONTACT ============ */
@@ -1379,6 +1403,14 @@ a { color: inherit; }
 [data-theme="midnight"] .sticker.v-mint .dot { background: oklch(0.88 0.06 160); }
 [data-theme="midnight"] .sticker.v-butter { background: oklch(0.30 0.05 95); color: oklch(0.90 0.06 95); }
 [data-theme="midnight"] .sticker.v-butter .dot { background: oklch(0.90 0.06 95); }
+
+/* keep midnight dot pattern subtle */
+[data-theme="midnight"] .skill-section::before {
+  background-image:
+    radial-gradient(circle at 1px 1px, oklch(0.65 0.04 290 / 0.28) 1px, transparent 0);
+  background-size: 24px 24px;
+  opacity: 0.6;
+}
 
 /* cat bar action buttons */
 [data-theme="midnight"] .catbar .actions .feed { background: oklch(0.28 0.05 20); color: oklch(0.88 0.06 20); }

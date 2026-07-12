@@ -131,7 +131,7 @@ function AboutPage() {
           </div>
           <div className="stats">
             <div><strong>4</strong><span>years in tech</span></div>
-            <div><strong>20+</strong><span>projects shipped</span></div>
+            <div><strong>10+</strong><span>projects shipped</span></div>
             <div><strong>3</strong><span>languages spoken</span></div>
           </div>
         </div>
@@ -266,55 +266,46 @@ function ProjectsPage({ go }) {
 }
 
 /* ---------- SKILLS ---------- */
+const ICON = (name) => `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${name}.svg`;
+
 const SKILLS = {
-  Languages: [
-    { label: 'Python', v: 'v-sky' },
-    { label: 'SQL', v: 'v-sky' },
-    { label: 'C#', v: 'v-lav' },
-    { label: 'HTML & CSS', v: 'v-sky' },
-    { label: 'JavaScript', v: 'v-lav' },
-    { label: 'PHP', v: 'v-sky' },
-    { label: 'Java', v: 'v-blush' },
-    { label: 'Kotlin', v: 'v-sky' },
+  LANGUAGES: [
+    { label: 'Python', v: 'v-sky', icon: ICON('python/python-original') },
+    { label: 'SQL', v: 'v-sky', icon: ICON('azuresqldatabase/azuresqldatabase-original') },
+    { label: 'C#', v: 'v-lav', icon: ICON('csharp/csharp-original') },
+    { label: 'HTML & CSS', v: 'v-butter', icon: ICON('html5/html5-original') },
+    { label: 'JavaScript', v: 'v-lav', icon: ICON('javascript/javascript-original') },
+    { label: 'PHP', v: 'v-sky', icon: ICON('php/php-original') },
+    { label: 'Java', v: 'v-blush', icon: ICON('java/java-original') },
+    { label: 'Kotlin', v: 'v-sky', icon: ICON('kotlin/kotlin-original') },
   ],
-  Frameworks: [
-    { label: 'Flask API', v: 'v-lav' },
-    { label: 'Jetpack Compose', v: 'v-sky' },
+  FRAMEWORKS: [
+    { label: 'Flask', v: 'v-lav', icon: ICON('flask/flask-original') },
+    { label: 'Jetpack Compose', v: 'v-sky', icon: ICON('jetpackcompose/jetpackcompose-original') },
+    { label: 'Vue', v: 'v-mint', icon: ICON('vuejs/vuejs-original') },
   ],
-  Libraries: [
-    { label: 'pandas', v: 'v-mint' },
-    { label: 'scikit-learn', v: 'v-lav' }
+  LIBRARIES: [
+    { label: 'pandas', v: 'v-mint', icon: ICON('pandas/pandas-original') },
+    { label: 'scikit-learn', v: 'v-lav', icon: ICON('scikitlearn/scikitlearn-original') },
   ],
-  Infrastructure: [
-    { label: 'MySQL', v: 'v-mint' },
-    { label: 'SQLite', v: 'v-mint' },
-    { label: 'AWS', v: 'v-lav' },
+  INFRASTRUCTURE: [
+    { label: 'MySQL', v: 'v-butter', icon: ICON('mysql/mysql-original') },
+    { label: 'Supabase', v: 'v-mint', icon: ICON('supabase/supabase-original') },
+    { label: 'AWS', v: 'v-lav', icon: ICON('amazonwebservices/amazonwebservices-original-wordmark') },
   ],
-  Spoken: [
-    { label: 'English', v: 'v-lav' },
-    { label: 'Chinese', v: 'v-blush' },
-    { label: 'Malay', v: 'v-mint' },
+  TOOLS: [
+    { label: 'Git', v: 'v-lav', icon: ICON('git/git-original') },
   ],
-  'Soft & squishy': [
+  'Soft skills': [
     { label: 'Adaptable & curious', v: 'v-blush' },
     { label: 'Clear communicator', v: 'v-mint' },
     { label: 'Team player', v: 'v-lav' },
     { label: 'Detail-oriented', v: 'v-butter' },
+    { label: 'Process driven', v: 'v-sky' },
   ],
 };
 
-const TOOLS = [
-  { glyph: '💻', name: 'VS Code' },
-  { glyph: '🐙', name: 'GitHub' },
-  { glyph: '📓', name: 'Jupyter' },
-  { glyph: '☁️', name: 'Google Colab' },
-  { glyph: '📊', name: 'Power BI / Tableau' },
-  { glyph: '🗄️', name: 'MySQL / SSMS' },
-];
-
-const SWATCHES = { Languages: 'var(--sky-deep)', Frameworks: 'var(--mint)', Libraries: 'oklch(0.70 0.10 200)', Infrastructure: 'oklch(0.65 0.12 160)', Spoken: 'var(--lavender-deep)', 'Soft & squishy': 'oklch(0.72 0.12 20)' };
-
-function DraggableSticker({ baseRotate, className, children }) {
+function DraggableSticker({ baseRotate, className, icon, children }) {
   const [pos, setPos] = React.useState({ x: 0, y: 0 });
   const [dragging, setDragging] = React.useState(false);
   const ref = React.useRef(null);
@@ -357,6 +348,7 @@ function DraggableSticker({ baseRotate, className, children }) {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
+      {icon ? <img src={icon} className="sticker-icon" alt="" onError={(e) => { e.target.style.display = 'none'; }} /> : null}
       {children}
     </span>
   );
@@ -371,37 +363,24 @@ function SkillsPage() {
         <p>The things I do most often, and the tools I reach for on a Tuesday. Drag them around — they don't bite.</p>
       </div>
 
-      <div className="skills-board">
+      <div className="skills-grid">
         {Object.entries(SKILLS).map(([category, items]) => (
           <div key={category}>
-            <div className="cluster-label">
-              <span className="swatch" style={{ background: SWATCHES[category] }} />
-              {category}
+            <div className="cluster-label"><span className={`swatch swatch-${category.toLowerCase().replace(/[^a-z]/g, '')}`}></span> {category}</div>
+            <div className="skill-section">
+              <div className="skill-cluster">
+                {items.map((s, i) => (
+                  <DraggableSticker
+                    key={s.label}
+                    className={`sticker ${s.v}`}
+                    icon={s.icon}
+                    baseRotate={(i % 3 - 1) * 1.5}
+                  >
+                    {s.label}
+                  </DraggableSticker>
+                ))}
+              </div>
             </div>
-            <div className="skill-cluster">
-              {items.map((s, i) => (
-                <DraggableSticker
-                  key={s.label}
-                  className={`sticker ${s.v}`}
-                  baseRotate={(i % 3 - 1) * 1.5}
-                >
-                  <span className="dot" /> {s.label}
-                </DraggableSticker>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="cluster-label" style={{ marginTop: 36 }}>
-        <span className="swatch" style={{ background: 'var(--lavender-deep)' }} />
-        Daily tools
-      </div>
-      <div className="tools-row">
-        {TOOLS.map(t => (
-          <div key={t.name} className="tool-card">
-            <span className="glyph">{t.glyph}</span>
-            {t.name}
           </div>
         ))}
       </div>
