@@ -84,6 +84,7 @@ function App() {
       {pageElement}
 
       <CatRoot />
+      <ChatBot />
     </>
   );
 }

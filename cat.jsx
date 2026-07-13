@@ -12,60 +12,75 @@ function CatSVG({ mood }) {
     <svg className="cat-svg" width="76" height="74" viewBox="0 0 100 100" style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)' }}>
       {/* tail */}
       <g className="tail" style={{ transformOrigin: '78px 70px' }}>
-        <path d="M 78 70 Q 92 60 88 44" stroke="#caa3e0" strokeWidth="7" fill="none" strokeLinecap="round" />
-        <path d="M 78 70 Q 92 60 88 44" stroke="#e6cff2" strokeWidth="3" fill="none" strokeLinecap="round" />
+        <path d="M 78 70 Q 92 60 88 44" stroke="#8a5f30" strokeWidth="7" fill="none" strokeLinecap="round" />
+        <path d="M 78 70 Q 92 60 88 44" stroke="#5c3c1c" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeDasharray="3 5" />
       </g>
 
       {/* body */}
-      <ellipse cx="48" cy="76" rx="26" ry="18" fill="#e6cff2" />
-      <ellipse cx="48" cy="74" rx="22" ry="14" fill="#f3e1fa" />
+      <ellipse cx="48" cy="76" rx="26" ry="18" fill="#b8894e" />
+      <ellipse cx="48" cy="74" rx="22" ry="14" fill="#cfa068" />
+      {/* mackerel tabby body stripes */}
+      <g stroke="#6e4a24" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.55">
+        <path d="M 40 64 Q 42 73 40 83" />
+        <path d="M 50 63 Q 52 73 50 84" />
+        <path d="M 60 65 Q 61 73 60 83" />
+      </g>
 
       {/* feet (used as walking legs) */}
-      <ellipse className="leg-fl" cx="36" cy="90" rx="5.5" ry="4" fill="#caa3e0" />
-      <ellipse className="leg-fr" cx="44" cy="90" rx="4.5" ry="3.5" fill="#caa3e0" />
-      <ellipse className="leg-bl" cx="54" cy="90" rx="4.5" ry="3.5" fill="#caa3e0" />
-      <ellipse className="leg-br" cx="62" cy="90" rx="5.5" ry="4" fill="#caa3e0" />
+      <ellipse className="leg-fl" cx="36" cy="90" rx="5.5" ry="4" fill="#8a5f30" />
+      <ellipse className="leg-fr" cx="44" cy="90" rx="4.5" ry="3.5" fill="#8a5f30" />
+      <ellipse className="leg-bl" cx="54" cy="90" rx="4.5" ry="3.5" fill="#8a5f30" />
+      <ellipse className="leg-br" cx="62" cy="90" rx="5.5" ry="4" fill="#8a5f30" />
 
       {/* head */}
       <g style={{ transformOrigin: '48px 50px', transform: happy ? 'rotate(-4deg)' : 'rotate(0)', transition: 'transform 0.3s' }}>
-        <path d="M 30 38 L 26 22 L 42 32 Z" fill="#caa3e0" />
-        <path d="M 30 38 L 28 26 L 39 32 Z" fill="#f7c8df" />
-        <path d="M 66 38 L 70 22 L 54 32 Z" fill="#caa3e0" />
-        <path d="M 66 38 L 68 26 L 57 32 Z" fill="#f7c8df" />
+        <path d="M 30 38 L 26 22 L 42 32 Z" fill="#8a5f30" />
+        <path d="M 30 38 L 28 26 L 39 32 Z" fill="#cf9b7a" />
+        <path d="M 66 38 L 70 22 L 54 32 Z" fill="#8a5f30" />
+        <path d="M 66 38 L 68 26 L 57 32 Z" fill="#cf9b7a" />
 
-        <ellipse cx="48" cy="50" rx="22" ry="20" fill="#f3e1fa" />
-        <ellipse cx="48" cy="51" rx="20" ry="18" fill="#fbf3ff" />
+        <ellipse cx="48" cy="50" rx="22" ry="20" fill="#cfa068" />
+        <ellipse cx="48" cy="51" rx="20" ry="18" fill="#e6c893" />
 
-        <ellipse cx="34" cy="56" rx="5" ry="3" fill="#f7c8df" opacity="0.7" />
-        <ellipse cx="62" cy="56" rx="5" ry="3" fill="#f7c8df" opacity="0.7" />
+        {/* forehead mackerel "M" mark */}
+        <g stroke="#6e4a24" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.7">
+          <path d="M 40 34 L 42 41" />
+          <path d="M 48 33 L 48 41" />
+          <path d="M 56 34 L 54 41" />
+        </g>
+
+        <ellipse cx="34" cy="56" rx="5" ry="3" fill="#d9a76e" opacity="0.6" />
+        <ellipse cx="62" cy="56" rx="5" ry="3" fill="#d9a76e" opacity="0.6" />
 
         {sleepy ?
-        <g stroke="#5a3f7a" strokeWidth="2" fill="none" strokeLinecap="round">
+        <g stroke="#4a3320" strokeWidth="2" fill="none" strokeLinecap="round">
             <path d="M 38 48 Q 42 51 46 48" />
             <path d="M 50 48 Q 54 51 58 48" />
           </g> :
         happy ?
-        <g stroke="#5a3f7a" strokeWidth="2.4" fill="none" strokeLinecap="round">
+        <g stroke="#4a3320" strokeWidth="2.4" fill="none" strokeLinecap="round">
             <path d="M 37 49 Q 42 44 47 49" />
             <path d="M 49 49 Q 54 44 59 49" />
           </g> :
 
         <>
-            <ellipse className="eye l" cx="42" cy="49" rx="2.6" ry="3.4" fill="#3b2754" />
-            <ellipse className="eye r" cx="54" cy="49" rx="2.6" ry="3.4" fill="#3b2754" />
+            <ellipse className="eye l" cx="42" cy="49" rx="2.8" ry="3.4" fill="#4f7a3a" />
+            <ellipse className="eye r" cx="54" cy="49" rx="2.8" ry="3.4" fill="#4f7a3a" />
+            <ellipse cx="42" cy="49" rx="1.1" ry="3" fill="#26401c" />
+            <ellipse cx="54" cy="49" rx="1.1" ry="3" fill="#26401c" />
             <circle cx="42.8" cy="48" r="0.9" fill="white" />
             <circle cx="54.8" cy="48" r="0.9" fill="white" />
           </>
         }
 
-        <path d="M 47 55 L 49 55 L 48 57 Z" fill="#d97aa6" />
+        <path d="M 47 55 L 49 55 L 48 57 Z" fill="#b0503a" />
         {eating ?
-        <ellipse cx="48" cy="60" rx="3" ry="2" fill="#5a3f7a" /> :
+        <ellipse cx="48" cy="60" rx="3" ry="2" fill="#4a3320" /> :
 
-        <path d="M 44 59 Q 48 62 52 59" stroke="#5a3f7a" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+        <path d="M 44 59 Q 48 62 52 59" stroke="#4a3320" strokeWidth="1.6" fill="none" strokeLinecap="round" />
         }
 
-        <g stroke="#caa3e0" strokeWidth="1" strokeLinecap="round" opacity="0.7">
+        <g stroke="#efe0c2" strokeWidth="1" strokeLinecap="round" opacity="0.8">
           <path d="M 28 56 L 18 54" />
           <path d="M 28 58 L 18 60" />
           <path d="M 68 56 L 78 54" />
@@ -148,7 +163,8 @@ function CatRoot() {
   /* ----- walking loop ----- */
   useEffect(() => {
     const tick = setInterval(() => {
-      if (placementRef.current !== 'footer') return;
+      const pl = placementRef.current;
+      if (pl !== 'footer' && pl !== 'placed') return;
       const b = behaviorRef.current;
       if (b === 'eat' || b === 'happy' || b === 'sleepy') return;
       if (b !== 'walk') return; // sit/groom/look just pause
@@ -174,15 +190,19 @@ function CatRoot() {
     const schedule = () => {
       const wait = 4000 + Math.random() * 6000;
       timeout = setTimeout(() => {
-        if (placementRef.current === 'footer' && ['walk'].includes(behaviorRef.current)) {
-          const choice = ['sit', 'groom', 'look'][Math.floor(Math.random() * 3)];
+        const pl = placementRef.current;
+        if ((pl === 'footer' || pl === 'placed') && behaviorRef.current === 'walk') {
+          const opts = pl === 'placed' ? ['sit', 'groom', 'look', 'sleep', 'sleep'] : ['sit', 'groom', 'look'];
+          const choice = opts[Math.floor(Math.random() * opts.length)];
           setBehavior(choice);
+          const dur = choice === 'sleep' ? 4000 + Math.random() * 4000 : 1800 + Math.random() * 2000;
           setTimeout(() => {
-            if (placementRef.current === 'footer' && behaviorRef.current === choice) {
+            const p2 = placementRef.current;
+            if ((p2 === 'footer' || p2 === 'placed') && behaviorRef.current === choice) {
               setBehavior('walk');
             }
             schedule();
-          }, 1800 + Math.random() * 2000);
+          }, dur);
         } else {
           schedule();
         }
@@ -203,7 +223,7 @@ function CatRoot() {
 
   /* ----- sleepy when both low ----- */
   useEffect(() => {
-    if (['eat', 'happy', 'dangle'].includes(behavior)) return;
+    if (['eat', 'happy', 'dangle', 'sleep'].includes(behavior)) return;
     if (hunger < 22 && fun < 22) setBehavior('sleepy');else
     if (behavior === 'sleepy') setBehavior('walk');
   }, [hunger, fun, behavior]);
@@ -263,7 +283,7 @@ function CatRoot() {
       const py = clientY + window.scrollY;
       setPlacement('placed');
       setPos({ x: px, y: py });
-      setBehavior('sit');
+      setBehavior('walk');
       try {localStorage.setItem('cozy.cat.placement', JSON.stringify({ placement: 'placed', x: px, y: py }));} catch (err) {}
     }
   };
@@ -346,14 +366,14 @@ function CatRoot() {
   if (placement === 'dragging') cls += ' dragging';else
   if (placement === 'placed') cls += ' placed';else
   cls += ' walking-host';
-  if (placement === 'footer' && behavior === 'walk') cls += ' walking';
+  if ((placement === 'footer' || placement === 'placed') && behavior === 'walk') cls += ' walking';
   if (behavior === 'groom') cls += ' grooming';
   if (behavior === 'look') cls += ' looking';
 
   // mood for the SVG itself
   const svgMood = behavior === 'eat' ? 'eating' :
   behavior === 'happy' ? 'happy' :
-  behavior === 'sleepy' ? 'sleepy' :
+  behavior === 'sleepy' || behavior === 'sleep' ? 'sleepy' :
   'idle';
 
   /* ----- mood label ----- */
@@ -361,6 +381,7 @@ function CatRoot() {
     if (behavior === 'eat') return 'nom nom...';
     if (behavior === 'happy') return 'purr purr ✨';
     if (behavior === 'sleepy') return 'zzz... feed me?';
+    if (behavior === 'sleep') return 'napping... zzz';
     if (behavior === 'groom') return 'tidying up';
     if (behavior === 'look') return 'what was that?';
     if (placement === 'placed') return 'sitting here a while';
