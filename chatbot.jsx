@@ -58,6 +58,8 @@ function ChatBot() {
       } else {
         reply = await res.text();
       }
+      // n8n sometimes returns literal \n escapes instead of real newlines
+      reply = String(reply ?? '').replace(/\\r\\n|\\n/g, '\n');
       setMessages((m) => [...m, { role: 'bot', text: reply || '(no response)' }]);
     } catch (e) {
       setMessages((m) => [...m, { role: 'bot', text: "Oops — I couldn't reach the server. Please try again in a bit!" }]);
@@ -76,13 +78,12 @@ function ChatBot() {
         <div className="chat-panel" role="dialog" aria-label="Chat with Elaine's assistant">
           <div className="chat-head">
             <div className="chat-head-title">
-              <span className="chat-avatar">🐱</span>
+              <img className="chat-avatar" src="Picture/sillycookie.jpeg" alt="Cookie" />
               <div>
-                <strong>Elaine's Assistant</strong>
-                <span className="chat-status">ask me anything</span>
+                <strong>COOKIE</strong>
+                <span className="chat-status">ask me anything /ᐠ .ᆺ. ᐟ\ﾉ</span>
               </div>
             </div>
-            <button className="chat-close" onClick={() => setOpen(false)} aria-label="Close chat">✕</button>
           </div>
 
           <div className="chat-msgs" ref={listRef}>
@@ -114,7 +115,7 @@ function ChatBot() {
       )}
 
       <button className={`chat-fab ${open ? 'open' : ''}`} onClick={() => setOpen((o) => !o)} aria-label="Chat">
-        {open ? '✕' : '💬'}
+        {open ? '✕' : <img className="chat-fab-img" src="Picture/chatbot-button.png" alt="Chat" />}
       </button>
     </>
   );

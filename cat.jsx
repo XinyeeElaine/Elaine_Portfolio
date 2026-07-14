@@ -12,45 +12,48 @@ function CatSVG({ mood }) {
     <svg className="cat-svg" width="76" height="74" viewBox="0 0 100 100" style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)' }}>
       {/* tail */}
       <g className="tail" style={{ transformOrigin: '78px 70px' }}>
-        <path d="M 78 70 Q 92 60 88 44" stroke="#8a5f30" strokeWidth="7" fill="none" strokeLinecap="round" />
+        <path d="M 78 70 Q 92 60 88 44" stroke="#5c3c1c" strokeWidth="7" fill="none" strokeLinecap="round" />
         <path d="M 78 70 Q 92 60 88 44" stroke="#5c3c1c" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeDasharray="3 5" />
       </g>
 
-      {/* body */}
-      <ellipse cx="48" cy="76" rx="26" ry="18" fill="#b8894e" />
-      <ellipse cx="48" cy="74" rx="22" ry="14" fill="#cfa068" />
-      {/* mackerel tabby body stripes */}
-      <g stroke="#6e4a24" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.55">
-        <path d="M 40 64 Q 42 73 40 83" />
-        <path d="M 50 63 Q 52 73 50 84" />
-        <path d="M 60 65 Q 61 73 60 83" />
+      {/* body — brown tabby back, white chest/belly */}
+      <ellipse cx="48" cy="76" rx="26" ry="18" fill="#7d5730" />
+      <ellipse cx="48" cy="80" rx="23" ry="13" fill="#f3ede2" />
+      {/* mackerel tabby stripes on brown back only */}
+      <g stroke="#6e4a24" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.5">
+        <path d="M 40 62 Q 42 69 41 74" />
+        <path d="M 50 61 Q 52 68 51 73" />
+        <path d="M 60 63 Q 61 69 60 74" />
       </g>
 
-      {/* feet (used as walking legs) */}
-      <ellipse className="leg-fl" cx="36" cy="90" rx="5.5" ry="4" fill="#8a5f30" />
-      <ellipse className="leg-fr" cx="44" cy="90" rx="4.5" ry="3.5" fill="#8a5f30" />
-      <ellipse className="leg-bl" cx="54" cy="90" rx="4.5" ry="3.5" fill="#8a5f30" />
-      <ellipse className="leg-br" cx="62" cy="90" rx="5.5" ry="4" fill="#8a5f30" />
+      {/* feet (used as walking legs) — white paws */}
+      <ellipse className="leg-fl" cx="40" cy="90" rx="6" ry="4.2" fill="#ece3d5" />
+      <ellipse className="leg-br" cx="58" cy="90" rx="6" ry="4.2" fill="#ece3d5" />
 
       {/* head */}
       <g style={{ transformOrigin: '48px 50px', transform: happy ? 'rotate(-4deg)' : 'rotate(0)', transition: 'transform 0.3s' }}>
-        <path d="M 30 38 L 26 22 L 42 32 Z" fill="#8a5f30" />
-        <path d="M 30 38 L 28 26 L 39 32 Z" fill="#cf9b7a" />
-        <path d="M 66 38 L 70 22 L 54 32 Z" fill="#8a5f30" />
-        <path d="M 66 38 L 68 26 L 57 32 Z" fill="#cf9b7a" />
+        <path d="M 30 38 L 26 22 L 42 32 Z" fill="#5c3c1c" />
+        <path d="M 30 38 L 28 26 L 39 32 Z" fill="#a06f4a" />
+        <path d="M 66 38 L 70 22 L 54 32 Z" fill="#5c3c1c" />
+        <path d="M 66 38 L 68 26 L 57 32 Z" fill="#a06f4a" />
 
-        <ellipse cx="48" cy="50" rx="22" ry="20" fill="#cfa068" />
-        <ellipse cx="48" cy="51" rx="20" ry="18" fill="#e6c893" />
+        <ellipse cx="48" cy="50" rx="22" ry="20" fill="#7d5730" />
+        <ellipse cx="48" cy="50" rx="20" ry="18" fill="#8a6238" />
 
-        {/* forehead mackerel "M" mark */}
+        {/* white muzzle + center blaze up the forehead */}
+        <ellipse cx="48" cy="58" rx="16" ry="12" fill="#f5efe4" />
+        <path d="M 48 34 Q 44 45 43 57 L 53 57 Q 52 45 48 34 Z" fill="#f5efe4" />
+
+        {/* forehead mackerel "M" mark on the brown cap */}
         <g stroke="#6e4a24" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.7">
-          <path d="M 40 34 L 42 41" />
-          <path d="M 48 33 L 48 41" />
-          <path d="M 56 34 L 54 41" />
+          <path d="M 37 34 L 39 41" />
+          <path d="M 43 33 L 43 40" />
+          <path d="M 53 33 L 53 40" />
+          <path d="M 59 34 L 57 41" />
         </g>
 
-        <ellipse cx="34" cy="56" rx="5" ry="3" fill="#d9a76e" opacity="0.6" />
-        <ellipse cx="62" cy="56" rx="5" ry="3" fill="#d9a76e" opacity="0.6" />
+        <ellipse cx="34" cy="57" rx="4" ry="2.6" fill="#e6b0b0" opacity="0.45" />
+        <ellipse cx="62" cy="57" rx="4" ry="2.6" fill="#e6b0b0" opacity="0.45" />
 
         {sleepy ?
         <g stroke="#4a3320" strokeWidth="2" fill="none" strokeLinecap="round">
@@ -73,11 +76,11 @@ function CatSVG({ mood }) {
           </>
         }
 
-        <path d="M 47 55 L 49 55 L 48 57 Z" fill="#b0503a" />
+        <path d="M 46.5 54.5 L 49.5 54.5 L 48 57 Z" fill="#e08c94" />
         {eating ?
         <ellipse cx="48" cy="60" rx="3" ry="2" fill="#4a3320" /> :
 
-        <path d="M 44 59 Q 48 62 52 59" stroke="#4a3320" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+        <path d="M 48 58 Q 45 62 42 59 M 48 58 Q 51 62 54 59" stroke="#4a3320" strokeWidth="1.6" fill="none" strokeLinecap="round" />
         }
 
         <g stroke="#efe0c2" strokeWidth="1" strokeLinecap="round" opacity="0.8">
