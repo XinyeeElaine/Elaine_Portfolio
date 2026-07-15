@@ -331,7 +331,8 @@ a { color: inherit; }
 }
 .collage .t-avatar {
   width: 240px; height: 280px;
-  top: 30px; left: 60px;
+  top: 30px; left: 0;
+  z-index: 2;
   background: linear-gradient(160deg, var(--lavender) 0%, var(--sky) 100%);
   transform: rotate(-4deg);
   position: relative;
@@ -342,7 +343,7 @@ a { color: inherit; }
   text-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 .collage .t-card1 {
-  width: 200px; top: 0; right: 40px;
+  width: 200px; top: 0; right: 0;
   transform: rotate(6deg);
   animation: float1 6s ease-in-out infinite;
 }

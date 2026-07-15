@@ -29,11 +29,11 @@ function HomePage({ go }) {
           </div>
           <div className="card-tile t-card1">
             <div className="tile-label">currently</div>
-            <div className="tile-body">undergoing internship 💻</div>
+            <div className="tile-body">job hunting & building side projects 💻</div>
           </div>
           <div className="card-tile t-card2">
-            <div className="tile-label">listening to</div>
-            <div className="tile-body">lo-fi & rain sounds 🌧️</div>
+            <div className="tile-label">learning</div>
+            <div className="tile-body">n8n automations 🔧</div>
           </div>
           <div className="card-tile t-card3">
             <div className="tile-label">playing</div>
@@ -49,16 +49,16 @@ function HomePage({ go }) {
             UI/UX design <span className="star">✦</span>
             front-end <span className="star">✦</span>
             Python <span className="star">✦</span>
-            prototyping <span className="star">✦</span>
-            illustration <span className="star">✦</span>
+            Automation <span className="star">✦</span>
+            Machine Learning <span className="star">✦</span>
           </span>
           <span>
             data science <span className="star">✦</span>
             UI/UX design <span className="star">✦</span>
             front-end <span className="star">✦</span>
             Python <span className="star">✦</span>
-            prototyping <span className="star">✦</span>
-            illustration <span className="star">✦</span>
+            Automation <span className="star">✦</span>
+            Machine Learning <span className="star">✦</span>
           </span>
         </div>
       </div>
@@ -295,6 +295,7 @@ const SKILLS = {
   ],
   TOOLS: [
     { label: 'Git', v: 'v-lav', icon: ICON('git/git-original') },
+    { label: 'n8n', v: 'v-blush', icon: 'https://cdn.simpleicons.org/n8n' },
   ],
   'Soft skills': [
     { label: 'Adaptable & curious', v: 'v-blush' },
