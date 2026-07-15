@@ -7,11 +7,11 @@ function HomePage({ go }) {
         <div>
           <div className="eyebrow"><span className="pulse" /> open to new projects · 2026</div>
           <h1>
-            Hi, I'm Elaine <span className="wave">🐱</span><br />
-            I turn data into <em>cozy</em> things -⩊-
+            Hi, I'm <span className="wave">🐱</span><br />
+            <em>Elaine Pang Xin Yee -⩊-</em>
           </h1>
           <p className="lede">
-            Bachelor in Data Science student at TARUMT. I enjoy building warm, playful interfaces for the web.
+            Data Science graduate from TARUMT. I turn messy data into clear, playful things people actually want to use — dashboards, apps, and the automations that keep them fed.
           </p>
           <div className="cta-row">
             <button className="btn primary" onClick={() => go('contact')}>
@@ -141,6 +141,45 @@ function AboutPage() {
 }
 
 /* ---------- PROJECTS ---------- */
+/* What each tool actually did on these projects — shown under the name in "Built with",
+   so the list reads as roles rather than a pile of nouns. */
+const TECH_ROLE = {
+  // LoafLand
+  'Kotlin': 'Language',
+  'Jetpack Compose': 'UI toolkit',
+  'MVVM': 'Architecture',
+  'Room (SQLite)': 'Local database',
+  'Material 3': 'Design system',
+  'Android SDK': 'Platform',
+  // Meow-ney Maker
+  'HTML': 'Markup',
+  'CSS': 'Styling',
+  'Vanilla JavaScript': 'Language',
+  'localStorage': 'Client storage',
+  // FYP Predictive API
+  'Python': 'Language',
+  'Flask': 'Web framework',
+  'scikit-learn': 'Machine learning',
+  'pandas': 'Data wrangling',
+  'Waitress': 'WSGI server',
+  'Render': 'Hosting',
+  // H&Maybe
+  'PHP': 'Backend',
+  'MySQL': 'Database',
+  'MariaDB': 'Database',
+  'PDO': 'Database access',
+  'Stripe': 'Payments',
+  'PHPMailer': 'Transactional email',
+  'jQuery': 'Frontend',
+  // FoodTrust
+  'Amazon Bedrock': 'LLM inference',
+  'AWS Lambda': 'Serverless compute',
+  'Amazon API Gateway': 'API routing',
+  'Amazon S3': 'Object storage',
+  'Amazon SageMaker Studio': 'ML prototyping',
+  'JavaScript': 'Extension frontend',
+};
+
 const PROJECTS = [
   {
     title: 'LoafLand Bakery',
@@ -148,6 +187,15 @@ const PROJECTS = [
     summary: 'Full-featured Android bakery app — online ordering for customers, management dashboard for admins.',
     description: "A complete Android mobile app built for a bakery shop, delivering \"fresh from the oven, straight to your phone.\" Developed as part of a mobile application development course.\n\nBuilt with Kotlin and Jetpack Compose using MVVM architecture. The app has two modules — a customer-facing side (menu browsing, cart with 6% service tax, in-app wallet, order tracking, custom combo sets, reviews) and an admin panel (CRUD for menu items, review management, order status updates).\n\nFeatures Room (SQLite) with 8 entity tables, multi-language support (English, Bahasa Melayu, Chinese), and Material 3 design throughout.",
     tags: ['Android', 'Kotlin', 'Jetpack Compose', 'MVVM', 'Room DB'],
+    features: [
+      'Menu browsing with cart and 6% service tax',
+      'In-app wallet and live order tracking',
+      'Build-your-own combo sets',
+      'Customer reviews and ratings',
+      'Admin panel — menu CRUD, review moderation, order status',
+      'Multi-language: English, Bahasa Melayu, Chinese',
+    ],
+    techStack: ['Kotlin', 'Jetpack Compose', 'MVVM', 'Room (SQLite)', 'Material 3', 'Android SDK'],
     glyph: 'L',
     thumb: 'Picture/LoafLand-Bakery_logo.jpg',
     bg: 'linear-gradient(135deg, oklch(0.78 0.10 55) 0%, oklch(0.84 0.08 85) 100%)',
@@ -169,6 +217,15 @@ const PROJECTS = [
     summary: 'Real-time salary tracker with a bouncing DJ cat. Watch your earnings grow second-by-second.',
     description: "Work is boring, but getting paid isn't. A playful real-time working timer that calculates your earnings down to the second based on your monthly salary and working hours — complete with a bouncing hard-working cat companion and a DJ Cat for clock-out celebrations.\n\nBuilt with pure HTML, CSS, and vanilla JavaScript — no frameworks, just feline motivation. Session history is saved via local storage so you can track shifts, hours, and earnings over time. The UI uses clean glass-morphism cards with a custom floating glitter background.",
     tags: ['Web app', 'Vanilla JS', 'Productivity', 'Fun'],
+    features: [
+      'Earnings counter that ticks up second-by-second',
+      'Set your monthly salary and working hours',
+      'Bouncing cat companion while you work',
+      'DJ Cat clock-out celebration',
+      'Session history — shifts, hours, earnings over time',
+      'Glass-morphism UI with a floating glitter background',
+    ],
+    techStack: ['HTML', 'CSS', 'Vanilla JavaScript', 'localStorage'],
     glyph: 'M',
     bg: 'linear-gradient(135deg, oklch(0.84 0.08 85) 0%, oklch(0.78 0.10 55) 100%)',
     thumb: 'Picture/meow-ney_logo.png',
@@ -182,6 +239,15 @@ const PROJECTS = [
     summary: 'EV charger predictive diagnostics API: ML-powered fault detection for charging infrastructure.',
             description: "EV Predictive Maintenance API — a Flask REST API that detects charger faults before they happen using a trained scikit-learn pipeline.\n\nThe POST /predict endpoint accepts charger telemetry and returns a failure probability, risk level, failure category (Overheating, Power Quality, Software Error), and a root cause explanation. Designed to handle messy real-world data with input key mapping (Laravel/PHP integration), rolling-feature backfilling, and sensible fallback defaults.\n\nServed via Waitress, deployed on Render, and tested against 20 edge-case scenarios.",
     tags: ['Python', 'Flask', 'scikit-learn', 'ML', 'REST API', 'EV'],
+    features: [
+      'POST /predict returns a failure probability from charger telemetry',
+      'Risk level and failure category — Overheating, Power Quality, Software Error',
+      'Root cause explanation with every prediction',
+      'Input key mapping for Laravel/PHP integration',
+      'Rolling-feature backfilling and fallback defaults for messy data',
+      'Tested against 20 edge-case scenarios',
+    ],
+    techStack: ['Python', 'Flask', 'scikit-learn', 'pandas', 'Waitress', 'Render'],
     glyph: 'E',
     thumb: 'Picture/ev_logo.png',
     bg: 'linear-gradient(135deg, oklch(0.80 0.10 160) 0%, oklch(0.76 0.12 200) 100%)',
@@ -197,8 +263,19 @@ const PROJECTS = [
     title: 'H&Maybe',
     slug: 'h-and-maybe',
     summary: 'Full-stack fashion e-commerce web app — browse, cart, Stripe checkout, and admin panel.',
-    description: "A full-stack fashion e-commerce web application built from the ground up with plain PHP — no frameworks, just clean architecture.\n\nUsers can browse clothing by category, manage a shopping cart, pay via Stripe, and track orders. An admin panel lets store operators manage products (with variations), orders, and members. The database spans 10 tables covering users, products, variations, cart, orders, addresses, and auth tokens.\n\nFeatures PDO-based MySQL/MariaDB queries, PHPMailer for SMTP emails, Stripe integration via stripe-php, jQuery for interactivity, and custom CSS styling with .avif product images served through a thumbnail library.",
+    description: "A full-stack fashion e-commerce web application built from the ground up with plain PHP — no frameworks, just clean architecture.\n\nUsers can browse clothing by category, manage a shopping cart, pay via Stripe, and track orders. An admin panel lets store operators manage products (with variations), orders, and members. The database spans 12 tables covering users, products, variations, cart, orders, addresses, and auth tokens.\n\nFeatures PDO-based MySQL/MariaDB queries, PHPMailer for SMTP emails, Stripe integration via stripe-php, jQuery for interactivity, and custom CSS styling with .avif product images served through a thumbnail library.",
     tags: ['PHP', 'MySQL', 'E-commerce', 'Stripe', 'Full-stack'],
+    collaborators: [{ name: 'MingLi', role: 'Teammate', href: 'https://exoticpengy.me', avatar: 'Picture/exoticpengy.png' }],
+    features: [
+      'Browse clothing by category',
+      'Shopping cart with product variations',
+      'Stripe checkout',
+      'Order history and tracking',
+      'Admin panel — products, orders, members',
+      'Transactional email over SMTP',
+      '12-table schema: users, products, variations, cart, orders, addresses, auth tokens',
+    ],
+    techStack: ['PHP', 'MySQL', 'MariaDB', 'PDO', 'Stripe', 'PHPMailer', 'jQuery', 'CSS'],
     glyph: 'H',
     bg: 'linear-gradient(135deg, oklch(0.75 0.10 10) 0%, oklch(0.68 0.12 30) 100%)',
     thumb: 'Picture/HAndMaybe.png?v=2',
@@ -214,9 +291,17 @@ const PROJECTS = [
   {
     title: 'FoodTrust',
     slug: 'foodtrust',
-    summary: 'AI-powered browser extension that detects fake reviews on Google Maps using AWS Bedrock.',
-    description: "We built this during the Great AI Hackathon 2025 - Team Penguining, my first hackathon project🤩 FoodTrust is a browser extension that brings transparency back to online food reviews.\n\nIt analyzes Google Maps restaurant reviews in real time using AWS Bedrock's language models, flagging suspicious reviews with reasoning and probability scores. An overall trust score (e.g. 85%) is displayed directly on the page.\n\nThe architecture uses a serverless AWS backend — Lambda functions process review text through Bedrock, with API Gateway routing and S3 for storage. The extension frontend is vanilla JavaScript, HTML, and CSS, while the ML pipeline was prototyped in Jupyter Notebooks via SageMaker Studio.",
-    tags: ['AI/ML', 'Browser Extension', 'AWS Bedrock', 'JavaScript', 'Python'],
+    summary: 'AI-powered browser extension that detects fake reviews on Google Maps using Amazon Bedrock.',
+    description: "We built this during the Great AI Hackathon 2025 - Team Penguining, my first hackathon project =´∇｀= FoodTrust is a browser extension that brings transparency back to online food reviews.\n\nIt analyzes Google Maps restaurant reviews in real time using Amazon Bedrock's language models, flagging suspicious reviews with reasoning and probability scores. An overall trust score (e.g. 85%) is displayed directly on the page.\n\nThe architecture uses a serverless AWS backend — Lambda functions process review text through Bedrock, with API Gateway routing and S3 for storage. The extension frontend is vanilla JavaScript, HTML, and CSS, while the ML pipeline was prototyped in Jupyter Notebooks via SageMaker Studio.",
+    tags: ['AI/ML', 'Browser Extension', 'Amazon Bedrock', 'JavaScript', 'Python'],
+    collaborators: [{ name: 'MingLi', role: 'Teammate · Team Penguining', href: 'https://exoticpengy.me', avatar: 'Picture/exoticpengy.png' }],
+    features: [
+      'Analyzes Google Maps restaurant reviews in real time',
+      'Flags suspicious reviews with reasoning and a probability score',
+      'Overall trust score shown directly on the page',
+      'Serverless backend — no server to babysit',
+    ],
+    techStack: ['Amazon Bedrock', 'AWS Lambda', 'Amazon API Gateway', 'Amazon S3', 'Amazon SageMaker Studio', 'JavaScript', 'Python'],
     glyph: 'F',
     bg: 'linear-gradient(135deg, oklch(0.72 0.08 260) 0%, oklch(0.62 0.12 290) 100%)',
     thumb: 'Picture/FoodTrust.png?v=1',
@@ -390,6 +475,40 @@ function SkillsPage() {
 }
 
 /* ---------- CONTACT ---------- */
+/* Brand marks: devicon carries LinkedIn but not Instagram/WhatsApp; simple-icons is the
+   reverse (it dropped LinkedIn), so each one comes from whichever CDN actually has it.
+   CSS recolours them white — the source colours here don't survive the filter. */
+const SOCIALS = [
+  {
+    label: 'LinkedIn',
+    value: '/in/elaine-pang-xin-yee',
+    href: 'https://www.linkedin.com/in/elaine-pang-xin-yee-313b4b211/',
+    // devicon's LinkedIn is a filled badge — recolouring it white erases the "in".
+    // This is devicon's own path with the outer badge subpath dropped, leaving the glyph.
+    icon: "data:image/svg+xml," + encodeURIComponent(
+      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='18 27 92 82'><path d='M39.17 107H21.06V48.73h18.11zm-9-66.21a10.5 10.5 0 1110.49-10.5 10.5 10.5 0 01-10.54 10.48zM107 107H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53V48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75z'/></svg>"
+    ),
+  },
+  {
+    label: 'GitHub',
+    value: '@XinyeeElaine',
+    href: 'https://github.com/XinyeeElaine',
+    icon: 'https://cdn.simpleicons.org/github/181717',
+  },
+  {
+    label: 'Instagram',
+    value: '@xinyee_elaine',
+    href: 'https://www.instagram.com/xinyee_elaine/',
+    icon: 'https://cdn.simpleicons.org/instagram/E4405F',
+  },
+  {
+    label: 'WhatsApp',
+    value: '016-286 4168',
+    href: 'https://wa.me/60162864168?text=Hi%20Elaine%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect.',
+    icon: 'https://cdn.simpleicons.org/whatsapp/25D366',
+  },
+];
+
 function ContactPage() {
   const [form, setForm] = React.useState({ name: '', message: '' });
   const [errors, setErrors] = React.useState({});
@@ -429,34 +548,17 @@ function ContactPage() {
           <h3>Find me here</h3>
           <p>Or drop a line directly — both work. I promise I'm a friendly inbox.</p>
           <div className="social">
-            <a href="https://www.linkedin.com/in/elaine-pang-xin-yee-313b4b211/" target="_blank" rel="noopener noreferrer">
-              <span className="icon">in</span>
-              <div>
-                <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>LinkedIn</div>
-                <div>/in/elaine-pang-xin-yee</div>
-              </div>
-            </a>
-            <a href="https://github.com/XinyeeElaine" target="_blank" rel="noopener noreferrer">
-              <span className="icon">gh</span>
-              <div>
-                <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>GitHub</div>
-                <div>@XinyeeElaine</div>
-              </div>
-            </a>
-            <a href="https://www.instagram.com/xinyee_elaine/" target="_blank" rel="noopener noreferrer">
-              <span className="icon">ig</span>
-              <div>
-                <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>Instagram</div>
-                <div>@xinyee_elaine</div>
-              </div>
-            </a>
-            <a href="https://wa.me/60162864168?text=Hi%20Elaine%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener noreferrer">
-              <span className="icon">wa</span>
-              <div>
-                <div style={{ fontSize: 12, opacity: 0.85, fontWeight: 500 }}>WhatsApp</div>
-                <div>016-286 4168</div>
-              </div>
-            </a>
+            {SOCIALS.map(s => (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">
+                <span className="icon">
+                  <img src={s.icon} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                </span>
+                <div>
+                  <div className="social-label">{s.label}</div>
+                  <div className="social-value">{s.value}</div>
+                </div>
+              </a>
+            ))}
           </div>
         </div>
 
@@ -532,6 +634,24 @@ function ImageCarousel({ images, title }) {
             className={`carousel-img ${i === active ? 'carousel-img-active' : ''}`}
           />
         ))}
+        {images.length > 1 && (
+          <React.Fragment>
+            <button
+              className="carousel-arrow carousel-arrow-prev"
+              onClick={() => goTo((active - 1 + images.length) % images.length)}
+              aria-label="Previous image"
+            >
+              ←
+            </button>
+            <button
+              className="carousel-arrow carousel-arrow-next"
+              onClick={() => goTo((active + 1) % images.length)}
+              aria-label="Next image"
+            >
+              →
+            </button>
+          </React.Fragment>
+        )}
       </div>
       {images.length > 1 && (
         <div className="carousel-dots">
@@ -543,9 +663,19 @@ function ImageCarousel({ images, title }) {
               aria-label={`Image ${i + 1}`}
             />
           ))}
+          <span className="carousel-count">{active + 1} / {images.length}</span>
         </div>
       )}
     </div>
+  );
+}
+
+// inline so it picks up the link's colour in every theme — a devicon PNG would stay black on midnight
+function GitHubMark() {
+  return (
+    <svg className="proj-detail-link-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+    </svg>
   );
 }
 
@@ -561,80 +691,131 @@ function ProjectDetailPage({ slug, go }) {
   const idx = PROJECTS.indexOf(project);
   const prev = PROJECTS[(idx - 1 + PROJECTS.length) % PROJECTS.length];
   const next = PROJECTS[(idx + 1) % PROJECTS.length];
+  // no screenshots? fall back to the project's own artwork before the bare glyph
+  const hero = project.image || project.thumb;
 
   return (
-    <div className="page" data-screen-label="Project Detail">
+    <article className="page" data-screen-label="Project Detail">
       <button className="proj-detail-back btn ghost" onClick={() => go('projects')}>
         ← Projects
       </button>
 
-      <div className="proj-detail-preview">
-        {project.images && project.images.length > 0 ? (
-          <ImageCarousel images={project.images} title={project.title} />
-        ) : (
-          <div
-            className="proj-detail-preview-img"
-            style={!project.image ? { background: project.bg } : {}}
-          >
-            {project.image
-              ? <img src={project.image} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-              : <span className="glyph">{project.glyph}</span>
-            }
-          </div>
-        )}
-        <div className="proj-detail-body">
+      <div className="proj-detail-hero">
+        <header className="proj-detail-head">
           <div className="proj-detail-kicker">selected work</div>
           <h1>{project.title}</h1>
+          <p className="proj-detail-summary">{project.summary}</p>
           <div className="tag-row">
             {project.tags.map(t => <span key={t} className="chip">{t}</span>)}
           </div>
-        </div>
-      </div>
+        </header>
 
-      <div className="proj-detail-cards">
-        <div className="proj-detail-card">
-          <div className="proj-detail-kicker">About this project</div>
-          <p>{project.description}</p>
-          {(project.github || project.deploy) && (
-            <div className="proj-detail-links-row">
-              <div className="proj-detail-kicker">Links</div>
-              {project.github && (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="proj-detail-link proj-detail-link-gh"
-                >
-                  GitHub →
-                </a>
-              )}
-              {project.deploy && (
-                <a
-                  href={project.deploy}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="proj-detail-link proj-detail-link-live"
-                >
-                  Live site →
-                </a>
-              )}
+        <figure className="proj-gallery">
+          {project.images && project.images.length > 0 ? (
+            <ImageCarousel images={project.images} title={project.title} />
+          ) : (
+            <div
+              className="proj-detail-preview-img"
+              style={hero ? {} : { background: project.bg }}
+            >
+              {hero
+                ? <img src={hero} alt={`${project.title} logo`} />
+                : <span className="glyph">{project.glyph}</span>
+              }
             </div>
           )}
-        </div>
-
-        {project.techStack && (
-          <div className="proj-detail-card">
-            <div className="proj-detail-kicker">Tech stack</div>
-            <div className="tech-stack-grid">
-              {project.techStack.map(t => (
-                <span key={t} className="tech-chip">{t}</span>
-              ))}
-            </div>
-          </div>
-        )}
+        </figure>
       </div>
 
-      <div className="proj-detail-nav">
+      <section className="proj-section">
+        <h2 className="proj-section-title">Overview</h2>
+        {project.description.split('\n\n').map((para, i) => (
+          <p key={i}>{para}</p>
+        ))}
+      </section>
+
+      {(project.github || project.deploy) && (
+        <section className="proj-section">
+          <h2 className="proj-section-title">Deployment Links</h2>
+          <div className="proj-detail-links-row">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="proj-detail-link proj-detail-link-gh"
+              >
+                <GitHubMark />
+                <span>Source Code</span>
+                <span className="proj-detail-link-arrow">→</span>
+              </a>
+            )}
+            {project.deploy && (
+              <a
+                href={project.deploy}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="proj-detail-link proj-detail-link-live"
+              >
+                <span>Live site</span>
+                <span className="proj-detail-link-arrow">→</span>
+              </a>
+            )}
+          </div>
+        </section>
+      )}
+
+      {project.techStack && (
+        <section className="proj-section">
+          <h2 className="proj-section-title">Built with</h2>
+          <div className="tech-grid">
+            {project.techStack.map(t => (
+              <span key={t} className="tech-item">
+                <span className="tech-item-name">{t}</span>
+                {TECH_ROLE[t] && <span className="tech-item-role">{TECH_ROLE[t]}</span>}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {project.features && (
+        <section className="proj-section">
+          <h2 className="proj-section-title">Features</h2>
+          <ul className="proj-detail-features">
+            {project.features.map(f => <li key={f}>{f}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {project.collaborators && (
+        <section className="proj-section">
+          <h2 className="proj-section-title">Built with the help of</h2>
+          <div className="collab-row">
+            {project.collaborators.map(c => (
+              <a
+                key={c.href}
+                href={c.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="collab-card"
+              >
+                <span className="collab-avatar" aria-hidden="true">
+                  {c.avatar
+                    ? <img src={c.avatar} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
+                    : c.name.charAt(0).toUpperCase()}
+                </span>
+                <span className="collab-text">
+                  <span className="collab-name">{c.name}</span>
+                  {c.role && <span className="collab-role">{c.role}</span>}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <nav className="proj-detail-nav">
         <button
           className="proj-detail-nav-btn"
           onClick={() => go(`project-${prev.slug}`)}
@@ -647,8 +828,8 @@ function ProjectDetailPage({ slug, go }) {
         >
           {next.title} →
         </button>
-      </div>
-    </div>
+      </nav>
+    </article>
   );
 }
 

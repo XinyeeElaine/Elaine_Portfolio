@@ -263,6 +263,8 @@ a { color: inherit; }
 .btn.ghost:hover { transform: translateY(-2px); }
 
 /* ============ chips ============ */
+.tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
 .chip {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 12px; border-radius: 100px;
@@ -299,7 +301,10 @@ a { color: inherit; }
 }
 .hero h1 {
   font-size: clamp(48px, 6vw, 84px);
-  line-height: 0.98;
+  /* 0.98 made the line box shorter than the glyphs, and the gradient <em> below paints
+     via background-clip:text — so the "g" descender fell outside the paint area and
+     got sliced off. Needs to clear the font's descender. */
+  line-height: 1.18;
   margin-bottom: 22px;
 }
 .hero h1 .wave { display: inline-block; transform-origin: 70% 70%; animation: wave 2.4s ease-in-out infinite; }
@@ -313,6 +318,12 @@ a { color: inherit; }
   background: linear-gradient(135deg, var(--lavender-deep), var(--sky-deep));
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
+  /* Caprasimo's "g" paints wider and lower than its advance box, and background-clip:text
+     only fills inside that box — so the overhang was sliced flat. Padding widens the paint
+     area; `clone` is what makes every wrapped line get it, not just the last fragment. */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0 0.1em 0.08em 0;
 }
 .hero p.lede {
   font-size: 19px; color: var(--ink-soft);
@@ -630,11 +641,14 @@ a { color: inherit; }
   display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px;
   align-items: stretch;
 }
+/* --ink, not white: the gradient uses --lavender/--sky, which are near-white in every
+   theme except midnight — white text on them lands around 1.2:1. --ink is dark on the
+   light themes and white on midnight, so it stays legible either way. */
 .contact-side {
   background: linear-gradient(160deg, var(--lavender) 0%, var(--sky) 100%);
   border-radius: var(--radius-lg);
   padding: 36px;
-  color: white;
+  color: var(--ink);
   position: relative; overflow: hidden;
   box-shadow: var(--shadow-md);
 }
@@ -644,23 +658,39 @@ a { color: inherit; }
 }
 .contact-side::before { width: 200px; height: 200px; bottom: -60px; right: -60px; }
 .contact-side::after { width: 100px; height: 100px; top: 20px; right: 40px; }
-.contact-side h3 { font-size: 32px; color: white; margin-bottom: 12px; position: relative; }
-.contact-side p { font-size: 15px; opacity: 0.95; margin: 0 0 26px; position: relative; }
+.contact-side h3 { font-size: 32px; color: var(--ink); margin-bottom: 12px; position: relative; }
+.contact-side p { font-size: 15px; color: var(--ink-soft); margin: 0 0 26px; position: relative; }
 .contact-side .social { display: flex; flex-direction: column; gap: 10px; position: relative; }
 .contact-side .social a {
   display: flex; align-items: center; gap: 12px;
-  background: rgba(255,255,255,0.18);
+  background: color-mix(in oklab, var(--paper) 55%, transparent);
   padding: 12px 16px; border-radius: 14px;
-  text-decoration: none; color: white; font-weight: 600;
+  text-decoration: none; color: var(--ink); font-weight: 600;
   backdrop-filter: blur(8px);
   transition: transform 0.2s, background 0.2s;
 }
-.contact-side .social a:hover { transform: translateX(6px); background: rgba(255,255,255,0.28); }
+.contact-side .social a:hover { transform: translateX(6px); background: color-mix(in oklab, var(--paper) 80%, transparent); }
 .contact-side .social a .icon {
-  width: 32px; height: 32px; border-radius: 8px;
-  background: var(--paper); color: var(--lavender-deep);
+  width: 26px; height: 26px;
   display: grid; place-items: center;
-  font-family: "Caprasimo", serif; font-size: 14px;
+  flex: 0 0 auto;
+}
+/* no tile behind the marks, so flatten each one to a single colour that tracks --ink:
+   dark on the light themes, white on midnight (override below) */
+.contact-side .social a .icon img {
+  width: 22px; height: 22px; object-fit: contain; display: block;
+  filter: brightness(0);
+  opacity: 0.82;
+}
+[data-theme="midnight"] .contact-side .social a .icon img {
+  filter: brightness(0) invert(1);
+  opacity: 1;
+}
+.contact-side .social .social-label {
+  font-size: 14px; font-weight: 700; letter-spacing: 0.01em; color: var(--ink);
+}
+.contact-side .social .social-value {
+  font-size: 13px; font-weight: 500; color: var(--ink-soft);
 }
 
 .contact-form {
@@ -1189,45 +1219,17 @@ a { color: inherit; }
 
 /* ============ PROJECT DETAIL ============ */
 .proj-detail-back {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
-.proj-detail-preview {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  margin-bottom: 20px;
-}
-
-.proj-detail-preview-img {
-  height: 280px;
-  display: flex;
+/* ---- hero: title block left, gallery right ---- */
+.proj-detail-hero {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 48px;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  margin-bottom: 56px;
 }
-
-.proj-detail-preview-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.proj-detail-preview-img .glyph {
-  font-family: "Caprasimo", serif;
-  font-size: 96px;
-  color: rgba(255, 255, 255, 0.88);
-  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-}
-
-.proj-detail-body {
-  padding: 22px 28px 26px;
-}
-
-.proj-detail-body .tag-row { display: flex; gap: 6px; flex-wrap: wrap; }
 
 .proj-detail-kicker {
   font-size: 12px;
@@ -1238,56 +1240,203 @@ a { color: inherit; }
   margin-bottom: 10px;
 }
 
-.proj-detail-body h1 {
+.proj-detail-head h1 {
   font-size: clamp(32px, 4vw, 48px);
   margin-bottom: 14px;
+  text-wrap: balance;
 }
 
-.proj-detail-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 14px;
-  align-items: flex-start;
+.proj-detail-summary {
+  color: var(--ink-soft);
+  font-size: 17px;
+  max-width: 60ch;
+  margin: 0 0 18px;
+  text-wrap: pretty;
 }
 
-.proj-detail-cards .proj-detail-card {
-  flex: 1 1 500px;
-}
-
-.proj-detail-card {
+/* ---- gallery: the one place elevation is meaningful ---- */
+.proj-gallery {
+  margin: 0;
+  padding: 14px;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 24px 28px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+/* fallback when a project has no images[] — a logo lockup, not a screenshot,
+   so it stays shorter than the 16/9 carousel */
+.proj-detail-preview-img {
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.proj-detail-preview-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.proj-detail-preview-img .glyph {
+  font-family: "Caprasimo", serif;
+  font-size: 96px;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* sections carry no box — headings and whitespace do the work */
+.proj-section + .proj-section { margin-top: 40px; }
+.proj-section:last-of-type { margin-bottom: 24px; }
+
+.proj-section-title {
+  font-family: "Caprasimo", serif;
+  font-size: 22px;
+  font-weight: 400;
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.proj-section p {
+  color: var(--ink-soft);
+  font-size: 16px;
+  line-height: 1.75;
+  margin: 0 0 14px;
+  text-wrap: pretty;
+}
+
+.proj-section p:last-child { margin-bottom: 0; }
+
+/* "Built with" — square-cornered tiles on a tinted surface, deliberately
+   not the pill-shaped .chip used for tags */
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tech-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  transition: transform 0.2s cubic-bezier(.2, .8, .2, 1), box-shadow 0.2s;
+}
+
+.tech-item:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
 
-.proj-detail-card p {
-  color: var(--ink-soft);
-  font-size: 16px;
-  line-height: 1.7;
-  margin: 0;
+.tech-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
 }
+
+.tech-item-role {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  line-height: 1.2;
+}
+
+/* collaborator credit */
+.collab-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.collab-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px 10px 10px;
+  border-radius: 8px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  text-decoration: none;
+  transition: transform 0.2s cubic-bezier(.2, .8, .2, 1), box-shadow 0.2s;
+}
+
+.collab-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.collab-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--lavender-deep), var(--sky-deep));
+  color: #fff;
+  font-family: "Caprasimo", serif;
+  font-size: 16px;
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+.collab-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.collab-text { display: flex; flex-direction: column; gap: 3px; }
+.collab-name { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.collab-role {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-faint); line-height: 1.2;
+}
+
+.proj-detail-features {
+  margin: 0; padding-left: 20px;
+  color: var(--ink-soft); font-size: 16px; line-height: 1.7;
+}
+.proj-detail-features li { margin-bottom: 6px; }
+.proj-detail-features li::marker { color: var(--lavender-deep); }
 
 .proj-detail-links-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 16px;
+  gap: 10px;
 }
 
 .proj-detail-link {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 18px;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
   border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
   transition: transform 0.2s cubic-bezier(.2, .8, .2, 1);
 }
+
+.proj-detail-link-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.proj-detail-link-arrow { margin-left: auto; }
 
 .proj-detail-link:hover { transform: translateX(4px); }
 
@@ -1336,8 +1485,10 @@ a { color: inherit; }
 .carousel-viewport {
   position: relative;
   width: 100%;
-  aspect-ratio: 2 / 1;
-  max-height: 360px;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .carousel-img {
@@ -1356,14 +1507,64 @@ a { color: inherit; }
   pointer-events: auto;
 }
 
+/* ---- prev / next arrows: appear on hover, but stay reachable by keyboard ---- */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--paper) 82%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s cubic-bezier(.2, .8, .2, 1), background 0.25s;
+}
+
+.carousel-arrow-prev { left: 12px; }
+.carousel-arrow-next { right: 12px; }
+
+.carousel:hover .carousel-arrow,
+.carousel-arrow:focus-visible { opacity: 1; }
+
+.carousel-arrow:hover { background: var(--paper); }
+.carousel-arrow-prev:hover { transform: translateY(-50%) translateX(-2px) scale(1.08); }
+.carousel-arrow-next:hover { transform: translateY(-50%) translateX(2px) scale(1.08); }
+
 
 .carousel-dots {
+  position: relative;
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 0;
-  border-top: 1px solid var(--line);
-  background: var(--paper);
+  padding: 12px 0 4px;
+}
+
+/* absolute so the dots stay optically centred, not pushed off by the counter's width */
+.carousel-count {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
 }
 
 .carousel-dot {
@@ -1389,6 +1590,10 @@ a { color: inherit; }
 
 .carousel-dot-active:hover {
   transform: scale(1.3);
+}
+
+@media (max-width: 880px) {
+  .proj-detail-hero { grid-template-columns: 1fr; gap: 28px; margin-bottom: 40px; }
 }
 
 /* ============ Midnight Pastel — dark-mode overrides for hardcoded light elements ============ */
