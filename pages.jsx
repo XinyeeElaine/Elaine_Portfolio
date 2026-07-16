@@ -757,7 +757,11 @@ function ProjectDetailPage({ slug, go }) {
                 rel="noopener noreferrer"
                 className="proj-detail-link proj-detail-link-live"
               >
-                <span>Live site</span>
+                <svg className="proj-detail-link-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.5" />
+                  <path d="M1.5 8h13M8 1.5a10 10 0 0 1 0 13a10 10 0 0 1 0-13Z" />
+                </svg>
+                <span>Live Site</span>
                 <span className="proj-detail-link-arrow">→</span>
               </a>
             )}
@@ -767,7 +771,7 @@ function ProjectDetailPage({ slug, go }) {
 
       {project.techStack && (
         <section className="proj-section">
-          <h2 className="proj-section-title">Built with</h2>
+          <h2 className="proj-section-title">Tech Stack</h2>
           <div className="tech-grid">
             {project.techStack.map(t => (
               <span key={t} className="tech-item">
