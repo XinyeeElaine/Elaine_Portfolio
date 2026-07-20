@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="Picture/favicon.png" width="90" alt="logo" />
+<img src="public/Picture/favicon.png" width="90" alt="logo" />
 
 # elaine.portfolio
 
-**A buildless React portfolio with an AI assistant, a synthesised lofi soundtrack, and a draggable SVG cat.**
+**A personal portfolio — a cozy corner of the internet you can repaint, listen to, and play with.**
 
 [![Live](https://img.shields.io/badge/live-sillycookie.me-caa3e0?style=for-the-badge)](https://sillycookie.me)
 [![Copyright](https://img.shields.io/badge/©_2026-all_rights_reserved-9fc6ee?style=for-the-badge)](#-copyright)
@@ -12,13 +12,12 @@
 <br />
 
 ![React](https://img.shields.io/badge/React_18-20232a?style=flat-square&logo=react&logoColor=61dafb)
-![Babel](https://img.shields.io/badge/Babel_Standalone-f9dc3e?style=flat-square&logo=babel&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite_6-646cff?style=flat-square&logo=vite&logoColor=white)
 ![CSS](https://img.shields.io/badge/Vanilla_CSS-1572b6?style=flat-square&logo=css3&logoColor=white)
 ![Web Audio](https://img.shields.io/badge/Web_Audio_API-ff5722?style=flat-square)
 ![SVG](https://img.shields.io/badge/Inline_SVG-ffb13b?style=flat-square&logo=svg&logoColor=black)
 ![n8n](https://img.shields.io/badge/n8n-ea4b71?style=flat-square&logo=n8n&logoColor=white)
 ![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-f38020?style=flat-square&logo=cloudflare&logoColor=white)
-![No Build](https://img.shields.io/badge/build_step-none-4caf50?style=flat-square)
 
 </div>
 
@@ -26,12 +25,9 @@
 
 ## 🌙 About the project
 
-The site is deliberately **buildless**. `index.html` pulls React 18, ReactDOM, and Babel Standalone from a CDN, then loads four `.jsx` files as `type="text/babel"` scripts that Babel transpiles in the browser at load time.
+A portfolio that behaves less like a résumé and more like a room you can wander around in. Every project gets its own page, and the place comes with things to fiddle with: five colour themes to repaint it, a lofi soundtrack the browser makes up as it goes, an AI assistant happy to answer questions about the work, and Cookie, a cat who patrols the bottom of the page and can be picked up and dropped wherever you like.
 
-> No bundler. No `package.json`. No `node_modules`. No CI step.
-> The repo **is** the deployable artifact — push, and Cloudflare Pages serves it.
-
-That constraint drives the rest of the architecture. Scripts share one global scope instead of using ES modules, so components are plain globals and hooks are referenced as `React.useState` in files loaded after `cat.jsx` (which destructures the hooks into globals first). All state is client-side. The only backend dependency is a single webhook.
+Under the cuteness: a single-page React app bundled with Vite and served as static files from Cloudflare Pages. Routing runs on the URL hash, styling is vanilla CSS driven by custom properties, the soundtrack is synthesised at runtime with the Web Audio API, and Cookie is hand-drawn inline SVG. A Cloudflare Pages Function fields the chatbot's requests and keeps its backend URL safely server-side. Everything here is built from scratch and tuned by hand.
 
 ---
 
@@ -42,7 +38,7 @@ That constraint drives the rest of the architecture. Scripts share one global sc
 <td width="50%" valign="top">
 
 ### 🧭 Hash routing
-`app.jsx` owns a `route` string synced with `window.location.hash` in **both** directions — clicks call `go(id)`, and a `hashchange` listener catches back/forward. Routes matching `project-<slug>` render a detail view, keeping every project deep-linkable with zero router dependency.
+`app.jsx` owns a `route` string synced with `window.location.hash` in **both** directions — clicks call `go(id)`, and a `hashchange` listener catches back/forward. Routes matching `project-<slug>` render a detail view, so every project stays deep-linkable and shareable.
 
 </td>
 <td width="50%" valign="top">
@@ -62,7 +58,7 @@ Cross-fade via absolutely-positioned stacked `<img>` toggling opacity — no tra
 <td width="50%" valign="top">
 
 ### 🤖 AI chatbot
-`POST { sessionId, prompt }` to an n8n webhook. `sessionId` is minted once per browser and stored, so the workflow threads memory server-side. Falls through `output → reply → text → message → answer` since the key depends on which node ends the workflow. Network failures degrade to an in-chat message.
+The browser `POST`s `{ sessionId, prompt }` to a same-origin `/api/chat`; a Pages Function validates it and forwards to n8n. `sessionId` is minted once per browser and stored, so the workflow threads memory server-side. The reply parser falls through `output → reply → text → message → answer`, since the key depends on which node ends the workflow. Network failures degrade to an in-chat message.
 
 </td>
 </tr>
@@ -76,7 +72,7 @@ Five palettes applied by setting `data-theme` on `<body>`. Every colour is a CSS
 <td width="50%" valign="top">
 
 ### 🎧 Procedural lofi engine
-No audio files. A Web Audio graph is built at runtime — oscillator pads, lead, and drums through per-instrument gain buses into a shared lowpass, with an LFO on the pad bus for tremolo. A few hundred bytes of code instead of a multi-megabyte MP3.
+The whole soundtrack is generated in the browser. A Web Audio graph is built at runtime — oscillator pads, lead, and drums through per-instrument gain buses into a shared lowpass, with an LFO on the pad bus for tremolo. A few hundred bytes of code stands in for a multi-megabyte MP3.
 
 </td>
 </tr>
@@ -94,26 +90,35 @@ Hand-drawn SVG with mood-driven variants (`happy`, `eating`, `sleepy`). A behavi
 
 ## 🔀 Flow
 
-**Load order**
+**Load order** — `main.jsx` imports for side effects, and the sequence matters
 
 ```
 index.html
-  ├─ CDN: React 18 · ReactDOM · Babel Standalone
-  ├─ config.js            → window.CHAT_WEBHOOK_URL   (gitignored)
-  └─ text/babel scripts, in order:
-       cat.jsx        → CatRoot        (destructures hooks into global scope)
-       chatbot.jsx    → ChatBot
-       settings.jsx   → SettingsGear
-       pages.jsx      → page components + PROJECTS + ImageCarousel
-       app.jsx        → App, mounts to #root
+  └─ main.jsx
+       ├─ globals.js     → window.React · window.ReactDOM   (must be first)
+       ├─ styles.css
+       ├─ cat.jsx        → CatRoot   (destructures the hooks into globals)
+       ├─ chatbot.jsx    → ChatBot
+       ├─ settings.jsx   → SettingsGear
+       ├─ pages.jsx      → page components + PROJECTS + ImageCarousel
+       └─ app.jsx        → App, mounts to #root
 ```
 
 **Runtime**
 
 ```
 hash change ──> App.route ──> project-<slug> ? ProjectDetailPage : PageComponent
-chat send   ──> POST {sessionId, prompt} ──> n8n webhook ──> knowledge base ──> reply
+chat send   ──> POST /api/chat ──> Pages Function ──> n8n ──> knowledge base ──> reply
 theme pick  ──> body[data-theme] ──> CSS custom properties ──> localStorage
+```
+
+**Repo layout**
+
+```
+main.jsx · globals.js · app.jsx · cat.jsx · chatbot.jsx · pages.jsx · settings.jsx · styles.css
+functions/api/chat.js     server-side chat proxy (Cloudflare)
+public/Picture/           images, copied to dist/ as-is
+.env                      N8N_WEBHOOK_URL, gitignored
 ```
 
 <details>
@@ -138,15 +143,64 @@ theme pick  ──> body[data-theme] ──> CSS custom properties ──> local
 
 | Layer | What |
 |---|---|
-| **UI** | React 18 (UMD, CDN) |
-| **Transpile** | Babel Standalone, in-browser |
+| **UI** | React 18 |
+| **Build** | Vite 6 — `npm run dev` / `npm run build` |
 | **Routing** | `window.location.hash` + `hashchange` |
 | **Styling** | Vanilla CSS — custom properties, `aspect-ratio`, `color-mix`, `oklch` |
 | **Audio** | Web Audio API, synthesised at runtime |
 | **Graphics** | Inline SVG |
-| **Chat backend** | n8n webhook |
+| **Chat backend** | Cloudflare Pages Function → n8n webhook |
 | **State** | React hooks + localStorage |
-| **Hosting** | Cloudflare Pages — static, no server, no build |
+| **Hosting** | Cloudflare Pages — static output, built on push |
+
+---
+
+## 🚀 Running it locally
+
+Requires **Node 20+** (built on 22).
+
+```bash
+npm install                    # once
+cp .env.example .env           # then put the real webhook URL in it
+npm run dev                    # http://localhost:5173
+```
+
+`npm run dev` hot-reloads on save — no manual refresh, no cache-busting query strings.
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server with hot reload |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Serve `dist/` locally to check the real build |
+
+<details>
+<summary><b>Why <code>.env</code> is needed for the chatbot</b></summary>
+
+<br />
+
+In production, `/api/chat` is handled by `functions/api/chat.js` running on Cloudflare. The Vite dev server doesn't run Pages Functions, so `vite.config.js` proxies the same path straight to `N8N_WEBHOOK_URL` from `.env` instead. Either way the URL stays server-side and never reaches the browser.
+
+Without `.env`, everything works except the chatbot, which reports that it couldn't reach the server.
+
+</details>
+
+---
+
+## ☁️ Deployment
+
+Pushing to `main` triggers a Cloudflare Pages build. Settings:
+
+| Setting | Value |
+|---|---|
+| Framework preset | `Vite` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | *(empty)* |
+| `NODE_VERSION` | `22` |
+
+The chatbot's upstream URL is stored as an encrypted environment variable and read at request time by `functions/api/chat.js` — never bundled, never sent to the client.
+
+`functions/` is picked up automatically; nothing to configure for it.
 
 ---
 
@@ -158,7 +212,7 @@ This is a personal project and is **not** open source. No license is granted.
 
 The source code, design, written copy, illustrations, and all other assets in this repository are my own work. You may view and read the code for reference or learning. You may **not** copy, reuse, modify, redistribute, republish, or use any part of it — in whole or in part, commercially or otherwise — without my written permission.
 
-Third-party libraries loaded by this project (React, Babel, and any CDN dependencies) remain under their own respective licenses.
+Third-party dependencies (React, Vite, and anything in `package.json`) remain under their own respective licenses.
 
 Want to use something here? [Ask me](https://sillycookie.me/#contact).
 
