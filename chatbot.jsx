@@ -3,8 +3,9 @@
 /* Note: use React.* (not destructured hooks) — these scripts share one global
    scope, and cat.jsx already declares const useState/useRef/useEffect. */
 
-/* Webhook URL comes from config.js (gitignored) → window.CHAT_WEBHOOK_URL */
-const N8N_WEBHOOK_URL = window.CHAT_WEBHOOK_URL || '';
+/* Same-origin proxy — the real n8n webhook URL stays server-side in
+   functions/api/chat.js and never reaches the browser. */
+const CHAT_ENDPOINT = '/api/chat';
 
 function getSessionId() {
   try {
@@ -41,7 +42,7 @@ function ChatBot() {
     setInput('');
     setLoading(true);
     try {
-      const res = await fetch(N8N_WEBHOOK_URL, {
+      const res = await fetch(CHAT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId: sessionId.current, prompt: text }),
@@ -78,7 +79,7 @@ function ChatBot() {
         <div className="chat-panel" role="dialog" aria-label="Chat with Elaine's assistant">
           <div className="chat-head">
             <div className="chat-head-title">
-              <img className="chat-avatar" src="Picture/sillycookie.jpeg" alt="Cookie" />
+              <img className="chat-avatar" src="/Picture/sillycookie.jpeg" alt="Cookie" />
               <div>
                 <strong>COOKIE</strong>
                 <span className="chat-status">ask me anything /ᐠ .ᆺ. ᐟ\ﾉ</span>
@@ -115,7 +116,7 @@ function ChatBot() {
       )}
 
       <button className={`chat-fab ${open ? 'open' : ''}`} onClick={() => setOpen((o) => !o)} aria-label="Chat">
-        {open ? '✕' : <img className="chat-fab-img" src="Picture/chatbot-button.png" alt="Chat" />}
+        {open ? '✕' : <img className="chat-fab-img" src="/Picture/chatbot-button.png" alt="Chat" />}
       </button>
     </>
   );

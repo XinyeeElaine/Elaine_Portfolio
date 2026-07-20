@@ -17,6 +17,7 @@
 ![Web Audio](https://img.shields.io/badge/Web_Audio_API-ff5722?style=flat-square)
 ![SVG](https://img.shields.io/badge/Inline_SVG-ffb13b?style=flat-square&logo=svg&logoColor=black)
 ![n8n](https://img.shields.io/badge/n8n-ea4b71?style=flat-square&logo=n8n&logoColor=white)
+![Cloudflare Pages](https://img.shields.io/badge/Cloudflare_Pages-f38020?style=flat-square&logo=cloudflare&logoColor=white)
 ![No Build](https://img.shields.io/badge/build_step-none-4caf50?style=flat-square)
 
 </div>
@@ -28,7 +29,7 @@
 The site is deliberately **buildless**. `index.html` pulls React 18, ReactDOM, and Babel Standalone from a CDN, then loads four `.jsx` files as `type="text/babel"` scripts that Babel transpiles in the browser at load time.
 
 > No bundler. No `package.json`. No `node_modules`. No CI step.
-> The repo **is** the deployable artifact — push and it's live.
+> The repo **is** the deployable artifact — push, and Cloudflare Pages serves it.
 
 That constraint drives the rest of the architecture. Scripts share one global scope instead of using ES modules, so components are plain globals and hooks are referenced as `React.useState` in files loaded after `cat.jsx` (which destructures the hooks into globals first). All state is client-side. The only backend dependency is a single webhook.
 
@@ -145,27 +146,7 @@ theme pick  ──> body[data-theme] ──> CSS custom properties ──> local
 | **Graphics** | Inline SVG |
 | **Chat backend** | n8n webhook |
 | **State** | React hooks + localStorage |
-| **Hosting** | Static — no server, no build |
-
----
-
-## ⚙️ Configuration
-
-`config.js` holds the webhook URL and is gitignored.
-
-```bash
-cp config.example.js config.js   # then fill in the webhook URL
-```
-
-The chatbot degrades to an error message if it's missing. Everything else works without it.
-
----
-
-## ⚖️ Trade-offs
-
-- **In-browser Babel** costs a transpile on every load and ships React's dev builds. Fine at this size; a build step is the answer when it stops being fine.
-- **Shared global scope** makes script order in `index.html` load-bearing.
-- **Manual cache busting** — `?v=N` query strings on script and stylesheet tags. Bump on deploy.
+| **Hosting** | Cloudflare Pages — static, no server, no build |
 
 ---
 

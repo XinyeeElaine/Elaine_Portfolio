@@ -25,7 +25,7 @@ function HomePage({ go }) {
 
         <div className="collage">
           <div className="card-tile t-avatar">
-            <img src="Picture/Elaine_profile.jpg?v=2" alt="Elaine" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src="/Picture/Elaine_profile.jpg?v=2" alt="Elaine" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div className="card-tile t-card1">
             <div className="tile-label">currently</div>
@@ -197,18 +197,18 @@ const PROJECTS = [
     ],
     techStack: ['Kotlin', 'Jetpack Compose', 'MVVM', 'Room (SQLite)', 'Material 3', 'Android SDK'],
     glyph: 'L',
-    thumb: 'Picture/LoafLand-Bakery_logo.jpg',
+    thumb: '/Picture/LoafLand-Bakery_logo.jpg',
     bg: 'linear-gradient(135deg, oklch(0.78 0.10 55) 0%, oklch(0.84 0.08 85) 100%)',
     image: null,
     github: 'https://github.com/XinyeeElaine/LoafLand-Bakery',
     deploy: null,
     images: [
-      'Picture/LoafLand-Bakery1.png',
-      'Picture/LoafLand-Bakery2.png',
-      'Picture/LoafLand-Bakery3.png',
-      'Picture/LoafLand-Bakery4.png',
-      'Picture/LoafLand-Bakery5.png',
-      'Picture/LoafLand-Bakery6.png',
+      '/Picture/LoafLand-Bakery1.png',
+      '/Picture/LoafLand-Bakery2.png',
+      '/Picture/LoafLand-Bakery3.png',
+      '/Picture/LoafLand-Bakery4.png',
+      '/Picture/LoafLand-Bakery5.png',
+      '/Picture/LoafLand-Bakery6.png',
     ],
   },
   {
@@ -229,13 +229,13 @@ const PROJECTS = [
     techStack: ['HTML', 'CSS', 'Vanilla JavaScript', 'Supabase', 'localStorage', 'GitHub Pages'],
     glyph: 'M',
     bg: 'linear-gradient(135deg, oklch(0.84 0.08 85) 0%, oklch(0.78 0.10 55) 100%)',
-    thumb: 'Picture/meow-ney_logo.png',
+    thumb: '/Picture/meow-ney_logo.png',
     image: null,
     github: 'https://github.com/XinyeeElaine/Meow-ney-Maker',
     deploy: 'https://meow-ney.sillycookie.me/',
     images: [
-      'Picture/meow-ney_timer.png',
-      'Picture/meow-ney_runningtimer.png',
+      '/Picture/meow-ney_timer.png',
+      '/Picture/meow-ney_runningtimer.png',
     ],
   },
   {
@@ -254,14 +254,14 @@ const PROJECTS = [
     ],
     techStack: ['Python', 'Flask', 'scikit-learn', 'pandas', 'Waitress', 'Render'],
     glyph: 'E',
-    thumb: 'Picture/ev_logo.png',
+    thumb: '/Picture/ev_logo.png',
     bg: 'linear-gradient(135deg, oklch(0.80 0.10 160) 0%, oklch(0.76 0.12 200) 100%)',
     image: null,
     github: 'https://github.com/XinyeeElaine/FYP_Predictive_api',
     deploy: null,
     images: [
-      'Picture/ev_predictive_maintenance.png',
-      'Picture/ev_usage_analysis.png',
+      '/Picture/ev_predictive_maintenance.png',
+      '/Picture/ev_usage_analysis.png',
     ],
   },
   {
@@ -270,7 +270,7 @@ const PROJECTS = [
     summary: 'Full-stack fashion e-commerce web app — browse, cart, Stripe checkout, and admin panel.',
     description: "A full-stack fashion e-commerce web application built from the ground up with plain PHP — no frameworks, just clean architecture.\n\nUsers can browse clothing by category, manage a shopping cart, pay via Stripe, and track orders. An admin panel lets store operators manage products (with variations), orders, and members. The database spans 12 tables covering users, products, variations, cart, orders, addresses, and auth tokens.\n\nFeatures PDO-based MySQL/MariaDB queries, PHPMailer for SMTP emails, Stripe integration via stripe-php, jQuery for interactivity, and custom CSS styling with .avif product images served through a thumbnail library.",
     tags: ['PHP', 'MySQL', 'E-commerce', 'Stripe', 'Full-stack'],
-    collaborators: [{ name: 'MingLi', role: 'Teammate', href: 'https://exoticpengy.me', avatar: 'Picture/exoticpengy.png' }],
+    collaborators: [{ name: 'MingLi', role: 'Teammate', href: 'https://exoticpengy.me', avatar: '/Picture/exoticpengy.png' }],
     features: [
       'Browse clothing by category',
       'Shopping cart with product variations',
@@ -283,14 +283,14 @@ const PROJECTS = [
     techStack: ['PHP', 'MySQL', 'MariaDB', 'PDO', 'Stripe', 'PHPMailer', 'jQuery', 'CSS'],
     glyph: 'H',
     bg: 'linear-gradient(135deg, oklch(0.75 0.10 10) 0%, oklch(0.68 0.12 30) 100%)',
-    thumb: 'Picture/HAndMaybe.png?v=2',
+    thumb: '/Picture/HAndMaybe.png?v=2',
     image: null,
     github: 'https://github.com/XinyeeElaine/HAndMaybe',
     deploy: null,
     images: [
-      'Picture/H&Maybe_product.png',
-      'Picture/H&Maybe_cart.png',
-      'Picture/H&Maybe_order.png',
+      '/Picture/H&Maybe_product.png',
+      '/Picture/H&Maybe_cart.png',
+      '/Picture/H&Maybe_order.png',
     ],
   },
   {
@@ -299,7 +299,7 @@ const PROJECTS = [
     summary: 'AI-powered browser extension that detects fake reviews on Google Maps using Amazon Bedrock.',
     description: "We built this during the Great AI Hackathon 2025 - Team Penguining, my first hackathon project =´∇｀= FoodTrust is a browser extension that brings transparency back to online food reviews.\n\nIt analyzes Google Maps restaurant reviews in real time using Amazon Bedrock's language models, flagging suspicious reviews with reasoning and probability scores. An overall trust score (e.g. 85%) is displayed directly on the page.\n\nThe architecture uses a serverless AWS backend — Lambda functions process review text through Bedrock, with API Gateway routing and S3 for storage. The extension frontend is vanilla JavaScript, HTML, and CSS, while the ML pipeline was prototyped in Jupyter Notebooks via SageMaker Studio.",
     tags: ['AI/ML', 'Browser Extension', 'Amazon Bedrock', 'JavaScript', 'Python'],
-    collaborators: [{ name: 'MingLi', role: 'Teammate · Team Penguining', href: 'https://exoticpengy.me', avatar: 'Picture/exoticpengy.png' }],
+    collaborators: [{ name: 'MingLi', role: 'Teammate · Team Penguining', href: 'https://exoticpengy.me', avatar: '/Picture/exoticpengy.png' }],
     features: [
       'Analyzes Google Maps restaurant reviews in real time',
       'Flags suspicious reviews with reasoning and a probability score',
@@ -309,13 +309,13 @@ const PROJECTS = [
     techStack: ['Amazon Bedrock', 'AWS Lambda', 'Amazon API Gateway', 'Amazon S3', 'Amazon SageMaker Studio', 'JavaScript', 'Python'],
     glyph: 'F',
     bg: 'linear-gradient(135deg, oklch(0.72 0.08 260) 0%, oklch(0.62 0.12 290) 100%)',
-    thumb: 'Picture/FoodTrust.png?v=1',
+    thumb: '/Picture/FoodTrust.png?v=1',
     image: null,
     github: 'https://github.com/XinyeeElaine/fake-food-review-detector',
     deploy: null,
     images: [
-      'Picture/FoodTrust_extension.png',
-      'Picture/FoodTrust_analysis.png',
+      '/Picture/FoodTrust_extension.png',
+      '/Picture/FoodTrust_analysis.png',
     ],
   },
 ];
