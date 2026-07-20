@@ -235,6 +235,7 @@ const PROJECTS = [
     deploy: 'https://meow-ney.sillycookie.me/',
     images: [
       'Picture/meow-ney_timer.png',
+      'Picture/meow-ney_runningtimer.png',
     ],
   },
   {
