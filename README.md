@@ -155,40 +155,47 @@ public/Picture/           images, copied to dist/ as-is
 
 ---
 
-## 🚀 Running it locally
+## 🚀 Installation
 
-Requires **Node 20+** (built on 22).
+**Prerequisites:** [Node.js](https://nodejs.org) 20 or newer (built on 22) and npm.
+
+**1. Clone the repository**
 
 ```bash
-npm install                    # once
-cp .env.example .env           # then put the real webhook URL in it
-npm run dev                    # http://localhost:5173
+git clone https://github.com/XinyeeElaine/Elaine_Portfolio.git
+cd Elaine_Portfolio
 ```
 
-`npm run dev` hot-reloads on save — no manual refresh, no cache-busting query strings.
+**2. Install dependencies**
+
+```bash
+npm install
+```
+
+**3. Start the dev server**
+
+```bash
+npm run dev
+```
+
+Open **http://localhost:5173**. Edits hot-reload on save.
+
+### npm scripts
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Dev server with hot reload |
+| `npm install` | Install dependencies |
+| `npm run dev` | Dev server with hot reload, on port 5173 |
 | `npm run build` | Production build into `dist/` |
-| `npm run preview` | Serve `dist/` locally to check the real build |
-
-<details>
-<summary><b>Why <code>.env</code> is needed for the chatbot</b></summary>
-
-<br />
-
-In production, `/api/chat` is handled by `functions/api/chat.js` running on Cloudflare. The Vite dev server doesn't run Pages Functions, so `vite.config.js` proxies the same path straight to `N8N_WEBHOOK_URL` from `.env` instead. Either way the URL stays server-side and never reaches the browser.
-
-Without `.env`, everything works except the chatbot, which reports that it couldn't reach the server.
-
-</details>
+| `npm run preview` | Serve the built `dist/` locally to check it before deploying |
 
 ---
 
 ## ☁️ Deployment
 
-Pushing to `main` triggers a Cloudflare Pages build. Settings:
+Hosted on **Cloudflare Pages**. Pushing to `main` triggers a build automatically.
+
+Project settings:
 
 | Setting | Value |
 |---|---|
@@ -198,9 +205,9 @@ Pushing to `main` triggers a Cloudflare Pages build. Settings:
 | Root directory | *(empty)* |
 | `NODE_VERSION` | `22` |
 
-The chatbot's upstream URL is stored as an encrypted environment variable and read at request time by `functions/api/chat.js` — never bundled, never sent to the client.
+The `functions/` directory is picked up automatically; nothing to configure for it.
 
-`functions/` is picked up automatically; nothing to configure for it.
+Check a build locally before pushing with `npm run build && npm run preview`.
 
 ---
 
