@@ -25,9 +25,9 @@
 
 ## 🌙 About the project
 
-A portfolio that behaves less like a résumé and more like a room you can wander around in. Every project gets its own page, and the place comes with things to fiddle with: five colour themes to repaint it, a lofi soundtrack the browser makes up as it goes, an AI assistant happy to answer questions about the work, and Cookie, a cat who patrols the bottom of the page and can be picked up and dropped wherever you like.
+A portfolio that behaves less like a résumé and more like a room you can wander around in. Every project gets its own page, plus things to fiddle with: five colour themes, a lofi soundtrack the browser makes up as it goes, an AI assistant that answers questions about the work, and Cookie, a cat you can pick up and drop wherever you like.
 
-Under the cuteness: a single-page React app bundled with Vite and served as static files from Cloudflare Pages. Routing runs on the URL hash, styling is vanilla CSS driven by custom properties, the soundtrack is synthesised at runtime with the Web Audio API, and Cookie is hand-drawn inline SVG. A Cloudflare Pages Function fields the chatbot's requests and keeps its backend URL safely server-side. Everything here is built from scratch and tuned by hand.
+Under the cuteness: a **single-page React app bundled with Vite and served as static files from Cloudflare Pages**. Routing runs on the URL hash, styling is **vanilla CSS driven by custom properties**, the soundtrack is **synthesised at runtime with the Web Audio API**, and Cookie is hand-drawn inline SVG. A Cloudflare Pages Function fields the chatbot's requests and keeps its backend URL server-side. **Everything here is built from scratch and tuned by hand.**
 
 ---
 
@@ -38,13 +38,13 @@ Under the cuteness: a single-page React app bundled with Vite and served as stat
 <td width="50%" valign="top">
 
 ### 🧭 Hash routing
-`app.jsx` owns a `route` string synced with `window.location.hash` in **both** directions — clicks call `go(id)`, and a `hashchange` listener catches back/forward. Routes matching `project-<slug>` render a detail view, so every project stays deep-linkable and shareable.
+Hash-synced routes, both ways. `project-<slug>` renders a deep-linkable detail page.
 
 </td>
 <td width="50%" valign="top">
 
 ### 🗂 Data-driven project pages
-Projects live as one array of objects in `pages.jsx` — copy, tags, features, stack, links, optional `images[]`, gradient `bg` fallback. Supply `images[]` and you get a carousel; omit it and it falls back to a logo lockup or a glyph on the gradient.
+One array of objects in `pages.jsx`. Add `images[]` for a carousel, or skip it.
 
 </td>
 </tr>
@@ -52,13 +52,13 @@ Projects live as one array of objects in `pages.jsx` — copy, tags, features, s
 <td width="50%" valign="top">
 
 ### 🖼 Image carousel
-Cross-fade via absolutely-positioned stacked `<img>` toggling opacity — no transforms, no layout thrash. Autoplay on a 3.5s interval, pauses on hover, and pauses 4s after manual navigation. Arrows, dots, and the counter render only when `images.length > 1`.
+Opacity cross-fade, no transforms. Autoplays every 3.5s, pauses on hover and manual nav.
 
 </td>
 <td width="50%" valign="top">
 
 ### 🤖 AI chatbot
-The browser `POST`s `{ sessionId, prompt }` to a same-origin `/api/chat`; a Pages Function validates it and forwards to n8n. `sessionId` is minted once per browser and stored, so the workflow threads memory server-side. The reply parser falls through `output → reply → text → message → answer`, since the key depends on which node ends the workflow. Network failures degrade to an in-chat message.
+Chats via a Pages Function proxy to n8n. Per-browser session threads memory server-side.
 
 </td>
 </tr>
@@ -66,13 +66,55 @@ The browser `POST`s `{ sessionId, prompt }` to a same-origin `/api/chat`; a Page
 <td width="50%" valign="top">
 
 ### 🎨 Themes
-Five palettes applied by setting `data-theme` on `<body>`. Every colour is a CSS custom property, so a theme switch is **one attribute write and zero re-renders**. Persisted to localStorage.
+Five palettes via `data-theme` — **one attribute write, zero re-renders**. Persisted.
 
 </td>
 <td width="50%" valign="top">
 
 ### 🎧 Procedural lofi engine
-The whole soundtrack is generated in the browser. A Web Audio graph is built at runtime — oscillator pads, lead, and drums through per-instrument gain buses into a shared lowpass, with an LFO on the pad bus for tremolo. A few hundred bytes of code stands in for a multi-megabyte MP3.
+Soundtrack synthesised live in the browser. A few hundred bytes replace a multi-MB MP3.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 🍰 Tamagotchi cat care
+Feed, play, pet — raises hunger and fun stats and bursts floating emoji.
+
+</td>
+<td width="50%" valign="top">
+
+### 🧲 Draggable skill stickers
+Every skill sticker is pointer-draggable around its card.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 🎚 Full audio controls
+Volume slider, on/off toggle, autoplay unlocked on first gesture. All persisted.
+
+</td>
+<td width="50%" valign="top">
+
+### ✉️ Contact form
+Validates, then opens a prefilled Gmail compose window.
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 🌫 Ambient motion
+Drifting gradient blobs, glassmorphism nav, an infinite marquee, page-enter transitions.
+
+</td>
+<td width="50%" valign="top">
+
+### 📱 Responsive & nav
+Mobile hamburger menu, wrap-around prev/next links, smooth scroll-to-top.
 
 </td>
 </tr>
@@ -80,7 +122,7 @@ The whole soundtrack is generated in the browser. A Web Audio graph is built at 
 <td colspan="2" valign="top">
 
 ### 🐱 Virtual cat
-Hand-drawn SVG with mood-driven variants (`happy`, `eating`, `sleepy`). A behaviour interval drives idle states and walking; pointer handlers implement drag-and-drop with a captured offset so the cat doesn't snap to the cursor. Two placement modes — `footer` (walks along a bar) and `placed` (pinned anywhere in the viewport) — both persisted.
+Hand-drawn SVG with mood variants and procedural tail wag, blink, and walk cycle. Drag-and-drop between two modes — `footer` (walks a bar) and `placed` (pinned anywhere) — both persisted.
 
 </td>
 </tr>
@@ -88,37 +130,45 @@ Hand-drawn SVG with mood-driven variants (`happy`, `eating`, `sleepy`). A behavi
 
 ---
 
-## 🔀 Flow
+## 🏗 Architecture
 
-**Load order** — `main.jsx` imports for side effects, and the sequence matters
+**Module load order** — `main.jsx` imports for side effects; the sequence is load-bearing.
 
 ```
 index.html
   └─ main.jsx
-       ├─ globals.js     → window.React · window.ReactDOM   (must be first)
+       ├─ globals.js     window.React · window.ReactDOM   (must run first)
        ├─ styles.css
-       ├─ cat.jsx        → CatRoot   (destructures the hooks into globals)
-       ├─ chatbot.jsx    → ChatBot
-       ├─ settings.jsx   → SettingsGear
-       ├─ pages.jsx      → page components + PROJECTS + ImageCarousel
-       └─ app.jsx        → App, mounts to #root
+       ├─ cat.jsx        CatRoot     (destructures hooks into globals)
+       ├─ chatbot.jsx    ChatBot
+       ├─ settings.jsx   SettingsGear
+       ├─ pages.jsx      page components · PROJECTS · ImageCarousel
+       └─ app.jsx        App, mounts to #root
 ```
 
-**Runtime**
+**Runtime data flow**
 
 ```
-hash change ──> App.route ──> project-<slug> ? ProjectDetailPage : PageComponent
-chat send   ──> POST /api/chat ──> Pages Function ──> n8n ──> knowledge base ──> reply
-theme pick  ──> body[data-theme] ──> CSS custom properties ──> localStorage
+hash change   App.route  ·  project-<slug> ? ProjectDetailPage : PageComponent
+chat send     POST /api/chat  ·  Pages Function  ·  n8n  ·  knowledge base  ·  reply
+theme pick    body[data-theme]  ·  CSS custom properties  ·  localStorage
 ```
 
-**Repo layout**
+**Project structure**
 
 ```
-main.jsx · globals.js · app.jsx · cat.jsx · chatbot.jsx · pages.jsx · settings.jsx · styles.css
-functions/api/chat.js     server-side chat proxy (Cloudflare)
-public/Picture/           images, copied to dist/ as-is
-.env                      N8N_WEBHOOK_URL, gitignored
+main.jsx        entry — imports every module in order, then mounts
+globals.js      pins React + hooks onto window (no bundler-side imports)
+app.jsx         App shell, nav, routing, background motion
+pages.jsx       page components + PROJECTS data + ImageCarousel
+cat.jsx         Cookie — SVG, behaviour loop, drag-and-drop
+chatbot.jsx     chat widget + client-side session handling
+settings.jsx    theme, music, and volume controls
+styles.css      all styling — one vanilla CSS file
+
+functions/api/chat.js   server-side chat proxy (Cloudflare)
+public/Picture/         images, copied to dist/ as-is
+.env                    N8N_WEBHOOK_URL, gitignored
 ```
 
 <details>
@@ -215,13 +265,7 @@ Check a build locally before pushing with `npm run build && npm run preview`.
 
 **© 2026 Elaine Pang Xin Yee. All rights reserved.**
 
-This is a personal project and is **not** open source. No license is granted.
-
-The source code, design, written copy, illustrations, and all other assets in this repository are my own work. You may view and read the code for reference or learning. You may **not** copy, reuse, modify, redistribute, republish, or use any part of it — in whole or in part, commercially or otherwise — without my written permission.
-
-Third-party dependencies (React, Vite, and anything in `package.json`) remain under their own respective licenses.
-
-Want to use something here? [Ask me](https://sillycookie.me/#contact).
+Personal project, **not** open source — no license granted. Code and assets are my own; view them for reference, but no copying, reuse, or redistribution without written permission. Third-party dependencies keep their own licenses. Want to use something? [Ask me](https://sillycookie.me/#contact).
 
 <div align="center">
 <br />
