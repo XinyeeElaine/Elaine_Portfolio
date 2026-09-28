@@ -1,9 +1,20 @@
 /* All 5 page components for the cozy portfolio. */
 
 function HomePage({ go }) {
+  // mouse parallax for the collage: sets --mx/--my (-0.5..0.5), CSS does the rest
+  const tilt = (e) => {
+    if (e.pointerType !== 'mouse') return;
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mx', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+    e.currentTarget.style.setProperty('--my', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+  };
+  const untilt = (e) => {
+    e.currentTarget.style.setProperty('--mx', 0);
+    e.currentTarget.style.setProperty('--my', 0);
+  };
   return (
     <div className="page" data-screen-label="01 Home">
-      <div className="hero">
+      <div className="hero" onPointerMove={tilt} onPointerLeave={untilt}>
         <div>
           <div className="eyebrow"><span className="pulse" /> open to new projects · 2026</div>
           <h1>
@@ -514,37 +525,14 @@ const SOCIALS = [
   },
   {
     label: 'WhatsApp',
-    value: '016-286 4168',
+    value: '@xinyee_elaine',
     href: 'https://wa.me/60162864168?text=Hi%20Elaine%2C%20I%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect.',
     icon: 'https://cdn.simpleicons.org/whatsapp/25D366',
   },
 ];
 
 function ContactPage() {
-  const [form, setForm] = React.useState({ name: '', message: '' });
-  const [errors, setErrors] = React.useState({});
-  const [sent, setSent] = React.useState(false);
-
-  const onChange = (k) => (e) => {
-    setForm(f => ({ ...f, [k]: e.target.value }));
-    if (errors[k]) setErrors(err => ({ ...err, [k]: undefined }));
-  };
-
-  const submit = (e) => {
-    e.preventDefault();
-    const next = {};
-    if (!form.name.trim()) next.name = 'A name would be lovely.';
-    if (form.message.trim().length < 8) next.message = 'A few more words, please?';
-    setErrors(next);
-    if (Object.keys(next).length === 0) {
-      const subject = encodeURIComponent('Contacting from portfolio');
-      const body = encodeURIComponent(`${form.message}\n\nFrom,\n${form.name}`);
-      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=xinyeeelaine@gmail.com&su=${subject}&body=${body}`, '_blank');
-      setSent(true);
-      setForm({ name: '', message: '' });
-      setTimeout(() => setSent(false), 6000);
-    }
-  };
+  const linkedin = SOCIALS.find(s => s.label === 'LinkedIn');
 
   return (
     <div className="page" data-screen-label="05 Contact">
@@ -557,7 +545,7 @@ function ContactPage() {
       <div className="contact-grid">
         <div className="contact-side">
           <h3>Find me here</h3>
-          <p>Or drop a line directly — both work. I promise I'm a friendly inbox.</p>
+          <p>Reach out on whichever platform suits you best. I'd love to hear from you!</p>
           <div className="social">
             {SOCIALS.map(s => (
               <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">
@@ -573,27 +561,14 @@ function ContactPage() {
           </div>
         </div>
 
-        <form className="contact-form" onSubmit={submit} noValidate>
-          {sent && (
-            <div className="success" style={{ marginBottom: 16 }}>
-              ✨ Sent! I'll get back to you within a day or two.
-            </div>
-          )}
-          <div className="field">
-            <label>Your name</label>
-            <input type="text" value={form.name} onChange={onChange('name')} placeholder="Elaine from the studio" />
-            {errors.name && <div className="err">{errors.name}</div>}
-          </div>
-          <div className="field">
-            <label>What's on your mind?</label>
-            <textarea value={form.message} onChange={onChange('message')} placeholder="Tell me about the project, the team, the timeline — or just say hi." />
-            {errors.message && <div className="err">{errors.message}</div>}
-          </div>
-          <div className="submit-row">
-            <button type="submit" className="btn primary">Send it →</button>
-            <span style={{ fontSize: 13, color: 'var(--ink-faint)' }}>I read every message.</span>
-          </div>
-        </form>
+        <div className="contact-form contact-cta">
+          <span className="cta-badge"><img src={linkedin.icon} alt="" /></span>
+          <h3>Let's chat on LinkedIn</h3>
+          <p>The quickest way to reach me. Send a message or a connection request and I'll reply within a day or two.</p>
+          <a className="btn primary" href={linkedin.href} target="_blank" rel="noopener noreferrer">
+            Message me on LinkedIn →
+          </a>
+        </div>
       </div>
     </div>
   );

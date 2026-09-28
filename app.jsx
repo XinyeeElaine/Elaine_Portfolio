@@ -36,6 +36,44 @@ function App() {
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
+  // scroll reveal: fade/slide items up as they enter the viewport, staggered per sibling
+  React.useEffect(() => {
+    const els = document.querySelectorAll(
+      '.page .section-head, .page .t-item, .page .about-bio, .page .proj-card, .page .skill-section, ' +
+      '.page .contact-side, .page .contact-form, .page .proj-section, .page .marquee'
+    );
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.12 });
+    els.forEach((el) => {
+      const i = Array.prototype.indexOf.call(el.parentNode.children, el);
+      el.style.setProperty('--i', Math.min(i, 6));
+      el.classList.add('reveal');
+      io.observe(el);
+    });
+    return () => io.disconnect();
+  }, [route]);
+
+  // nav pill glides to the active link; ResizeObserver covers resize + late font load
+  const linksRef = React.useRef(null);
+  const [pill, setPill] = React.useState(null);
+  React.useLayoutEffect(() => {
+    const links = linksRef.current;
+    if (!links) return;
+    const measure = () => {
+      const a = links.querySelector('.link.active');
+      setPill(a && a.offsetWidth ? { left: a.offsetLeft, top: a.offsetTop, width: a.offsetWidth, height: a.offsetHeight } : null);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(links);
+    return () => ro.disconnect();
+  }, [route, mobileOpen]);
+
   let pageElement;
   if (route.startsWith('project-')) {
     const slug = route.slice('project-'.length);
@@ -59,7 +97,8 @@ function App() {
           <span className="dot" />
           elaine.portfolio
         </div>
-        <div className={`links ${mobileOpen ? 'mobile-open' : ''}`}>
+        <div ref={linksRef} className={`links ${mobileOpen ? 'mobile-open' : ''}`}>
+          {pill && <span className="nav-pill" style={pill} />}
           {PAGES.map(p => (
             <a
               key={p.id}

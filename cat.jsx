@@ -9,7 +9,7 @@ function CatSVG({ mood }) {
   const sleepy = mood === 'sleepy';
 
   return (
-    <svg className="cat-svg" width="76" height="74" viewBox="0 0 100 100" style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)' }}>
+    <svg className={`cat-svg ${mood}`} width="76" height="74" viewBox="0 0 100 100">
       {/* tail */}
       <g className="tail" style={{ transformOrigin: '78px 70px' }}>
         <path d="M 78 70 Q 92 60 88 44" stroke="#5c3c1c" strokeWidth="7" fill="none" strokeLinecap="round" />
@@ -32,10 +32,14 @@ function CatSVG({ mood }) {
 
       {/* head */}
       <g style={{ transformOrigin: '48px 50px', transform: happy ? 'rotate(-4deg)' : 'rotate(0)', transition: 'transform 0.3s' }}>
-        <path d="M 30 38 L 26 22 L 42 32 Z" fill="#5c3c1c" />
-        <path d="M 30 38 L 28 26 L 39 32 Z" fill="#a06f4a" />
-        <path d="M 66 38 L 70 22 L 54 32 Z" fill="#5c3c1c" />
-        <path d="M 66 38 L 68 26 L 57 32 Z" fill="#a06f4a" />
+        <g className="ear l">
+          <path d="M 30 38 L 26 22 L 42 32 Z" fill="#5c3c1c" />
+          <path d="M 30 38 L 28 26 L 39 32 Z" fill="#a06f4a" />
+        </g>
+        <g className="ear r">
+          <path d="M 66 38 L 70 22 L 54 32 Z" fill="#5c3c1c" />
+          <path d="M 66 38 L 68 26 L 57 32 Z" fill="#a06f4a" />
+        </g>
 
         <ellipse cx="48" cy="50" rx="22" ry="20" fill="#7d5730" />
         <ellipse cx="48" cy="50" rx="20" ry="18" fill="#8a6238" />
@@ -145,6 +149,14 @@ function CatRoot() {
     if (initialPlacement === 'placed') setPlacement('placed');
   }, [initialPlacement]);
 
+  // yarn ball for play: { from, to } in viewport px (centre x)
+  const [yarn, setYarn] = useState(null);
+  const yarnRef = useRef(null);
+  useEffect(() => {yarnRef.current = yarn;}, [yarn]);
+  // brief squash after a drop
+  const [landing, setLanding] = useState(false);
+  const land = () => {setLanding(true);setTimeout(() => setLanding(false), 450);};
+
   // particles
   const [particles, setParticles] = useState([]);
   const idCounter = useRef(0);
@@ -169,6 +181,22 @@ function CatRoot() {
       const pl = placementRef.current;
       if (pl !== 'footer' && pl !== 'placed') return;
       const b = behaviorRef.current;
+      if (b === 'chase') {
+        const y = yarnRef.current;
+        if (!y) return;
+        const d = y.to - (posRef.current.x + CAT_W / 2);
+        if (Math.abs(d) < 24) {
+          yarnRef.current = null;
+          setYarn(null);
+          setBehavior('happy');
+          emitParticles(['💜', '🧶', '✨', '💙'], 7);
+          setTimeout(() => setBehavior((cur) => cur === 'happy' ? 'walk' : cur), 1600);
+          return;
+        }
+        setFacing(d > 0 ? 'right' : 'left');
+        setPos((p) => ({ ...p, x: p.x + Math.sign(d) * Math.min(16, Math.abs(d)) }));
+        return;
+      }
       if (b === 'eat' || b === 'happy' || b === 'sleepy') return;
       if (b !== 'walk') return; // sit/groom/look just pause
 
@@ -226,7 +254,7 @@ function CatRoot() {
 
   /* ----- sleepy when both low ----- */
   useEffect(() => {
-    if (['eat', 'happy', 'dangle', 'sleep'].includes(behavior)) return;
+    if (['eat', 'happy', 'dangle', 'sleep', 'chase'].includes(behavior)) return;
     if (hunger < 22 && fun < 22) setBehavior('sleepy');else
     if (behavior === 'sleepy') setBehavior('walk');
   }, [hunger, fun, behavior]);
@@ -252,6 +280,7 @@ function CatRoot() {
     dragOffset.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     setPlacement('dragging');
     setBehavior('dangle');
+    setYarn(null);
     setPos({ x: e.clientX - dragOffset.current.x, y: e.clientY - dragOffset.current.y });
     try {host.setPointerCapture(e.pointerId);} catch (err) {}
   };
@@ -273,12 +302,21 @@ function CatRoot() {
     const clientX = e.clientX - dragOffset.current.x;
     const winH = window.innerHeight;
 
-    // if dropped near footer area → snap into walking on footer
-    if (clientY + CAT_H >= winH - FOOTER_H - 10) {
+    // dropped in lower third → falls down onto the footer
+    if (clientY + CAT_H >= winH * 2 / 3) {
       const x = Math.max(16, Math.min(window.innerWidth - CAT_W - 16, clientX));
-      setPlacement('footer');
-      setPos({ x, y: 0 });
-      setBehavior('walk');
+      const floor = winH - (collapsedRef.current ? 28 : FOOTER_H) - CAT_H;
+      setPlacement('falling');
+      setPos({ x, y: Math.min(clientY, floor) });
+      // two frames so the start position paints before the transition target
+      requestAnimationFrame(() => requestAnimationFrame(() => setPos({ x, y: floor })));
+      setTimeout(() => {
+        if (placementRef.current !== 'falling') return; // grabbed again mid-fall
+        setPlacement('footer');
+        setPos({ x, y: 0 });
+        setBehavior('walk');
+        land();
+      }, 420);
       try {localStorage.removeItem('cozy.cat.placement');} catch (err) {}
     } else {
       // place on page (page coords)
@@ -287,6 +325,7 @@ function CatRoot() {
       setPlacement('placed');
       setPos({ x: px, y: py });
       setBehavior('walk');
+      land();
       try {localStorage.setItem('cozy.cat.placement', JSON.stringify({ placement: 'placed', x: px, y: py }));} catch (err) {}
     }
   };
@@ -323,7 +362,16 @@ function CatRoot() {
     }
   };
 
+  // already maxed (as shown in the bar) → shake head no instead
+  const refuse = (kind) => {
+    setBehavior(kind);
+    setYarn(null); // refused mid-chase: don't strand the yarn
+    emitParticles(['💢'], 1);
+    setTimeout(() => setBehavior((cur) => cur === kind ? 'walk' : cur), 1400);
+  };
+
   const onFeed = () => {
+    if (Math.round(hunger) >= 100) return refuse('full');
     setHunger((h) => Math.min(100, h + 28));
     teleportToFooterIfNeeded(() => {
       setBehavior('eat');
@@ -332,12 +380,29 @@ function CatRoot() {
     });
   };
   const onPlay = () => {
+    if (Math.round(fun) >= 100) return refuse('bored-of-it');
     setFun((f) => Math.min(100, f + 32));
     teleportToFooterIfNeeded(() => {
-      setBehavior('happy');
-      emitParticles(['💜', '🧶', '✨', '💙'], 7);
-      setTimeout(() => setBehavior('walk'), 2000);
+      // roll yarn ~260px ahead (turn around if that's off-screen), cat chases it in the walk loop
+      const edge = CAT_W / 2 + 16;
+      const maxX = window.innerWidth - edge;
+      const cx = posRef.current.x + CAT_W / 2;
+      let dir = facingRef.current === 'right' ? 1 : -1;
+      if (cx + dir * 260 < edge || cx + dir * 260 > maxX) dir = -dir;
+      const to = Math.max(edge, Math.min(maxX, cx + dir * 260));
+      setYarn({ from: cx + dir * 30, to });
+      setFacing(dir > 0 ? 'right' : 'left');
+      setBehavior('chase');
     });
+  };
+
+  const onHover = (e) => {
+    if (e.pointerType !== 'mouse') return;
+    const b = behaviorRef.current;
+    if (b !== 'walk' && b !== 'sleep') return;
+    if (b === 'sleep') emitParticles(['❗'], 1);
+    setBehavior('look');
+    setTimeout(() => setBehavior((cur) => cur === 'look' ? 'walk' : cur), 1500);
   };
   const onPet = () => {
     setFun((f) => Math.min(100, f + 10));
@@ -357,7 +422,7 @@ function CatRoot() {
       const bottom = collapsed ? 28 : FOOTER_H;
       return { left: pos.x + 'px', bottom: bottom + 'px', top: 'auto', position: 'fixed' };
     }
-    if (placement === 'dragging') {
+    if (placement === 'dragging' || placement === 'falling') {
       return { left: pos.x + 'px', top: pos.y + 'px', bottom: 'auto', position: 'fixed' };
     }
     // placed (absolute = page coords)
@@ -367,11 +432,15 @@ function CatRoot() {
   // class composition
   let cls = 'cat-host facing-' + facing;
   if (placement === 'dragging') cls += ' dragging';else
+  if (placement === 'falling') cls += ' falling';else
   if (placement === 'placed') cls += ' placed';else
   cls += ' walking-host';
-  if ((placement === 'footer' || placement === 'placed') && behavior === 'walk') cls += ' walking';
+  if ((placement === 'footer' || placement === 'placed') && (behavior === 'walk' || behavior === 'chase')) cls += ' walking';
+  if (behavior === 'chase') cls += ' chasing';
   if (behavior === 'groom') cls += ' grooming';
   if (behavior === 'look') cls += ' looking';
+  if (behavior === 'full' || behavior === 'bored-of-it') cls += ' refusing';
+  if (landing) cls += ' landing';
 
   // mood for the SVG itself
   const svgMood = behavior === 'eat' ? 'eating' :
@@ -387,6 +456,9 @@ function CatRoot() {
     if (behavior === 'sleep') return 'napping... zzz';
     if (behavior === 'groom') return 'tidying up';
     if (behavior === 'look') return 'what was that?';
+    if (behavior === 'chase') return 'must... catch... yarn!';
+    if (behavior === 'full') return "I'm stuffed, no more!";
+    if (behavior === 'bored-of-it') return 'too tired to play...';
     if (placement === 'placed') return 'sitting here a while';
     if (placement === 'dragging') return 'wheeeee!';
     // hunger/fun-driven moods (lower bound wins)
@@ -410,11 +482,16 @@ function CatRoot() {
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}>
-        
+        onPointerCancel={onPointerUp}
+        onPointerEnter={onHover}>
+
         <div className="scale-wrap">
           <div className="ground" />
           <CatSVG mood={svgMood} />
+          {behavior === 'eat' && <span className="bowl">🥣</span>}
+          {(behavior === 'sleep' || behavior === 'sleepy') &&
+          <span className="zzz"><i>z</i><i>z</i><i>z</i></span>
+          }
           {placement === 'placed' && <span className="pickup-hint">pick me up?</span>}
           {particles.map((p) =>
           <span
@@ -427,6 +504,14 @@ function CatRoot() {
           )}
         </div>
       </div>
+
+      {yarn &&
+      <span
+        className="yarn"
+        style={{ left: yarn.from + 'px', bottom: (collapsed ? 28 : FOOTER_H) + 'px', '--dx': yarn.to - yarn.from + 'px', '--spin': (yarn.to > yarn.from ? 720 : -720) + 'deg' }}>
+          🧶
+        </span>
+      }
 
       {/* the footer bar */}
       <div className={`catbar ${collapsed ? 'collapsed' : ''}`} data-screen-label="cat-footer">

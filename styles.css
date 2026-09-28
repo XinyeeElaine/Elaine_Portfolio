@@ -212,7 +212,17 @@ a { color: inherit; }
   animation: spin 14s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-.nav .links { display: flex; gap: 4px; }
+.nav .links { display: flex; gap: 4px; position: relative; }
+/* one pill that glides to the active link (positioned from app.jsx) */
+.nav .nav-pill {
+  position: absolute; z-index: 0;
+  background: var(--paper);
+  border-radius: 100px;
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+  transition: left 0.4s cubic-bezier(.3,1.3,.5,1), top 0.4s cubic-bezier(.3,1.3,.5,1),
+              width 0.4s cubic-bezier(.3,1.3,.5,1), height 0.4s cubic-bezier(.3,1.3,.5,1);
+}
 .nav a.link {
   text-decoration: none;
   font-weight: 600; font-size: 15px;
@@ -220,13 +230,10 @@ a { color: inherit; }
   color: var(--ink-soft);
   cursor: pointer;
   transition: all 0.25s cubic-bezier(.2,.8,.2,1);
-  position: relative;
+  position: relative; z-index: 1;
 }
 .nav a.link:hover { color: var(--ink); background: rgba(180,160,220,0.12); }
-.nav a.link.active {
-  color: var(--ink); background: var(--paper);
-  box-shadow: var(--shadow-sm);
-}
+.nav a.link.active { color: var(--ink); background: transparent; }
 
 /* ============ page container ============ */
 .page {
@@ -238,6 +245,18 @@ a { color: inherit; }
 @keyframes pagein {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* scroll reveal: app.jsx tags elements .reveal, adds .in when on screen.
+   `translate` keeps element's own transform/hover untouched. */
+.reveal:not(.in) { opacity: 0; }
+.reveal.in {
+  animation: reveal 0.7s cubic-bezier(.2,.8,.2,1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+@keyframes reveal {
+  from { opacity: 0; translate: 0 28px; scale: 0.98; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
 }
 
 /* ============ buttons ============ */
@@ -373,6 +392,19 @@ a { color: inherit; }
   50% { transform: rotate(var(--r, 0deg)) translateY(-8px); }
 }
 .t-card1 { --r: 6deg; } .t-card2 { --r: -3deg; } .t-card3 { --r: 4deg; }
+
+/* mouse parallax: --mx/--my (-0.5..0.5) set on .hero from pages.jsx.
+   Uses `translate`, not `transform`, so it stacks on the float animation. */
+.collage .card-tile {
+  translate: calc(var(--mx, 0) * var(--depth, 20) * 1px) calc(var(--my, 0) * var(--depth, 20) * 1px);
+  transition: translate 0.5s cubic-bezier(.2,.8,.2,1), transform 0.5s cubic-bezier(.2,.8,.2,1);
+}
+.collage .t-avatar {
+  --depth: 16;
+  transform: perspective(800px) rotate(-4deg)
+             rotateY(calc(var(--mx, 0) * 16deg)) rotateX(calc(var(--my, 0) * -16deg));
+}
+.t-card1 { --depth: -34; } .t-card2 { --depth: -24; } .t-card3 { --depth: 40; }
 
 .tile-label { font-size: 11px; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
 .tile-body { font-family: "Caprasimo", serif; font-size: 20px; line-height: 1.1; }
@@ -700,35 +732,23 @@ a { color: inherit; }
   padding: 36px;
   box-shadow: var(--shadow-sm);
 }
-.contact-form .field { margin-bottom: 18px; }
-.contact-form label { font-size: 13px; font-weight: 700; color: var(--ink-soft); display: block; margin-bottom: 8px; }
-.contact-form input, .contact-form textarea {
-  width: 100%; padding: 14px 16px;
-  border: 1.5px solid var(--line);
-  border-radius: 14px;
-  font-family: inherit; font-size: 15px;
-  background: var(--bg);
-  transition: border 0.2s, box-shadow 0.2s, background 0.2s;
-  color: var(--ink);
+/* LinkedIn call-to-action card (replaces the old message form) */
+.contact-cta {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 14px;
 }
-.contact-form input:focus, .contact-form textarea:focus {
-  outline: none;
-  border-color: var(--lavender-deep);
-  background: var(--paper);
-  box-shadow: 0 0 0 4px rgba(180,160,220,0.18);
+.contact-cta .cta-badge {
+  width: 72px; height: 72px; border-radius: 22px;
+  display: grid; place-items: center;
+  background: #0A66C2;
+  box-shadow: 0 12px 24px -10px rgba(10, 102, 194, 0.6);
+  animation: float1 5s ease-in-out infinite;
+  --r: -6deg;
 }
-.contact-form textarea { resize: vertical; min-height: 120px; font-family: inherit; }
-.contact-form .err { color: oklch(0.55 0.18 25); font-size: 12px; margin-top: 6px; font-weight: 600; }
-.contact-form .submit-row { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
-.contact-form .success {
-  background: oklch(0.95 0.05 145);
-  color: oklch(0.36 0.12 145);
-  padding: 14px 18px; border-radius: 14px;
-  font-weight: 600; font-size: 14px;
-  display: flex; align-items: center; gap: 10px;
-  animation: pagein 0.4s;
-}
-
+.contact-cta .cta-badge img { width: 34px; height: 34px; filter: brightness(0) invert(1); }
+.contact-cta h3 { margin: 6px 0 0; }
+.contact-cta p { color: var(--ink-soft); max-width: 38ch; margin: 0 0 6px; }
+.contact-cta .btn { text-decoration: none; }
 /* ============ CAT FOOTER ============ */
 .catbar {
   position: fixed; bottom: 0; left: 0; right: 0;
@@ -837,24 +857,27 @@ a { color: inherit; }
 .catbar .actions .pet { background: oklch(0.95 0.04 295); border-color: var(--lavender); color: oklch(0.40 0.12 295); }
 
 /* cat svg */
+/* keyframes below animate the individual translate/scale/rotate properties, never
+   `transform` — that stays free for centring + the facing flip, so they compose. */
 .cat-svg {
   position: absolute; bottom: 0; left: 50%;
+  transform: translateX(-50%);
   transform-origin: 50% 92%;
   animation: catbreath 3.4s ease-in-out infinite;
 }
 .cat-svg.happy { animation: cathop 0.6s cubic-bezier(.2,.8,.2,1) 3; }
 .cat-svg.eating { animation: cateat 0.4s cubic-bezier(.2,.8,.2,1) 5; }
 @keyframes catbreath {
-  0%, 100% { transform: translateX(-50%) scaleY(1) scaleX(1); }
-  50% { transform: translateX(-50%) scaleY(1.025) scaleX(0.99); }
+  0%, 100% { scale: 1 1; }
+  50% { scale: 0.99 1.025; }
 }
 @keyframes cathop {
-  0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
-  50% { transform: translateX(-50%) translateY(-10px) rotate(-3deg); }
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  50% { translate: 0 -10px; rotate: -3deg; }
 }
 @keyframes cateat {
-  0%, 100% { transform: translateX(-50%) translateY(0) rotate(0); }
-  50% { transform: translateX(-50%) translateY(-2px) rotate(2deg); }
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  50% { translate: 0 -2px; rotate: 2deg; }
 }
 
 /* tail wag */
@@ -1134,10 +1157,8 @@ a { color: inherit; }
   background: radial-gradient(ellipse at center, color-mix(in oklab, var(--ink) 25%, transparent), transparent 70%);
   transition: opacity 0.3s;
 }
-.cat-host.facing-left .cat-svg {
-  transform: translateX(-50%) scaleX(-1);
-}
-.cat-host.facing-left.dragging .cat-svg {
+/* art is drawn with the tail on the right, so flip when heading right to keep it trailing */
+.cat-host.facing-right .cat-svg {
   transform: translateX(-50%) scaleX(-1);
 }
 
@@ -1206,6 +1227,84 @@ a { color: inherit; }
   box-shadow: var(--shadow-sm);
 }
 .cat-host.placed:hover .pickup-hint { opacity: 1; }
+
+/* legs + tail flail while held */
+.cat-host.dragging .leg-fl { animation: legA 0.22s ease-in-out infinite; }
+.cat-host.dragging .leg-br { animation: legB 0.22s ease-in-out infinite; }
+.cat-host.dragging .tail { animation: tailwag 0.3s ease-in-out infinite; }
+
+/* drop: gravity-style ease-in fall, then squash on landing */
+.cat-host.falling {
+  z-index: 999;
+  transition: top 0.42s cubic-bezier(.55,.05,.9,.5);
+}
+.cat-host.landing .cat-svg { animation: catland 0.45s cubic-bezier(.2,.8,.2,1); }
+@keyframes catland {
+  0% { scale: 1.18 0.78; }
+  45% { scale: 0.94 1.08; }
+  100% { scale: 1 1; }
+}
+
+/* refusing feed/play: head-shake "no" */
+.cat-host.refusing .scale-wrap { animation: refuseshake 0.5s ease-in-out 2; }
+@keyframes refuseshake {
+  0%, 100% { rotate: 0deg; }
+  20%, 60% { rotate: -9deg; }
+  40%, 80% { rotate: 9deg; }
+}
+
+/* chasing yarn: quicker stride */
+.cat-host.chasing .cat-svg,
+.cat-host.chasing .leg-fl,
+.cat-host.chasing .leg-br { animation-duration: 0.3s; }
+
+/* ears twitch when the cursor arrives */
+.ear { transform-box: fill-box; transform-origin: 50% 100%; }
+.cat-host:hover .ear.l { animation: eartwitchL 0.35s ease-in-out 2; }
+.cat-host:hover .ear.r { animation: eartwitchR 0.35s ease-in-out 2 0.08s; }
+@keyframes eartwitchL { 50% { transform: rotate(-16deg); } }
+@keyframes eartwitchR { 50% { transform: rotate(16deg); } }
+
+/* food bowl while eating */
+.cat-host .bowl {
+  position: absolute; bottom: -4px; left: 50%;
+  font-size: 22px; line-height: 1;
+  translate: -50% 0;
+  pointer-events: none;
+  animation: bowlpop 0.35s cubic-bezier(.3,1.6,.5,1) both;
+}
+@keyframes bowlpop { from { scale: 0; } to { scale: 1; } }
+
+/* sleeping z's drift up from the head */
+.cat-host .zzz {
+  position: absolute; top: 4px; right: 4px;
+  pointer-events: none;
+  font-family: "Caprasimo", serif; color: var(--ink-soft);
+}
+.cat-host .zzz i {
+  position: absolute; font-style: normal; font-size: 13px;
+  opacity: 0;
+  animation: zfloat 2.4s ease-out infinite;
+}
+.cat-host .zzz i:nth-child(2) { animation-delay: 0.8s; font-size: 16px; }
+.cat-host .zzz i:nth-child(3) { animation-delay: 1.6s; font-size: 19px; }
+@keyframes zfloat {
+  0% { translate: 0 0; opacity: 0; }
+  20% { opacity: 1; }
+  100% { translate: 14px -34px; opacity: 0; }
+}
+
+/* yarn ball rolls out along the footer */
+.yarn {
+  position: fixed; z-index: 61;
+  font-size: 22px; line-height: 1;
+  pointer-events: none;
+  animation: yarnroll 0.8s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes yarnroll {
+  from { translate: -50% 0; rotate: 0deg; }
+  to { translate: calc(-50% + var(--dx)) 0; rotate: var(--spin); }
+}
 
 /* hide static cat inside catbar stage now that host floats */
 .catbar .stage .cat-svg-static { display: none; }
@@ -1628,7 +1727,6 @@ a { color: inherit; }
 [data-theme="midnight"] .proj-detail-link-live { background: oklch(0.28 0.05 230); color: oklch(0.88 0.06 230); }
 
 /* contact form success message */
-[data-theme="midnight"] .contact-form .success { background: oklch(0.28 0.05 145); color: oklch(0.88 0.06 145); }
 
 /* ========== Chatbot widget ========== */
 .chat-fab {
@@ -1764,5 +1862,25 @@ a { color: inherit; }
 @media (max-width: 480px) {
   .chat-panel { right: 12px; bottom: 132px; }
   .chat-fab { right: 14px; }
+}
+
+/* ============ interaction overrides (keep last: must beat earlier :hover rules) ============ */
+/* press squish */
+.btn.primary:active, .btn.ghost:active, .btn:active,
+.catbar .actions button:active,
+.chat-fab:active {
+  transform: scale(0.93);
+  transition-duration: 0.08s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .collage .card-tile { translate: none; }
+  .collage .t-avatar { transform: rotate(-4deg); }
 }
 
