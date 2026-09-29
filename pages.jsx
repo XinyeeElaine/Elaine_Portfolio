@@ -397,7 +397,10 @@ const PROJECTS = [
     summary: 'AI-powered browser extension that detects fake reviews on Google Maps using Amazon Bedrock.',
     description: "We built this during the Great AI Hackathon 2025 - Team Penguining, my first hackathon project =´∇｀= FoodTrust is a browser extension that brings transparency back to online food reviews.\n\nIt analyzes Google Maps restaurant reviews in real time using Amazon Bedrock's language models, flagging suspicious reviews with reasoning and probability scores. An overall trust score (e.g. 85%) is displayed directly on the page.\n\nThe architecture uses a serverless AWS backend — Lambda functions process review text through Bedrock, with API Gateway routing and S3 for storage. The extension frontend is vanilla JavaScript, HTML, and CSS, while the ML pipeline was prototyped in Jupyter Notebooks via SageMaker Studio.",
     tags: ['AI/ML', 'Browser Extension', 'Amazon Bedrock', 'JavaScript', 'Python'],
-    collaborators: [{ name: 'MingLi', role: 'Teammate · Team Penguining', href: 'https://exoticpengy.me', avatar: '/Picture/exoticpengy.png' }],
+    collaborators: [
+      { name: 'MingLi', role: 'Teammate · Team Penguining', href: 'https://exoticpengy.me', avatar: '/Picture/exoticpengy.png' },
+      { name: 'Keat Yee', role: 'Teammate · Team Penguining', href: 'https://keatyee.github.io', avatar: '/Picture/keatyee.png' },
+    ],
     features: [
       'Analyzes Google Maps restaurant reviews in real time',
       'Flags suspicious reviews with reasoning and a probability score',
@@ -761,11 +764,24 @@ function ImageCarousel({ images, title }) {
     }
   };
 
+  // lightbox: native <dialog> gives Esc-to-close, focus trap and ::backdrop for free
+  const dlg = React.useRef(null);
+  const [zoomed, setZoomed] = React.useState(false);
+  const openZoom = () => { sfx('pop'); dlg.current.showModal(); setZoomed(true); };
+  const step = (d) => setActive(a => (a + d + images.length) % images.length);
+  // native listener: React's onClose missed Esc-closes in testing, leaving autoplay paused
   React.useEffect(() => {
-    if (!paused) startAuto();
+    const d = dlg.current;
+    const onClose = () => setZoomed(false);
+    d.addEventListener('close', onClose);
+    return () => d.removeEventListener('close', onClose);
+  }, []);
+
+  React.useEffect(() => {
+    if (!paused && !zoomed) startAuto();
     else clearTimers();
     return clearTimers;
-  }, [paused, images.length]);
+  }, [paused, zoomed, images.length]);
 
   const goTo = (i) => {
     clearTimers();
@@ -787,8 +803,13 @@ function ImageCarousel({ images, title }) {
             src={src}
             alt={`${title} — screenshot ${i + 1}`}
             className={`carousel-img ${i === active ? 'carousel-img-active' : ''}`}
+            onClick={openZoom}
+            onKeyDown={onEnter(openZoom)}
+            tabIndex={i === active ? 0 : -1}
+            role="button"
           />
         ))}
+        <span className="carousel-zoom-hint" aria-hidden="true">⤢ click to enlarge</span>
         {images.length > 1 && (
           <React.Fragment>
             <button
@@ -821,6 +842,27 @@ function ImageCarousel({ images, title }) {
           <span className="carousel-count">{active + 1} / {images.length}</span>
         </div>
       )}
+
+      <dialog
+        ref={dlg}
+        className="lightbox"
+        onClick={(e) => { if (e.target === dlg.current) dlg.current.close(); }}  // backdrop click
+        onKeyDown={(e) => {
+          if (images.length < 2) return;
+          if (e.key === 'ArrowLeft') step(-1);
+          if (e.key === 'ArrowRight') step(1);
+        }}
+      >
+        {zoomed && <img key={active} src={images[active]} alt={`${title} — screenshot ${active + 1}`} />}
+        <button className="lightbox-close" onClick={() => dlg.current.close()} aria-label="Close">×</button>
+        {images.length > 1 && (
+          <React.Fragment>
+            <button className="lightbox-arrow prev" onClick={() => step(-1)} aria-label="Previous image">←</button>
+            <button className="lightbox-arrow next" onClick={() => step(1)} aria-label="Next image">→</button>
+            <span className="lightbox-count">{active + 1} / {images.length}</span>
+          </React.Fragment>
+        )}
+      </dialog>
     </div>
   );
 }
