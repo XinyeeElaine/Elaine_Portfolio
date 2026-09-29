@@ -717,7 +717,7 @@ function ContactPage() {
           <p>Reach out on whichever platform suits you best. I'd love to hear from you!</p>
           <div className="social">
             {SOCIALS.map(s => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer">
+              <a key={s.label} href={s.href} target="_blank" rel="noopener">
                 <span className="icon">
                   <img src={s.icon} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                 </span>
@@ -734,7 +734,9 @@ function ContactPage() {
           <span className="cta-badge"><img src={linkedin.icon} alt="" /></span>
           <h3>Let's chat on LinkedIn</h3>
           <p>The quickest way to reach me. Send a message or a connection request and I'll reply within a day or two.</p>
-          <a className="btn primary" href={linkedin.href} target="_blank" rel="noopener noreferrer"
+          {/* no `noreferrer` here or on the social links: LinkedIn sends referrer-less visits
+              to its sign-in wall instead of the public profile */}
+          <a className="btn primary" href={linkedin.href} target="_blank" rel="noopener"
             onClick={(e) => { sfx('send'); burst(...pointOf(e), ['💌', '✉️', '💜'], 12); }}>
             Message me on LinkedIn →
           </a>
