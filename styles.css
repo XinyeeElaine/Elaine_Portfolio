@@ -763,7 +763,22 @@ a { color: inherit; }
 .contact-cta {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center; gap: 14px;
+  position: relative;
 }
+/* shining border: a light streak travels round the edge. A rotating conic gradient,
+   masked so only a 2px ring (the padding box minus the content box) shows. */
+@property --shine-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.contact-cta::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit;
+  padding: 2px; pointer-events: none;
+  background: conic-gradient(from var(--shine-angle),
+    transparent 0 65%, var(--lavender-deep) 78%, #fff 84%, var(--sky-deep) 90%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: bordershine 4s linear infinite;
+}
+@keyframes bordershine { to { --shine-angle: 360deg; } }
 .contact-cta .cta-badge {
   width: 72px; height: 72px; border-radius: 22px;
   display: grid; place-items: center;
@@ -2010,6 +2025,44 @@ a { color: inherit; }
 .sticker.nope { animation: nope 0.4s ease-in-out; }
 @keyframes nope {
   20%, 60% { translate: -6px 0; } 40%, 80% { translate: 6px 0; }
+}
+
+/* contact header: heading left, Malaysia local-time card filling the empty top-right */
+.contact-head {
+  display: grid; grid-template-columns: 1fr auto; gap: 32px;
+  align-items: center; margin-bottom: 36px;
+}
+.contact-head .section-head { margin-bottom: 0; }
+.local-time {
+  min-width: 280px;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-md);
+  padding: 22px 26px;
+  rotate: 2deg;
+  transition: rotate 0.3s cubic-bezier(.2,.8,.2,1);
+}
+.local-time:hover { rotate: 0deg; }
+.local-time .lt-label {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.local-time .lt-clock {
+  font-family: "Caprasimo", serif; font-size: 52px; line-height: 1.1;
+  color: var(--lavender-deep); margin: 4px 0 6px;
+  font-variant-numeric: tabular-nums;
+}
+.local-time .lt-clock span { font-size: 20px; margin-left: 6px; color: var(--ink-soft); }
+.local-time .lt-place { font-size: 14px; font-weight: 600; color: var(--ink-soft); }
+.local-time .lt-status {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line);
+  font-size: 13px; color: var(--ink-faint);
+}
+.local-time .lt-status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-faint); flex: 0 0 auto; }
+.local-time .lt-status.awake .dot { background: oklch(0.7 0.18 145); animation: pulse 2s infinite; }
+@media (max-width: 760px) {
+  .contact-head { grid-template-columns: 1fr; }
+  .local-time { min-width: 0; rotate: 0deg; }
 }
 
 /* contact: bouncy icons */

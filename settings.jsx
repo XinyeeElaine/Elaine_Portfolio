@@ -1,11 +1,11 @@
 /* Cozy Portfolio — floating settings gear with theme + music controls. */
 
 const THEMES = [
+  { id: 'midnight',   name: 'Midnight Pastel', a: '#5e4d8a', b: '#3a3b5a' },
   { id: 'lavender',   name: 'Lavender Sky',   a: '#caa3e0', b: '#9fc6ee' },
   { id: 'matcha',     name: 'Matcha Latte',   a: '#a8c79b', b: '#d4b78f' },
   { id: 'strawberry', name: 'Strawberry Cream', a: '#f5a8b5', b: '#f7c8a3' },
   { id: 'peach',      name: 'Peach Sunset',   a: '#f5b58a', b: '#f4d57a' },
-  { id: 'midnight',   name: 'Midnight Pastel', a: '#5e4d8a', b: '#3a3b5a' },
 ];
 // hidden until the Konami code is typed (hint sits at the bottom of the contact page)
 const SECRET_THEME = { id: 'cookie', name: 'Cookie Crumb 🍪 (secret)', a: '#c68a52', b: '#6b4a34' };
@@ -44,7 +44,6 @@ function sfx(name, arg = 0) {
     bonk:   () => tone(180, 0.18, { type: 'square', to: 90, gain: 0.08 }),
     snip:   () => { tone(1800, 0.04, { type: 'square', gain: 0.05 }); tone(1300, 0.05, { type: 'square', gain: 0.05, at: 0.06 }); },
     key:    () => tone(440 * Math.pow(2, (arg * 2) / 12), 0.12, { gain: 0.14 }),  // arg = key index, rises a whole step each
-    send:   () => [1046.5, 1318.5, 1568].forEach((f, i) => tone(f, 0.15, { at: i * 0.05, type: 'sine', gain: 0.1 })),
     meow:   () => { tone(620, 0.12, { to: 900, gain: 0.12 }); tone(900, 0.28, { at: 0.12, to: 520, gain: 0.12 }); },
     crunch: () => [0, 0.09, 0.18].forEach(at => tone(220, 0.05, { type: 'square', to: 120, gain: 0.07, at })),
     boing:  () => tone(200, 0.3, { type: 'sine', to: 600, gain: 0.2 }),
@@ -57,8 +56,8 @@ const KONAMI = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'ar
 function SettingsGear() {
   const [open, setOpen] = React.useState(false);
   const [theme, setTheme] = React.useState(() => {
-    try { return localStorage.getItem('cozy.theme') || 'lavender'; }
-    catch (e) { return 'lavender'; }
+    try { return localStorage.getItem('cozy.theme') || 'midnight'; }  // default: Midnight Pastel
+    catch (e) { return 'midnight'; }
   });
   const [sfxOn, setSfxOn] = React.useState(() => {
     try { return localStorage.getItem('cozy.sfx') !== '0'; }  // ON by default

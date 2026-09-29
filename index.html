@@ -10,6 +10,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
+<!-- apply the saved (or default Midnight) theme before first paint, so dark mode doesn't flash light -->
+<script>try { document.body.dataset.theme = localStorage.getItem('cozy.theme') || 'midnight'; } catch (e) { document.body.dataset.theme = 'midnight'; }</script>
 <div id="root"></div>
 
 <script type="module" src="/main.jsx"></script>

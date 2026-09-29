@@ -643,16 +643,22 @@ function SkillsPage() {
 /* Brand marks: devicon carries LinkedIn but not Instagram/WhatsApp; simple-icons is the
    reverse (it dropped LinkedIn), so each one comes from whichever CDN actually has it.
    CSS recolours them white — the source colours here don't survive the filter. */
+// LinkedIn lives in the right-hand CTA card, not the list
+const LINKEDIN = {
+  href: 'https://www.linkedin.com/in/elaine-pang-xin-yee-313b4b211/',
+  // devicon's LinkedIn is a filled badge — recolouring it white erases the "in".
+  // This is devicon's own path with the outer badge subpath dropped, leaving the glyph.
+  icon: "data:image/svg+xml," + encodeURIComponent(
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='18 27 92 82'><path d='M39.17 107H21.06V48.73h18.11zm-9-66.21a10.5 10.5 0 1110.49-10.5 10.5 10.5 0 01-10.54 10.48zM107 107H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53V48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75z'/></svg>"
+  ),
+};
+
 const SOCIALS = [
   {
-    label: 'LinkedIn',
-    value: '/in/elaine-pang-xin-yee',
-    href: 'https://www.linkedin.com/in/elaine-pang-xin-yee-313b4b211/',
-    // devicon's LinkedIn is a filled badge — recolouring it white erases the "in".
-    // This is devicon's own path with the outer badge subpath dropped, leaving the glyph.
-    icon: "data:image/svg+xml," + encodeURIComponent(
-      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='18 27 92 82'><path d='M39.17 107H21.06V48.73h18.11zm-9-66.21a10.5 10.5 0 1110.49-10.5 10.5 10.5 0 01-10.54 10.48zM107 107H88.89V78.65c0-6.75-.12-15.44-9.41-15.44s-10.87 7.36-10.87 15V107H50.53V48.73h17.36v8h.24c2.42-4.58 8.32-9.41 17.13-9.41C103.6 47.28 107 59.35 107 75z'/></svg>"
-    ),
+    label: 'Email',
+    value: 'xinyeeelaine@gmail.com',
+    href: 'mailto:xinyeeelaine@gmail.com',
+    icon: 'https://cdn.simpleicons.org/gmail/EA4335',
   },
   {
     label: 'GitHub',
@@ -700,15 +706,44 @@ function KonamiHint() {
   );
 }
 
-function ContactPage() {
-  const linkedin = SOCIALS.find(s => s.label === 'LinkedIn');
+// live clock in Malaysia time, so visitors know when a reply is likely
+const myTime = () => {
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kuala_Lumpur', hour: 'numeric', minute: '2-digit', hour12: true })
+    .formatToParts(new Date());
+  const get = (t) => parts.find(p => p.type === t).value;
+  const h24 = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Kuala_Lumpur', hour: 'numeric', hourCycle: 'h23' }).format(new Date()));
+  return { clock: `${get('hour')}:${get('minute')}`, ampm: get('dayPeriod'), awake: h24 >= 9 || h24 < 2 };  
+};
 
+function LocalTime() {
+  const [t, setT] = React.useState(myTime);
+  React.useEffect(() => {
+    const id = setInterval(() => setT(myTime()), 30000);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <div className="local-time">
+      <div className="lt-label">my local time</div>
+      <div className="lt-clock">{t.clock}<span>{t.ampm}</span></div>
+      <div className="lt-place">📍 Kuala Lumpur, Malaysia · GMT+8</div>
+      <div className={`lt-status ${t.awake ? 'awake' : ''}`}>
+        <span className="dot" />
+        {t.awake ? 'awake, probably chilling' : "probably asleep, I'll reply in the morning"}
+      </div>
+    </div>
+  );
+}
+
+function ContactPage() {
   return (
     <div className="page" data-screen-label="05 Contact">
-      <div className="section-head">
-        <div className="kicker">say hello</div>
-        <h2>Let's make<br />something together.</h2>
-        <p>I'm open to design work, AI projects, and the occasional collaboration. I reply within a day or two — usually with matcha in hand.</p>
+      <div className="contact-head">
+        <div className="section-head">
+          <div className="kicker">say hello</div>
+          <h2>Let's make<br />something together.</h2>
+          <p>I'm open to design work, AI projects, and the occasional collaboration. I reply within a day or two — usually with matcha in hand.</p>
+        </div>
+        <LocalTime />
       </div>
 
       <div className="contact-grid">
@@ -717,7 +752,7 @@ function ContactPage() {
           <p>Reach out on whichever platform suits you best. I'd love to hear from you!</p>
           <div className="social">
             {SOCIALS.map(s => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener">
+              <a key={s.label} href={s.href} target={s.href.startsWith('mailto:') ? undefined : '_blank'} rel="noopener">
                 <span className="icon">
                   <img src={s.icon} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                 </span>
@@ -731,13 +766,12 @@ function ContactPage() {
         </div>
 
         <div className="contact-form contact-cta">
-          <span className="cta-badge"><img src={linkedin.icon} alt="" /></span>
+          <span className="cta-badge"><img src={LINKEDIN.icon} alt="" /></span>
           <h3>Let's chat on LinkedIn</h3>
           <p>The quickest way to reach me. Send a message or a connection request and I'll reply within a day or two.</p>
           {/* no `noreferrer` here or on the social links: LinkedIn sends referrer-less visits
               to its sign-in wall instead of the public profile */}
-          <a className="btn primary" href={linkedin.href} target="_blank" rel="noopener"
-            onClick={(e) => { sfx('send'); burst(...pointOf(e), ['💌', '✉️', '💜'], 12); }}>
+          <a className="btn primary" href={LINKEDIN.href} target="_blank" rel="noopener">
             Message me on LinkedIn →
           </a>
         </div>
