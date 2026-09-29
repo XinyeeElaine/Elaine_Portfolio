@@ -17,6 +17,7 @@ function App() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const go = (id) => {
+    sfx('tick');
     setRoute(id);
     setMobileOpen(false);
     window.location.hash = id;

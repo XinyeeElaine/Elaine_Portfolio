@@ -7,6 +7,52 @@ const THEMES = [
   { id: 'peach',      name: 'Peach Sunset',   a: '#f5b58a', b: '#f4d57a' },
   { id: 'midnight',   name: 'Midnight Pastel', a: '#5e4d8a', b: '#3a3b5a' },
 ];
+// hidden until the Konami code is typed (hint sits at the bottom of the contact page)
+const SECRET_THEME = { id: 'cookie', name: 'Cookie Crumb 🍪 (secret)', a: '#c68a52', b: '#6b4a34' };
+/* ---- UI sound effects: tiny synthesised blips, no audio files ----
+   Own on/off switch in the settings panel ('cozy.sfx'), independent of the music.
+   Called as window.sfx('pop') from the other files. */
+let sfxCtx = null;
+function sfx(name, arg = 0) {
+  const vol = 0.5;
+  try { if (localStorage.getItem('cozy.sfx') === '0') return; } catch (e) {}
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  sfxCtx = sfxCtx || new AC();
+  if (sfxCtx.state === 'suspended') sfxCtx.resume();
+  const now = sfxCtx.currentTime;
+  // one note: frequency (optionally sliding to `to`), length, waveform, loudness, start delay
+  const tone = (f, dur, { type = 'triangle', gain = 0.15, to, at = 0 } = {}) => {
+    const t = now + at;
+    const o = sfxCtx.createOscillator(); o.type = type;
+    o.frequency.setValueAtTime(f, t);
+    if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+    const g = sfxCtx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gain * vol, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(sfxCtx.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  };
+  ({
+    pop:    () => tone(500, 0.1, { type: 'sine', to: 1100, gain: 0.25 }),
+    flip:   () => { tone(260, 0.12, { to: 620 }); tone(620, 0.08, { at: 0.1, type: 'sine', gain: 0.1 }); },
+    tick:   () => tone(1600, 0.03, { type: 'square', gain: 0.04 }),
+    pickup: () => tone(700, 0.06, { type: 'sine', to: 950, gain: 0.12 }),
+    drop:   () => tone(500, 0.07, { type: 'sine', to: 320, gain: 0.12 }),
+    link:   () => { tone(784, 0.12); tone(1175, 0.25, { at: 0.08 }); },
+    bonk:   () => tone(180, 0.18, { type: 'square', to: 90, gain: 0.08 }),
+    snip:   () => { tone(1800, 0.04, { type: 'square', gain: 0.05 }); tone(1300, 0.05, { type: 'square', gain: 0.05, at: 0.06 }); },
+    key:    () => tone(440 * Math.pow(2, (arg * 2) / 12), 0.12, { gain: 0.14 }),  // arg = key index, rises a whole step each
+    send:   () => [1046.5, 1318.5, 1568].forEach((f, i) => tone(f, 0.15, { at: i * 0.05, type: 'sine', gain: 0.1 })),
+    meow:   () => { tone(620, 0.12, { to: 900, gain: 0.12 }); tone(900, 0.28, { at: 0.12, to: 520, gain: 0.12 }); },
+    crunch: () => [0, 0.09, 0.18].forEach(at => tone(220, 0.05, { type: 'square', to: 120, gain: 0.07, at })),
+    boing:  () => tone(200, 0.3, { type: 'sine', to: 600, gain: 0.2 }),
+    unlock: () => [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) =>
+      tone(f, i === 4 ? 0.9 : 0.35, { at: i * 0.09, gain: 0.18 })),
+  })[name]?.();
+}
+const KONAMI = ['arrowup', 'arrowup', 'arrowdown', 'arrowdown', 'arrowleft', 'arrowright', 'arrowleft', 'arrowright', 'b', 'a'];
 
 function SettingsGear() {
   const [open, setOpen] = React.useState(false);
@@ -14,6 +60,16 @@ function SettingsGear() {
     try { return localStorage.getItem('cozy.theme') || 'lavender'; }
     catch (e) { return 'lavender'; }
   });
+  const [sfxOn, setSfxOn] = React.useState(() => {
+    try { return localStorage.getItem('cozy.sfx') !== '0'; }  // ON by default
+    catch (e) { return true; }
+  });
+  const toggleSfx = () => {
+    const on = !sfxOn;
+    try { localStorage.setItem('cozy.sfx', on ? '1' : '0'); } catch (e) {}
+    setSfxOn(on);
+    if (on) sfx('pop');  // audible confirmation it's back on
+  };
   const [music, setMusic] = React.useState(() => {
     try { return localStorage.getItem('cozy.music') !== '0'; }  // ON by default
     catch (e) { return true; }
@@ -25,6 +81,41 @@ function SettingsGear() {
   const [hovered, setHovered] = React.useState(null);
   const audioEngine = React.useRef(null);
   const panelRef = React.useRef(null);
+
+  const [secret, setSecret] = React.useState(() => {
+    try { return localStorage.getItem('cozy.secret') === '1'; }
+    catch (e) { return false; }
+  });
+  const [unlockToast, setUnlockToast] = React.useState(false);
+  const toastTimer = React.useRef(null);
+  const themes = secret ? [...THEMES, SECRET_THEME] : THEMES;
+
+  // Konami code → unlock + switch to the secret theme
+  React.useEffect(() => {
+    let i = 0;
+    const onKey = (e) => {
+      const k = e.key.toLowerCase();
+      const prev = i;
+      i = k === KONAMI[i] ? i + 1 : (k === KONAMI[0] ? 1 : 0);
+      // progress for the key hint on the contact page (pages.jsx)
+      if (i !== prev) window.dispatchEvent(new CustomEvent('konami', { detail: i }));
+      if (i > prev) sfx('key', i - 1); else if (i < prev) sfx('bonk');
+      if (i < KONAMI.length) return;
+      i = 0;
+      setSecret(true);
+      setTheme('cookie');
+      try { localStorage.setItem('cozy.secret', '1'); } catch (err) {}
+      sfx('unlock');
+      setUnlockToast(true);
+      clearTimeout(toastTimer.current);
+      toastTimer.current = setTimeout(() => setUnlockToast(false), 5000);
+      for (let n = 0; n < 4; n++) {
+        setTimeout(() => window.burst(Math.random() * innerWidth, Math.random() * innerHeight * 0.6, ['🍪', '✨', '🐱'], 12), n * 250);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   // apply theme to body
   React.useEffect(() => {
@@ -244,14 +335,25 @@ function SettingsGear() {
     return () => document.removeEventListener('mousedown', onDoc);
   }, [open]);
 
-  const current = THEMES.find(t => t.id === theme) || THEMES[0];
-  const labelTheme = hovered ? THEMES.find(t => t.id === hovered) : current;
+  const current = themes.find(t => t.id === theme) || THEMES[0];
+  const labelTheme = hovered ? themes.find(t => t.id === hovered) : current;
 
   return (
     <>
+      {unlockToast && (
+        <div className="unlock-toast" role="status">
+          <span className="toast-icon">🍪</span>
+          <div className="toast-text">
+            <b>Secret theme unlocked!</b>
+            <small>Cookie Crumb is on. Switch back anytime in ⚙ settings.</small>
+          </div>
+          <button className="toast-close" onClick={() => setUnlockToast(false)} aria-label="Dismiss">×</button>
+          <span className="toast-timer" />
+        </div>
+      )}
       <button
         className="gear-btn"
-        onClick={() => setOpen(o => !o)}
+        onClick={() => { sfx('tick'); setOpen(o => !o); }}
         title="Settings"
         aria-label="Open settings"
       >
@@ -265,11 +367,11 @@ function SettingsGear() {
         <div className="settings-panel" ref={panelRef}>
           <h4>Color theme</h4>
           <div className="theme-row" onMouseLeave={() => setHovered(null)}>
-            {THEMES.map(t => (
+            {themes.map(t => (
               <button
                 key={t.id}
                 className={`theme-swatch ${theme === t.id ? 'active' : ''}`}
-                onClick={() => setTheme(t.id)}
+                onClick={() => { sfx('pop'); setTheme(t.id); }}
                 onMouseEnter={() => setHovered(t.id)}
                 title={t.name}
                 aria-label={t.name}
@@ -308,6 +410,19 @@ function SettingsGear() {
             <span className="vol-pct">{Math.round(volume * 100)}</span>
           </div>
 
+          <h4>Sound effects</h4>
+          <div className="toggle-row">
+            <div className="meta">
+              <b>{sfxOn ? 'Clicks & boops on' : 'Sound effects off'}</b>
+              <small>{sfxOn ? 'pops, meows and little chimes' : 'tap for pops and meows'}</small>
+            </div>
+            <button
+              className={`switch ${sfxOn ? 'on' : ''}`}
+              onClick={toggleSfx}
+              aria-label="Toggle sound effects"
+            />
+          </div>
+
           <div className="settings-foot">
             <span className="pip" />
             Tweak anytime — your settings are saved.
@@ -318,4 +433,4 @@ function SettingsGear() {
   );
 }
 
-Object.assign(window, { SettingsGear });
+Object.assign(window, { SettingsGear, sfx });

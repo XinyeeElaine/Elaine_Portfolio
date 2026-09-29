@@ -367,11 +367,13 @@ function CatRoot() {
     setBehavior(kind);
     setYarn(null); // refused mid-chase: don't strand the yarn
     emitParticles(['💢'], 1);
+    window.sfx('bonk');
     setTimeout(() => setBehavior((cur) => cur === kind ? 'walk' : cur), 1400);
   };
 
   const onFeed = () => {
     if (Math.round(hunger) >= 100) return refuse('full');
+    window.sfx('crunch');
     setHunger((h) => Math.min(100, h + 28));
     teleportToFooterIfNeeded(() => {
       setBehavior('eat');
@@ -381,6 +383,7 @@ function CatRoot() {
   };
   const onPlay = () => {
     if (Math.round(fun) >= 100) return refuse('bored-of-it');
+    window.sfx('boing');
     setFun((f) => Math.min(100, f + 32));
     teleportToFooterIfNeeded(() => {
       // roll yarn ~260px ahead (turn around if that's off-screen), cat chases it in the walk loop
@@ -405,6 +408,7 @@ function CatRoot() {
     setTimeout(() => setBehavior((cur) => cur === 'look' ? 'walk' : cur), 1500);
   };
   const onPet = () => {
+    window.sfx('meow');
     setFun((f) => Math.min(100, f + 10));
     setHunger((h) => Math.min(100, h + 4));
     if (placementRef.current === 'footer') {

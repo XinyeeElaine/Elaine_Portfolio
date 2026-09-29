@@ -138,6 +138,33 @@
   --blob-3: oklch(0.38 0.08 320);
 }
 
+/* Cookie Crumb — secret theme (Konami code): cream dough, caramel, cocoa, after Cookie the cat */
+[data-theme="cookie"] {
+  --bg: #fbf3e6;
+  --bg-soft: #f3e3cc;
+  --paper: #fffaf1;
+  --ink: oklch(0.30 0.05 55);
+  --ink-soft: oklch(0.45 0.05 55);
+  --ink-faint: oklch(0.62 0.04 55);
+
+  --lavender: oklch(0.84 0.07 65);              /* primary → caramel */
+  --lavender-deep: oklch(0.62 0.11 55);
+  --sky: oklch(0.82 0.05 45);                   /* secondary → cocoa milk */
+  --sky-deep: oklch(0.48 0.08 45);
+  --blush: oklch(0.88 0.05 35);
+  --mint: oklch(0.89 0.04 110);
+  --butter: oklch(0.92 0.07 85);
+
+  --line: oklch(0.89 0.03 65);
+  --shadow-sm: 0 2px 6px rgba(120, 80, 40, 0.10);
+  --shadow-md: 0 12px 28px -10px rgba(120, 80, 40, 0.22);
+  --shadow-lg: 0 24px 48px -16px rgba(120, 80, 40, 0.28);
+
+  --blob-1: oklch(0.90 0.07 65);
+  --blob-2: oklch(0.88 0.05 45);
+  --blob-3: oklch(0.93 0.06 85);
+}
+
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
@@ -995,7 +1022,8 @@ a { color: inherit; }
 
 .theme-row { display: flex; gap: 8px; flex-wrap: nowrap; }
 .theme-swatch {
-  width: 44px; height: 44px;
+  /* shrinks to fit when the secret 6th theme joins the row */
+  flex: 0 1 44px; min-width: 0; aspect-ratio: 1; padding: 0;
   border-radius: 50%;
   border: 2px solid var(--line);
   cursor: pointer;
@@ -1873,7 +1901,139 @@ a { color: inherit; }
   transition-duration: 0.08s;
 }
 
+/* ============ playful bits (pages.jsx / app.jsx) ============ */
+/* emoji confetti — burst() in pages.jsx */
+.burst-bit {
+  position: fixed; z-index: 9999; pointer-events: none;
+  font-size: 22px; translate: -50% -50%;
+  animation: burstfly 0.9s cubic-bezier(.2,.8,.3,1) forwards;
+}
+@keyframes burstfly {
+  to { transform: translate(var(--dx), var(--dy)) rotate(var(--r)) scale(0.6); opacity: 0; }
+}
+
+/* one-shot wiggle on the name — `rotate` so it composes with other transforms */
+.wiggle { animation: wiggle 0.5s ease-in-out; }
+@keyframes wiggle {
+  20% { rotate: -4deg; } 40% { rotate: 3deg; } 60% { rotate: -2deg; } 80% { rotate: 1deg; }
+}
+/* mirror shine sweeping left → right over the name every few seconds: a white band layered
+   on top of the gradient, both clipped to the text */
+.hero h1 em.poke {
+  cursor: pointer;
+  background:
+    linear-gradient(110deg, transparent 40%, rgba(255,255,255,0.9) 50%, transparent 60%) 100% 0 / 250% 100% no-repeat,
+    linear-gradient(135deg, var(--lavender-deep), var(--sky-deep));
+  -webkit-background-clip: text; background-clip: text;
+  animation: nameshine 4.5s ease-in-out 1s infinite;
+}
+@keyframes nameshine {
+  0% { background-position: 100% 0, 0 0; }
+  35%, 100% { background-position: 0% 0, 0 0; }
+}
+.hero h1 em.poke:hover { filter: brightness(1.15); }
+
+/* flip tiles: the face swaps content and spins in; the tile keeps its float/parallax transforms */
+.collage .flippable { cursor: pointer; }
+.flip-face { animation: flipin 0.45s cubic-bezier(.2,.8,.2,1); }
+.collage .t-avatar .flip-face { position: absolute; inset: 0; }
+.collage .t-avatar .flip-face.back { padding: 22px; display: flex; flex-direction: column; justify-content: center; color: white; }
+.collage .t-avatar .flip-face.back .tile-label { color: rgba(255,255,255,0.85); }
+.flip-face.back .tile-body { font-size: 18px; }
+@keyframes flipin {
+  from { transform: perspective(600px) rotateY(90deg); opacity: 0.3; }
+  to { transform: perspective(600px) rotateY(0); opacity: 1; }
+}
+
+/* skill strings */
+.skills-grid { position: relative; }
+.skill-strings {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 2; overflow: visible;
+}
+.skill-strings path {
+  fill: none; stroke: var(--lavender-deep); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 2 7; opacity: 0.85;
+  pointer-events: stroke; cursor: pointer;
+  animation: stringin 0.4s ease-out;
+}
+.skill-strings path:hover { stroke-width: 5; stroke: var(--blush); }
+@keyframes stringin { from { opacity: 0; } }
+.sticker.nope { animation: nope 0.4s ease-in-out; }
+@keyframes nope {
+  20%, 60% { translate: -6px 0; } 40%, 80% { translate: 6px 0; }
+}
+
+/* contact: bouncy icons */
+.contact-side .social a:hover .icon { animation: iconbounce 0.5s cubic-bezier(.3,1.6,.5,1); }
+@keyframes iconbounce {
+  30% { translate: 0 -6px; rotate: -10deg; } 60% { translate: 0 1px; rotate: 6deg; }
+}
+
+/* Konami code hint (bottom of contact page) — unlocks the secret Cookie Crumb theme */
+.konami-hint {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 6px;
+  margin-top: 48px; opacity: 0.35; transition: opacity 0.3s;
+}
+.konami-hint:hover { opacity: 0.9; }
+.konami-hint kbd {
+  font-family: inherit; font-size: 12px; font-weight: 700; color: var(--ink-soft);
+  min-width: 24px; padding: 3px 6px; text-align: center;
+  background: var(--paper); border: 1px solid var(--line); border-bottom-width: 3px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, translate 0.15s;
+}
+/* typing progress: row wakes up, typed keys light up and press down */
+.konami-hint.active { opacity: 1; }
+.konami-hint kbd.lit {
+  background: var(--lavender-deep); border-color: var(--lavender-deep); color: white;
+  translate: 0 2px; border-bottom-width: 1px;
+  box-shadow: 0 0 12px var(--lavender);
+}
+.konami-hint.done kbd { animation: keyglow 0.6s ease-in-out 2; }
+@keyframes keyglow { 50% { scale: 1.15; } }
+.konami-hint.nope { animation: nope 0.4s ease-in-out; }
+/* toast shown when the secret theme unlocks (settings.jsx) */
+.unlock-toast {
+  position: fixed; top: 92px; right: 20px; z-index: 9999;
+  width: min(340px, calc(100% - 32px));
+  display: flex; align-items: center; gap: 12px;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 14px 40px 16px 14px;
+  overflow: hidden;
+  animation: toastin 0.45s cubic-bezier(.3,1.4,.5,1);
+}
+@keyframes toastin { from { translate: 120% 0; } }
+.unlock-toast .toast-icon {
+  flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 22px;
+  background: var(--bg-soft);
+  animation: toastwobble 0.6s ease-in-out 0.35s;
+}
+@keyframes toastwobble { 25% { rotate: -14deg; } 50% { rotate: 10deg; } 75% { rotate: -5deg; } }
+.unlock-toast .toast-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.unlock-toast b { font-size: 15px; }
+.unlock-toast small { font-size: 12.5px; color: var(--ink-soft); }
+.unlock-toast .toast-close {
+  position: absolute; top: 8px; right: 8px;
+  width: 26px; height: 26px; border-radius: 50%; border: none;
+  background: transparent; color: var(--ink-soft); font-size: 18px; line-height: 1;
+  cursor: pointer;
+}
+.unlock-toast .toast-close:hover { background: var(--bg-soft); color: var(--ink); }
+/* shrinking bar = time left before auto-dismiss (5s, matches settings.jsx) */
+.unlock-toast .toast-timer {
+  position: absolute; left: 0; bottom: 0; height: 3px; width: 100%;
+  background: linear-gradient(90deg, var(--lavender-deep), var(--sky-deep));
+  transform-origin: left;
+  animation: toasttimer 5s linear forwards;
+}
+@keyframes toasttimer { to { transform: scaleX(0); } }
+
 @media (prefers-reduced-motion: reduce) {
+  .burst-bit { display: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

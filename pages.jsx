@@ -1,6 +1,74 @@
 /* All 5 page components for the cozy portfolio. */
 
+/* ---------- playful helpers ---------- */
+// emoji confetti from a point; plain DOM + CSS keyframe, self-cleaning
+function burst(x, y, emojis, n = 10) {
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement('span');
+    s.className = 'burst-bit';
+    s.textContent = emojis[i % emojis.length];
+    const a = Math.random() * Math.PI * 2, d = 50 + Math.random() * 80;
+    s.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d - 40}px;--r:${Math.random() * 360 - 180}deg`;
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 900);
+  }
+}
+// click point, or element centre for keyboard clicks (no coordinates)
+const pointOf = (e) => {
+  if (e.clientX || e.clientY) return [e.clientX, e.clientY];
+  const r = e.currentTarget.getBoundingClientRect();
+  return [r.left + r.width / 2, r.top + r.height / 2];
+};
+// restart a one-shot CSS animation class
+const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+const onEnter = (fn) => (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(e); } };
+
+const NICKS = ['Elaine Pang Xin Yee -⩊-', 'Xin Yee ₍^. .^₎', 'night-owl coder ☾', 'Cookie\'s human ✦', 'dessert enthusiast ♡'];
+
+function FlipTile({ className, back, children }) {
+  const [flipped, setFlipped] = React.useState(false);
+  const flip = () => { sfx('flip'); setFlipped(f => !f); };
+  return (
+    <div className={`card-tile flippable ${className}`} onClick={flip} onKeyDown={onEnter(flip)}
+      role="button" tabIndex={0} aria-pressed={flipped} title="click to flip">
+      <div key={String(flipped)} className={`flip-face ${flipped ? 'back' : ''}`}>
+        {flipped ? back : children}
+      </div>
+    </div>
+  );
+}
+
+function CountUp({ to, suffix = '' }) {
+  const [n, setN] = React.useState(0);
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { setN(to); return; }
+    let raf;
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      const t0 = performance.now();
+      const tick = (t) => {
+        const p = Math.min(1, (t - t0) / 1200);
+        setN(Math.round(to * (1 - Math.pow(1 - p, 3))));
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    });
+    io.observe(ref.current);
+    return () => { io.disconnect(); cancelAnimationFrame(raf); };
+  }, [to]);
+  return <strong ref={ref}>{n}{suffix}</strong>;
+}
+
 function HomePage({ go }) {
+  const [clicks, setClicks] = React.useState(0);
+  const poke = (e) => {
+    sfx('pop');
+    burst(...pointOf(e), ['🐱', '✨', '💜', '🍪']);
+    replay(e.currentTarget.closest('h1'), 'wiggle');
+    setClicks(c => c + 1);
+  };
   // mouse parallax for the collage: sets --mx/--my (-0.5..0.5), CSS does the rest
   const tilt = (e) => {
     if (e.pointerType !== 'mouse') return;
@@ -19,7 +87,9 @@ function HomePage({ go }) {
           <div className="eyebrow"><span className="pulse" /> open to new projects · 2026</div>
           <h1>
             Hi, I'm <span className="wave">🐱</span><br />
-            <em>Elaine Pang Xin Yee -⩊-</em>
+            <em className="poke" onClick={poke} onKeyDown={onEnter(poke)} role="button" tabIndex={0} title="click me!">
+              {NICKS[clicks % NICKS.length]}
+            </em>
           </h1>
           <p className="lede">
             Data Science graduate from TARUMT. I turn messy data into clear, playful things people actually want to use — dashboards, apps, and the automations that keep them fed.
@@ -35,21 +105,33 @@ function HomePage({ go }) {
         </div>
 
         <div className="collage">
-          <div className="card-tile t-avatar">
+          <FlipTile className="t-avatar" back={<>
+            <div className="tile-label">fun fact</div>
+            <div className="tile-body">the cat walking around this site is based on my real cat, Cookie 🐈</div>
+          </>}>
             <img src="/Picture/Elaine_profile.jpg?v=2" alt="Elaine" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-          <div className="card-tile t-card1">
+          </FlipTile>
+          <FlipTile className="t-card1" back={<>
+            <div className="tile-label">secretly</div>
+            <div className="tile-body">a night owl, best code happens after 11pm 🌙</div>
+          </>}>
             <div className="tile-label">currently</div>
             <div className="tile-body">job hunting & building side projects 💻</div>
-          </div>
-          <div className="card-tile t-card2">
+          </FlipTile>
+          <FlipTile className="t-card2" back={<>
+            <div className="tile-label">first hackathon</div>
+            <div className="tile-body">Great AI Hackathon 2025, team Penguining 🐧</div>
+          </>}>
             <div className="tile-label">learning</div>
             <div className="tile-body">n8n automations 🔧</div>
-          </div>
-          <div className="card-tile t-card3">
+          </FlipTile>
+          <FlipTile className="t-card3" back={<>
+            <div className="tile-label">weakness</div>
+            <div className="tile-body">desserts. all of them 🍰</div>
+          </>}>
             <div className="tile-label">playing</div>
             <div className="tile-body">Perler Beads ✨</div>
-          </div>
+          </FlipTile>
         </div>
       </div>
 
@@ -98,8 +180,7 @@ const HOBBIES = [
 
 function AboutPage() {
 	  const [order, setOrder] = React.useState('asc');
-	  const sorted = order === 'asc' ? TIMELINE : [...TIMELINE].reverse();
-  return (
+	  const sorted = order === 'asc' ? TIMELINE : [...TIMELINE].reverse();  return (
     <div className="page" data-screen-label="02 About">
       <div className="section-head">
         <div className="kicker">about & experience</div>
@@ -141,9 +222,9 @@ function AboutPage() {
             ))}
           </div>
           <div className="stats">
-            <div><strong>4</strong><span>years in tech</span></div>
-            <div><strong>10+</strong><span>projects shipped</span></div>
-            <div><strong>3</strong><span>languages spoken</span></div>
+            <div><CountUp to={4} /><span>years in tech</span></div>
+            <div><CountUp to={10} suffix="+" /><span>projects shipped</span></div>
+            <div><CountUp to={3} /><span>languages spoken</span></div>
           </div>
         </div>
       </div>
@@ -413,7 +494,7 @@ const SKILLS = {
   ],
 };
 
-function DraggableSticker({ baseRotate, className, icon, children }) {
+function DraggableSticker({ baseRotate, className, icon, label, category, onDrop, children }) {
   const [pos, setPos] = React.useState({ x: 0, y: 0 });
   const [dragging, setDragging] = React.useState(false);
   const ref = React.useRef(null);
@@ -423,6 +504,7 @@ function DraggableSticker({ baseRotate, className, icon, children }) {
     if (e.button !== undefined && e.button !== 0) return;
     e.preventDefault();
     setDragging(true);
+    sfx('pickup');
     start.current = { x: e.clientX, y: e.clientY, ox: pos.x, oy: pos.y };
     try { ref.current.setPointerCapture(e.pointerId); } catch (err) {}
   };
@@ -437,6 +519,9 @@ function DraggableSticker({ baseRotate, className, icon, children }) {
     if (!dragging) return;
     setDragging(false);
     try { ref.current.releasePointerCapture(e.pointerId); } catch (err) {}
+    // dropped on another sticker → spring home, the string (or shake) says the rest
+    if (onDrop && onDrop(e.clientX, e.clientY)) setPos({ x: 0, y: 0 });
+    else sfx('drop');
   };
 
   const transform = `translate(${pos.x}px, ${pos.y}px) rotate(${baseRotate}deg)${dragging ? ' scale(1.08)' : ''}`;
@@ -445,6 +530,8 @@ function DraggableSticker({ baseRotate, className, icon, children }) {
     <span
       ref={ref}
       className={className}
+      data-label={label}
+      data-cat={category}
       style={{
         transform,
         zIndex: dragging ? 50 : (pos.x || pos.y ? 10 : 1),
@@ -463,15 +550,65 @@ function DraggableSticker({ baseRotate, className, icon, children }) {
 }
 
 function SkillsPage() {
+  const [links, setLinks] = React.useState([]);
+  const gridRef = React.useRef(null);
+
+  // stickers tie together only within their own category card.
+  // returns true when dropped on another sticker (so the dragged one springs home)
+  const dropOn = (label, category) => (x, y) => {
+    const target = document.elementsFromPoint(x, y)
+      .map(el => el.closest && el.closest('.sticker'))
+      .find(s => s && s.dataset.label !== label);
+    if (!target) return false;
+    if (target.dataset.cat === category) {
+      const key = [label, target.dataset.label].sort().join('|');
+      setLinks(l => l.includes(key) ? l : [...l, key]);
+      burst(x, y, ['🧵', '✨', '💜']);
+      sfx('link');
+    } else {
+      replay(target, 'nope');
+      sfx('bonk');
+    }
+    return true;
+  };
+
+  // strings follow their stickers (drag, resize, reflow) — redrawn each frame while any exist
+  React.useEffect(() => {
+    if (!links.length) return;
+    const grid = gridRef.current;
+    const centre = (label) => {
+      const r = grid.querySelector(`.sticker[data-label="${CSS.escape(label)}"]`).getBoundingClientRect();
+      return [r.left + r.width / 2, r.top + r.height / 2];
+    };
+    let raf;
+    const draw = () => {
+      const g = grid.getBoundingClientRect();
+      grid.querySelectorAll('.skill-strings path').forEach((p) => {
+        const [a, b] = p.dataset.k.split('|');
+        const [x1, y1] = centre(a), [x2, y2] = centre(b);
+        const sag = 20 + Math.hypot(x2 - x1, y2 - y1) * 0.12;
+        p.setAttribute('d', `M${x1 - g.left} ${y1 - g.top} Q${(x1 + x2) / 2 - g.left} ${(y1 + y2) / 2 - g.top + sag} ${x2 - g.left} ${y2 - g.top}`);
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(raf);
+  }, [links]);
+
   return (
     <div className="page" data-screen-label="04 Skills">
       <div className="section-head">
         <div className="kicker">skills & tools</div>
         <h2>Stickers on the<br />back of my laptop.</h2>
-        <p>The things I do most often, and the tools I reach for on a Tuesday. Drag them around — they don't bite.</p>
+        <p>The things I do most often, and the tools I reach for on a Tuesday. Drag them around — they don't bite. Drop a sticker on another from the same group to tie them together.</p>
       </div>
 
-      <div className="skills-grid">
+      <div className="skills-grid" ref={gridRef}>
+        <svg className="skill-strings" aria-hidden="true">
+          {links.map(k => (
+            <path key={k} data-k={k} onClick={() => { sfx('snip'); setLinks(l => l.filter(x => x !== k)); }} />
+          ))}
+        </svg>
         {Object.entries(SKILLS).map(([category, items]) => (
           <div key={category}>
             <div className="cluster-label"><span className={`swatch swatch-${category.toLowerCase().replace(/[^a-z]/g, '')}`}></span> {category}</div>
@@ -482,6 +619,9 @@ function SkillsPage() {
                     key={s.label}
                     className={`sticker ${s.v}`}
                     icon={s.icon}
+                    label={s.label}
+                    category={category}
+                    onDrop={dropOn(s.label, category)}
                     baseRotate={(i % 3 - 1) * 1.5}
                   >
                     {s.label}
@@ -531,6 +671,32 @@ const SOCIALS = [
   },
 ];
 
+/* Quiet hint for the Konami easter egg (unlocks the secret theme, settings.jsx).
+   Keys light up as they're typed; a wrong key shakes the row and resets it. */
+function KonamiHint() {
+  const [lit, setLit] = React.useState(0);
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    let t, prev = 0;
+    const onProgress = (e) => {
+      clearTimeout(t);
+      if (e.detail < prev && prev !== 10 && ref.current) replay(ref.current, 'nope');
+      prev = e.detail;
+      setLit(e.detail);
+      if (e.detail === 10) t = setTimeout(() => { prev = 0; setLit(0); }, 2000);
+    };
+    window.addEventListener('konami', onProgress);
+    return () => { window.removeEventListener('konami', onProgress); clearTimeout(t); };
+  }, []);
+  return (
+    <div ref={ref} className={`konami-hint ${lit ? 'active' : ''} ${lit === 10 ? 'done' : ''}`} title="type it on your keyboard">
+      {['↑', '↑', '↓', '↓', '←', '→', '←', '→', 'B', 'A'].map((k, i) => (
+        <kbd key={i} className={i < lit ? 'lit' : ''}>{k}</kbd>
+      ))}
+    </div>
+  );
+}
+
 function ContactPage() {
   const linkedin = SOCIALS.find(s => s.label === 'LinkedIn');
 
@@ -565,11 +731,14 @@ function ContactPage() {
           <span className="cta-badge"><img src={linkedin.icon} alt="" /></span>
           <h3>Let's chat on LinkedIn</h3>
           <p>The quickest way to reach me. Send a message or a connection request and I'll reply within a day or two.</p>
-          <a className="btn primary" href={linkedin.href} target="_blank" rel="noopener noreferrer">
+          <a className="btn primary" href={linkedin.href} target="_blank" rel="noopener noreferrer"
+            onClick={(e) => { sfx('send'); burst(...pointOf(e), ['💌', '✉️', '💜'], 12); }}>
             Message me on LinkedIn →
           </a>
         </div>
       </div>
+
+      <KonamiHint />
     </div>
   );
 }
@@ -823,4 +992,4 @@ function ProjectDetailPage({ slug, go }) {
   );
 }
 
-Object.assign(window, { HomePage, AboutPage, ProjectsPage, SkillsPage, ContactPage, ProjectDetailPage });
+Object.assign(window, { burst, HomePage, AboutPage, ProjectsPage, SkillsPage, ContactPage, ProjectDetailPage });
