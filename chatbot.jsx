@@ -29,15 +29,34 @@ function ChatBot() {
   const [loading, setLoading] = React.useState(false);
   const sessionId = React.useRef(getSessionId());
   const listRef = React.useRef(null);
+  // unread bot messages while the panel is closed; starts at 1 so the greeting invites a click
+  const [unread, setUnread] = React.useState(1);
+  const openRef = React.useRef(open);
+  openRef.current = open;
+  const fabRef = React.useRef(null);
+  const botSays = (text) => {
+    setMessages((m) => [...m, { role: 'bot', text }]);
+    if (!openRef.current) {
+      setUnread((n) => n + 1);
+      if (fabRef.current) replay(fabRef.current, 'nudge');
+    }
+  };
 
   // auto-scroll to newest
   React.useEffect(() => {
     if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [messages, loading, open]);
 
+  const toggle = () => {
+    sfx(open ? 'close' : 'open');
+    if (!open) setUnread(0);
+    setOpen((o) => !o);
+  };
+
   const send = async () => {
     const text = input.trim();
     if (!text || loading) return;
+    sfx('whoosh');
     setMessages((m) => [...m, { role: 'user', text }]);
     setInput('');
     setLoading(true);
@@ -61,9 +80,11 @@ function ChatBot() {
       }
       // n8n sometimes returns literal \n escapes instead of real newlines
       reply = String(reply ?? '').replace(/\\r\\n|\\n/g, '\n');
-      setMessages((m) => [...m, { role: 'bot', text: reply || '(no response)' }]);
+      botSays(reply || '(no response)');
+      sfx('receive');
     } catch (e) {
-      setMessages((m) => [...m, { role: 'bot', text: "Oops — I couldn't reach the server. Please try again in a bit!" }]);
+      sfx('bonk');
+      botSays("Oops — I couldn't reach the server. Please try again in a bit!");
     } finally {
       setLoading(false);
     }
@@ -82,7 +103,7 @@ function ChatBot() {
               <img className="chat-avatar" src="/Picture/sillycookie.jpeg" alt="Cookie" />
               <div>
                 <strong>COOKIE</strong>
-                <span className="chat-status">ask me anything /ᐠ .ᆺ. ᐟ\ﾉ</span>
+                <span className="chat-status">{loading ? 'Cookie is typing…' : 'ask me anything /ᐠ .ᆺ. ᐟ\\ﾉ'}</span>
               </div>
             </div>
           </div>
@@ -115,9 +136,12 @@ function ChatBot() {
         </div>
       )}
 
-      <button className={`chat-fab ${open ? 'open' : ''}`} onClick={() => setOpen((o) => !o)} aria-label="Chat">
+      <button ref={fabRef} className={`chat-fab ${open ? 'open' : ''}`} onClick={toggle}
+        aria-label={unread ? `Chat, ${unread} unread message${unread > 1 ? 's' : ''}` : 'Chat'}>
         {open ? '✕' : <img className="chat-fab-img" src="/Picture/chatbot-button.png" alt="Chat" />}
       </button>
+      {/* sibling, not child: .chat-fab clips its content (overflow: hidden) */}
+      {unread > 0 && !open && <span key={unread} className="chat-badge" aria-hidden="true">{unread}</span>}
     </>
   );
 }

@@ -47,6 +47,11 @@ function sfx(name, arg = 0) {
     meow:   () => { tone(620, 0.12, { to: 900, gain: 0.12 }); tone(900, 0.28, { at: 0.12, to: 520, gain: 0.12 }); },
     crunch: () => [0, 0.09, 0.18].forEach(at => tone(220, 0.05, { type: 'square', to: 120, gain: 0.07, at })),
     boing:  () => tone(200, 0.3, { type: 'sine', to: 600, gain: 0.2 }),
+    // chatbot
+    open:    () => { tone(440, 0.08, { type: 'sine', to: 660, gain: 0.14 }); tone(880, 0.12, { at: 0.07, type: 'sine', gain: 0.1 }); },
+    close:   () => tone(660, 0.1, { type: 'sine', to: 380, gain: 0.12 }),
+    whoosh:  () => tone(350, 0.14, { type: 'sine', to: 1400, gain: 0.12 }),
+    receive: () => { tone(988, 0.1, { type: 'sine', gain: 0.12 }); tone(1319, 0.18, { at: 0.08, type: 'sine', gain: 0.1 }); },
     unlock: () => [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((f, i) =>
       tone(f, i === 4 ? 0.9 : 0.35, { at: i * 0.09, gain: 0.18 })),
   })[name]?.();

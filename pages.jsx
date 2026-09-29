@@ -1070,4 +1070,4 @@ function ProjectDetailPage({ slug, go }) {
   );
 }
 
-Object.assign(window, { burst, HomePage, AboutPage, ProjectsPage, SkillsPage, ContactPage, ProjectDetailPage });
+Object.assign(window, { burst, replay, HomePage, AboutPage, ProjectsPage, SkillsPage, ContactPage, ProjectDetailPage });
